@@ -64,3 +64,4 @@
 
 # Game assets and third-party dependencies may be subject to separate licenses.
 
+Copyright © 2026 LuisHRL — original project code, to the extent owned by the original creator.

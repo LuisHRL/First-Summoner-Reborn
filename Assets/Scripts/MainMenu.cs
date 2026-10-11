@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.Localization.Settings;
 
 public class MainMenu : MonoBehaviour
 {
@@ -7,6 +9,7 @@ public class MainMenu : MonoBehaviour
     public GameObject missionPanel;
     public GameObject cardsPanel;
     public GameObject settingsPanel;
+    public GameObject aboutPanel;
 
     void Start()
     {
@@ -17,6 +20,7 @@ public class MainMenu : MonoBehaviour
         missionPanel.SetActive(false);
         cardsPanel.SetActive(false);
         settingsPanel.SetActive(false);
+        aboutPanel.SetActive(false);
     }
 
     public void OpenMissions()
@@ -24,7 +28,11 @@ public class MainMenu : MonoBehaviour
         mainButtonsPanel.SetActive(false);
         missionPanel.SetActive(true);
     }
-
+    public void OpenAbout()
+    {
+        mainButtonsPanel.SetActive(false);
+        aboutPanel.SetActive(true);
+    }
     public void OpenCards()
     {
         mainButtonsPanel.SetActive(false);
@@ -43,6 +51,7 @@ public class MainMenu : MonoBehaviour
         cardsPanel.SetActive(false);
         settingsPanel.SetActive(false);
         mainButtonsPanel.SetActive(true);
+        aboutPanel.SetActive(false);
     }
 
     public void StartNormalMission()
@@ -72,5 +81,25 @@ public class MainMenu : MonoBehaviour
     public void UseVirtualJoystick()
     {
         ControlSettings.SetMode(ControlMode.VirtualJoystick);
+    }
+    public void OpenGitHub()
+    {
+        Application.OpenURL("https://github.com/LuisHRL/First-Summoner-Reborn");
+    }
+    public void ChangeLanguage(int languageIndex)
+    {
+        StartCoroutine(SetLanguage(languageIndex));
+    }
+
+    private System.Collections.IEnumerator SetLanguage(int languageIndex)
+    {
+        yield return LocalizationSettings.InitializationOperation;
+
+        if (languageIndex >= 0 &&
+            languageIndex < LocalizationSettings.AvailableLocales.Locales.Count)
+        {
+            LocalizationSettings.SelectedLocale =
+                LocalizationSettings.AvailableLocales.Locales[languageIndex];
+        }
     }
 }

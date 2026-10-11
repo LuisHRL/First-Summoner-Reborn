@@ -1,0 +1,33 @@
+# Dossiers générés automatiquement par Unity — à ne jamais versionner
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+
+# Fichiers générés par les IDE (Visual Studio, Rider, VS Code)
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+
+# Fichiers spécifiques à certains OS
+.DS_Store
+Thumbs.db
+
+# Fichiers de build Android
+*.apk
+*.aab
+*.unitypackage
+
+# Fichiers de collaboration Unity (si tu n'utilises pas Unity Collab/Cloud Build)
+/[Aa]ssets/AssetStoreTools*

@@ -2367,6 +2367,63 @@ MonoBehaviour:
   player: {fileID: 899719377}
   manaCost: 25
   summonSound: {fileID: 8300000, guid: 4abc584f973dcd54c8a62dfc9e934044, type: 3}
+--- !u!1001 &1000484030
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.17222102
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00000006302128
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3.21275
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_Name
+      value: Standing Torch Light Torch (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
 --- !u!1 &1082700041
 GameObject:
   m_ObjectHideFlags: 0
@@ -4751,3 +4808,4 @@ SceneRoots:
   - {fileID: 1585053522}
   - {fileID: 330585546}
   - {fileID: 1253982565}
+  - {fileID: 1000484030}

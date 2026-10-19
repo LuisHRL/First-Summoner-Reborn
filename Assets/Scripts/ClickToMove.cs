@@ -55,6 +55,10 @@ public class ClickToMove : MonoBehaviour
             return;
         }
 
+        // Orienter l'archère vers sa destination.
+        transform.forward = direction.normalized;
+
+        // Avancer vers la destination.
         controller.Move(direction.normalized * speed * Time.deltaTime);
     }
 }

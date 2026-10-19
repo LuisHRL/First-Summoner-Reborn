@@ -1916,6 +1916,7 @@ GameObject:
   - component: {fileID: 899719382}
   - component: {fileID: 899719383}
   - component: {fileID: 899719384}
+  - component: {fileID: 899719385}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2053,6 +2054,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   speed: 5
   joystick: {fileID: 857380280}
+--- !u!114 &899719385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899719375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49fa2b70140221e48ad339ef1a95d317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeroAnimationController
+  heroAnimator: {fileID: 1000484032}
+  movementThreshold: 0.1
+  animationSmoothTime: 0.1
 --- !u!1 &917640553
 GameObject:
   m_ObjectHideFlags: 0
@@ -2399,6 +2415,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Standing Torch Light Torch (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 91fc3c2b7ce2ee5468e1b014460d3e5d, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2407,6 +2431,11 @@ PrefabInstance:
 --- !u!4 &1000484031 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
+  m_PrefabInstance: {fileID: 1000484030}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1000484032 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 078f8c4c4e83ba54996e4cc2abc3878f, type: 3}
   m_PrefabInstance: {fileID: 1000484030}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1082700041

@@ -37,6 +37,12 @@ public class MainMenu : MonoBehaviour
     {
         mainButtonsPanel.SetActive(false);
         cardsPanel.SetActive(true);
+        DeckManager deckManager = FindAnyObjectByType<DeckManager>();
+
+        if (deckManager != null)
+        {
+            deckManager.LoadDeck();
+        }
     }
 
     public void OpenSettings()

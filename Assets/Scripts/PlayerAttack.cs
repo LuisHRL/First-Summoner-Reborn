@@ -1,8 +1,12 @@
+
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerAttack : MonoBehaviour
 {
+    [Header("Animation")]
+    public Animator heroAnimator;
+
     [Header("Projectile")]
     public GameObject projectilePrefab;
     public Transform firePoint;
@@ -21,6 +25,8 @@ public class PlayerAttack : MonoBehaviour
     private CharacterController controller;
 
     private float nextAttackTime;
+    private bool attackInProgress;
+    private EnemyHealth pendingTarget;
 
     void Awake()
     {
@@ -30,133 +36,110 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        // Aucun ennemi sélectionné.
-        if (targeting == null ||
-            targeting.CurrentTarget == null)
-        {
+        if (targeting == null || targeting.CurrentTarget == null)
             return;
-        }
 
-        EnemyHealth target =
-            targeting.CurrentTarget;
-
-        // L'ennemi a été détruit ou n'existe plus.
-        if (target == null)
-        {
-            return;
-        }
-
-        // -----------------------------------------------------
-        // CALCUL DE LA DIRECTION VERS L'ENNEMI
-        // -----------------------------------------------------
+        EnemyHealth target = targeting.CurrentTarget;
 
         Vector3 direction =
-            target.transform.position -
-            transform.position;
+            target.transform.position - transform.position;
 
-        // On ignore la hauteur.
-        direction.y = 0;
+        direction.y = 0f;
 
-        float distance =
-            direction.magnitude;
+        float distance = direction.magnitude;
 
-        // -----------------------------------------------------
-        // ENNEMI HORS DE PORTÉE
-        // -----------------------------------------------------
+        // Attendre le lâcher de la flèche avant
+        // de commencer une nouvelle attaque.
+        if (attackInProgress)
+            return;
 
+        // Avancer vers l'ennemi s'il est hors de portée.
         if (distance > attackRange)
         {
-            // Le joueur avance automatiquement vers l'ennemi.
-            Vector3 movement =
-                direction.normalized *
-                moveToAttackSpeed *
-                Time.deltaTime;
-
-            controller.Move(movement);
-
-            // Le joueur regarde l'ennemi.
             if (direction.sqrMagnitude > 0.001f)
             {
-                transform.forward =
-                    direction.normalized;
+                controller.Move(
+                    direction.normalized *
+                    moveToAttackSpeed *
+                    Time.deltaTime
+                );
+
+                transform.forward = direction.normalized;
             }
 
-            // On ne tire pas encore.
             return;
         }
 
-        // -----------------------------------------------------
-        // ENNEMI À PORTÉE
-        // -----------------------------------------------------
-
-        // Le joueur est maintenant assez proche.
-        // Il arrête automatiquement de se déplacer
-        // et peut tirer.
-
+        // Regarder l'ennemi avant de tirer.
         if (direction.sqrMagnitude > 0.001f)
         {
-            transform.forward =
-                direction.normalized;
+            transform.forward = direction.normalized;
         }
 
-        // Respect du cooldown d'attaque.
+        // Respecter le délai entre les attaques.
         if (Time.time < nextAttackTime)
-        {
             return;
-        }
 
-        ShootAt(target);
-
-        nextAttackTime =
-            Time.time + attackCooldown;
+        StartAttack(target);
     }
 
-    // ---------------------------------------------------------
-    // TIR
-    // ---------------------------------------------------------
-
-    void ShootAt(EnemyHealth target)
+    void StartAttack(EnemyHealth target)
     {
         if (target == null)
-        {
             return;
-        }
 
-        if (projectilePrefab == null)
+        if (projectilePrefab == null || firePoint == null)
+            return;
+
+        if (heroAnimator == null)
         {
             Debug.LogWarning(
-                "PlayerAttack : projectilePrefab n'est pas assigné."
+                "PlayerAttack : Hero Animator non assigné."
             );
 
             return;
         }
 
-        if (firePoint == null)
-        {
-            Debug.LogWarning(
-                "PlayerAttack : firePoint n'est pas assigné."
-            );
+        pendingTarget = target;
+        attackInProgress = true;
 
+        // Joue directement l'animation de tir.
+        // Cette méthode fonctionne dans notre configuration.
+        heroAnimator.Play("BowAttack", 0, 0f);
+    }
+
+    // Appelée par l'Animation Event du clip BowAttack.
+    public void ReleaseArrow()
+    {
+        if (!attackInProgress)
             return;
-        }
+
+        attackInProgress = false;
+        nextAttackTime = Time.time + attackCooldown;
+
+        EnemyHealth target = pendingTarget;
+        pendingTarget = null;
+
+        // La cible peut avoir été détruite
+        // pendant l'animation.
+        if (target == null)
+            return;
+
+        if (firePoint == null || projectilePrefab == null)
+            return;
 
         Vector3 direction =
-            target.transform.position -
-            firePoint.position;
+            target.transform.position - firePoint.position;
 
-        direction.y = 0;
+        direction.y = 0f;
 
         if (direction.sqrMagnitude <= 0.001f)
-        {
             return;
-        }
 
         Quaternion projectileRotation =
-            Quaternion.LookRotation(
-                direction.normalized
-            );
+            Quaternion.LookRotation(direction.normalized);
 
-        // Son de tir.
+        // Jouer le son au moment du tir.
         if (launchSound != null)
         {
             AudioSource.PlayClipAtPoint(
@@ -165,22 +148,18 @@ public class PlayerAttack : MonoBehaviour
             );
         }
 
-        // Création du projectile.
-        GameObject projectileObject =
-            Instantiate(
-                projectilePrefab,
-                firePoint.position,
-                projectileRotation
-            );
+        // Créer la flèche magique.
+        GameObject projectileObject = Instantiate(
+            projectilePrefab,
+            firePoint.position,
+            projectileRotation
+        );
 
-        // Récupération du script du projectile.
         MagicProjectile projectile =
             projectileObject.GetComponent<MagicProjectile>();
 
         if (projectile != null)
         {
-            // Le joueur devient le propriétaire
-            // de la flèche.
             projectile.owner = transform;
         }
     }

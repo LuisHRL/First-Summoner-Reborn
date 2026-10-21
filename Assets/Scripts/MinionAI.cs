@@ -1,9 +1,9 @@
+
 using UnityEngine;
 
 public class MinionAI : MonoBehaviour
 {
     public float speed = 3f;
-    public float lifetime = 20f;
     public int damage = 5;
     public float attackRange = 1.3f;
     public float attackCooldown = 1f;
@@ -16,7 +16,6 @@ public class MinionAI : MonoBehaviour
     void Start()
     {
         player = FindAnyObjectByType<PlayerHealth>();
-        Destroy(gameObject, lifetime);
     }
 
     void Update()
@@ -49,6 +48,7 @@ public class MinionAI : MonoBehaviour
             {
                 AudioSource.PlayClipAtPoint(attackSound, transform.position);
             }
+
             target.TakeDamage(damage);
             nextAttackTime = Time.time + attackCooldown;
         }

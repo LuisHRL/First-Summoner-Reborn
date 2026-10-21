@@ -76,6 +76,10 @@ public class DeckManager : MonoBehaviour
 
             foreach (CardData card in allCards)
             {
+                // Ignorer les anciennes cartes désactivées.
+                if (!card.gameObject.activeInHierarchy)
+                    continue;
+
                 if (card.CardId == savedId)
                 {
                     CardDragHandler dragHandler =
@@ -134,7 +138,6 @@ public class DeckManager : MonoBehaviour
         PlayerPrefs.Save();
 
         // Charger le nouveau deck.
-        // LoadDeck remet déjà les cartes dans la collection.
         LoadDeck();
 
         Debug.Log("Deck actif : " + activeDeck);

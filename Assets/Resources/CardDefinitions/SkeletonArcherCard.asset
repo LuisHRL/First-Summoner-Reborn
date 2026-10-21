@@ -13,6 +13,18 @@ MonoBehaviour:
   m_Name: SkeletonArcherCard
   m_EditorClassIdentifier: Assembly-CSharp::SummonCardDefinition
   cardId: skeleton_archer
+  cardName: Skeleton Archer
+  description: "Invoque un archer squelette qui attaque ses ennemis \xE0 distance."
   minionPrefab: {fileID: 2196625450366437133, guid: 753c314d0d72daf48875a05a13e42a70, type: 3}
   manaCost: 6
+  rarity: Common
+  level: 1
+  summonType: Ground
+  attackDamage: 8
+  attackSpeed: 1.5
+  isRanged: 1
+  attackRange: 5
+  health: 70
+  movementSpeed: 3
+  numberOfUnits: 1
   cardArtwork: {fileID: 0}

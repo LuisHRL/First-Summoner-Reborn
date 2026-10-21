@@ -13,6 +13,18 @@ MonoBehaviour:
   m_Name: SkeletonMinionCard
   m_EditorClassIdentifier: Assembly-CSharp::SummonCardDefinition
   cardId: skeleton_minion
+  cardName: Skeleton Minion
+  description: "Invoque un squelette combattant au corps \xE0 corps."
   minionPrefab: {fileID: 4101930223977777471, guid: 497e6748021d58e4390b5086d823662f, type: 3}
   manaCost: 4
+  rarity: Common
+  level: 1
+  summonType: Ground
+  attackDamage: 10
+  attackSpeed: 2
+  isRanged: 0
+  attackRange: 1
+  health: 100
+  movementSpeed: 3
+  numberOfUnits: 1
   cardArtwork: {fileID: 0}

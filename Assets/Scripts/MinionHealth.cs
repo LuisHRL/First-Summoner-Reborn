@@ -1,5 +1,22 @@
-// Ce script n'a plus besoin de contenir de code :
-// tout est maintenant dans Health.cs, dont on hérite ici.
+
+using UnityEngine;
+
 public class MinionHealth : Health
 {
+    private Animator animator;
+
+    void Awake()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
+
+    public new void TakeDamage(int damage)
+    {
+        if (animator != null && CurrentHealth > damage)
+        {
+            animator.SetTrigger("Hit");
+        }
+
+        base.TakeDamage(damage);
+    }
 }

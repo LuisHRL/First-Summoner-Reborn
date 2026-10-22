@@ -27,6 +27,10 @@ public class MinionAI : MonoBehaviour
         playerTargeting = FindAnyObjectByType<PlayerTargeting>();
 
         animator = GetComponentInChildren<Animator>();
+        Debug.Log(
+    "MINION ANIMATOR UTILISÉ : " +
+    (animator != null ? animator.gameObject.name : "AUCUN")
+);
         previousPosition = transform.position;
     }
 
@@ -88,6 +92,8 @@ public class MinionAI : MonoBehaviour
         }
         else if (Time.time >= nextAttackTime)
         {
+            if (animator != null)
+                animator.SetTrigger("Attack");
             if (attackSound != null)
             {
                 AudioSource.PlayClipAtPoint(

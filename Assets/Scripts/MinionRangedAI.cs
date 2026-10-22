@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class MinionRangedAI : MonoBehaviour
@@ -12,22 +13,32 @@ public class MinionRangedAI : MonoBehaviour
 
     public GameObject projectilePrefab;
     public Transform firePoint;
-
     public AudioClip launchSound;
 
     private PlayerHealth player;
+    private PlayerTargeting playerTargeting;
     private float nextAttackTime;
 
     void Start()
     {
-        player =
-            FindAnyObjectByType<PlayerHealth>();
+        player = FindAnyObjectByType<PlayerHealth>();
+        playerTargeting = FindAnyObjectByType<PlayerTargeting>();
     }
 
     void Update()
     {
-        EnemyHealth target =
-            FindClosestEnemy();
+        if (playerTargeting == null)
+        {
+            playerTargeting =
+                FindAnyObjectByType<PlayerTargeting>();
+        }
+
+        EnemyHealth target = null;
+
+        if (playerTargeting != null)
+        {
+            target = playerTargeting.CurrentTarget;
+        }
 
         if (target != null)
         {
@@ -39,111 +50,50 @@ public class MinionRangedAI : MonoBehaviour
         }
     }
 
-    // ---------------------------------------------------------
-    // RECHERCHE DE L'ENNEMI LE PLUS PROCHE
-    // ---------------------------------------------------------
-
-    EnemyHealth FindClosestEnemy()
-    {
-        EnemyHealth[] enemies =
-            FindObjectsByType<EnemyHealth>();
-
-        EnemyHealth closest = null;
-
-        float closestDistance =
-            Mathf.Infinity;
-
-        foreach (EnemyHealth enemy in enemies)
-        {
-            if (enemy == null)
-                continue;
-
-            float distance =
-                Vector3.Distance(
-                    transform.position,
-                    enemy.transform.position
-                );
-
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closest = enemy;
-            }
-        }
-
-        return closest;
-    }
-
-    // ---------------------------------------------------------
-    // COMBAT
-    // ---------------------------------------------------------
-
     void FightEnemy(EnemyHealth target)
     {
-        if (target == null)
-            return;
-
         Vector3 direction =
-            target.transform.position -
-            transform.position;
+            target.transform.position - transform.position;
 
-        direction.y = 0;
+        direction.y = 0f;
 
-        float distance =
-            direction.magnitude;
+        float distance = direction.magnitude;
 
-        // L'ennemi est trop loin.
         if (distance > attackRange)
         {
             transform.position +=
-                direction.normalized *
-                speed *
-                Time.deltaTime;
+                direction.normalized * speed * Time.deltaTime;
 
             if (direction.sqrMagnitude > 0.001f)
             {
-                transform.forward =
-                    direction.normalized;
+                transform.forward = direction.normalized;
             }
 
             return;
         }
 
-        // L'ennemi est à portée.
         if (Time.time >= nextAttackTime)
         {
             ShootAt(target);
-
-            nextAttackTime =
-                Time.time + attackCooldown;
+            nextAttackTime = Time.time + attackCooldown;
         }
     }
 
-    // ---------------------------------------------------------
-    // TIR
-    // ---------------------------------------------------------
-
     void ShootAt(EnemyHealth target)
     {
-        if (target == null)
-            return;
-
-        if (firePoint == null)
+        if (target == null || firePoint == null)
             return;
 
         Vector3 direction =
-            target.transform.position -
-            firePoint.position;
+            target.transform.position - firePoint.position;
 
-        direction.y = 0;
+        direction.y = 0f;
 
         if (direction.sqrMagnitude <= 0.001f)
             return;
 
         Quaternion projectileRotation =
-            Quaternion.LookRotation(
-                direction.normalized
-            );
+            Quaternion.LookRotation(direction.normalized);
 
         if (launchSound != null)
         {
@@ -153,57 +103,44 @@ public class MinionRangedAI : MonoBehaviour
             );
         }
 
-        // Création du projectile.
-        GameObject projectileObject =
-            Instantiate(
-                projectilePrefab,
-                firePoint.position,
-                projectileRotation
-            );
+        GameObject projectileObject = Instantiate(
+            projectilePrefab,
+            firePoint.position,
+            projectileRotation
+        );
 
         MagicProjectile projectile =
             projectileObject.GetComponent<MagicProjectile>();
 
         if (projectile != null)
         {
-            // L'archer est le propriétaire
-            // de cette flèche.
             projectile.owner = transform;
         }
     }
-
-    // ---------------------------------------------------------
-    // SUIVI DU JOUEUR
-    // ---------------------------------------------------------
 
     void FollowPlayer()
     {
         if (player == null)
         {
-            player =
-                FindAnyObjectByType<PlayerHealth>();
+            player = FindAnyObjectByType<PlayerHealth>();
 
             if (player == null)
                 return;
         }
 
         Vector3 direction =
-            player.transform.position -
-            transform.position;
+            player.transform.position - transform.position;
 
-        direction.y = 0;
+        direction.y = 0f;
 
         if (direction.magnitude > followDistance)
         {
             transform.position +=
-                direction.normalized *
-                speed *
-                Time.deltaTime;
+                direction.normalized * speed * Time.deltaTime;
 
             if (direction.sqrMagnitude > 0.001f)
             {
-                transform.forward =
-                    direction.normalized;
+                transform.forward = direction.normalized;
             }
         }
     }

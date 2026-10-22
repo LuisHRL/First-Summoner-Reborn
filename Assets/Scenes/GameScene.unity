@@ -1808,8 +1808,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefab: {fileID: 2613733415468221727, guid: fb048dd2bd92c9f43a5ea82e5f408bd7, type: 3}
   spawnPoint: {fileID: 1082700042}
-  enemiesInWave: 20
-  spawnRadius: 4
+  enemiesInWave: 10
+  spawnRadius: 8
   spawnAllAtOnce: 1
   timeBetweenSpawns: 1.5
 --- !u!4 &773034159

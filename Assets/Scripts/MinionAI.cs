@@ -14,24 +14,38 @@ public class MinionAI : MonoBehaviour
     public AudioClip attackSound;
 
     private PlayerHealth player;
+    private PlayerTargeting playerTargeting;
+
     private float nextAttackTime;
 
-    // Animation du modèle 3D enfant
     private Animator animator;
     private Vector3 previousPosition;
 
     void Start()
     {
         player = FindAnyObjectByType<PlayerHealth>();
+        playerTargeting = FindAnyObjectByType<PlayerTargeting>();
 
         animator = GetComponentInChildren<Animator>();
-        Debug.Log("SkeletonMinion Animator trouvé : " + (animator != null));
         previousPosition = transform.position;
     }
 
     void Update()
     {
-        EnemyHealth target = FindAnyObjectByType<EnemyHealth>();
+        // Retrouver le système de ciblage si nécessaire
+        if (playerTargeting == null)
+        {
+            playerTargeting =
+                FindAnyObjectByType<PlayerTargeting>();
+        }
+
+        // Utiliser uniquement la cible du héros
+        EnemyHealth target = null;
+
+        if (playerTargeting != null)
+        {
+            target = playerTargeting.CurrentTarget;
+        }
 
         if (target != null)
         {
@@ -41,10 +55,8 @@ public class MinionAI : MonoBehaviour
         {
             FollowPlayer();
         }
-    }
 
-    void LateUpdate()
-    {
+        // Animation de déplacement
         if (animator != null)
         {
             bool isMoving =
@@ -62,14 +74,17 @@ public class MinionAI : MonoBehaviour
         Vector3 direction =
             target.transform.position - transform.position;
 
-        direction.y = 0;
+        direction.y = 0f;
 
         if (direction.magnitude > attackRange)
         {
             transform.position +=
                 direction.normalized * speed * Time.deltaTime;
 
-            transform.forward = direction.normalized;
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                transform.forward = direction.normalized;
+            }
         }
         else if (Time.time >= nextAttackTime)
         {
@@ -100,14 +115,17 @@ public class MinionAI : MonoBehaviour
         Vector3 direction =
             player.transform.position - transform.position;
 
-        direction.y = 0;
+        direction.y = 0f;
 
         if (direction.magnitude > followDistance)
         {
             transform.position +=
                 direction.normalized * speed * Time.deltaTime;
 
-            transform.forward = direction.normalized;
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                transform.forward = direction.normalized;
+            }
         }
     }
 }

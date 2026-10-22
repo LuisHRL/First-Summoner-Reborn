@@ -42,7 +42,27 @@ public class CollectionCardDisplay : MonoBehaviour, IPointerClickHandler
             cardArtwork.enabled = card.cardArtwork != null;
         }
 
-        // Les cadres de rareté seront configurés plus tard.
+        if (rarityFrame != null)
+        {
+            switch (card.rarity)
+            {
+                case "Common":
+                    rarityFrame.sprite = commonFrame;
+                    break;
+                case "Atypical":
+                    rarityFrame.sprite = atypicalFrame;
+                    break;
+                case "Rare":
+                    rarityFrame.sprite = rareFrame;
+                    break;
+                case "Epic":
+                    rarityFrame.sprite = epicFrame;
+                    break;
+                case "Legendary":
+                    rarityFrame.sprite = legendaryFrame;
+                    break;
+            }
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)

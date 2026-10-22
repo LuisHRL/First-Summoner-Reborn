@@ -272,10 +272,10 @@ MonoBehaviour:
   cardArtwork: {fileID: 7593568287558004607}
   rarityFrame: {fileID: 1332838490772251779}
   commonFrame: {fileID: 21300000, guid: 3d13607e444a4434dba536a973e7f51a, type: 3}
-  atypicalFrame: {fileID: 0}
-  rareFrame: {fileID: 0}
-  epicFrame: {fileID: 0}
-  legendaryFrame: {fileID: 0}
+  atypicalFrame: {fileID: 21300000, guid: 6bea397f26c10a14ba57cca168590c75, type: 3}
+  rareFrame: {fileID: 21300000, guid: 2940fcfdf37b4f9499c991b98ef8140b, type: 3}
+  epicFrame: {fileID: 21300000, guid: a67594a461b8b7642bed63c86399ff34, type: 3}
+  legendaryFrame: {fileID: 21300000, guid: b335e7999621d4e45aee1facab421fe4, type: 3}
   manaCostText: {fileID: 7506080206416682380}
   levelText: {fileID: 1820696058125861738}
 --- !u!1 &2702512087098144699

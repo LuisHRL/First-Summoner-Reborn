@@ -17,7 +17,7 @@ MonoBehaviour:
   description: "Invoque un archer squelette qui attaque ses ennemis \xE0 distance."
   minionPrefab: {fileID: 2196625450366437133, guid: 753c314d0d72daf48875a05a13e42a70, type: 3}
   manaCost: 6
-  rarity: Rare
+  rarity: Atypical
   level: 1
   summonType: Ground
   attackDamage: 8

@@ -9,6 +9,12 @@ public class CollectionCardDisplay : MonoBehaviour, IPointerClickHandler
     [Header("Éléments visuels")]
     [SerializeField] private Image cardArtwork;
     [SerializeField] private Image rarityFrame;
+    [Header("Cadres de rareté")]
+    [SerializeField] private Sprite commonFrame;
+    [SerializeField] private Sprite atypicalFrame;
+    [SerializeField] private Sprite rareFrame;
+    [SerializeField] private Sprite epicFrame;
+    [SerializeField] private Sprite legendaryFrame;
     [SerializeField] private TMP_Text manaCostText;
     [SerializeField] private TMP_Text levelText;
 

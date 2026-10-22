@@ -48,7 +48,13 @@ public class CombatDeckManager : MonoBehaviour
             // Configurer automatiquement l'invocation.
             combatCards[i].minionPrefab = card.minionPrefab;
             combatCards[i].manaCost = card.manaCost;
+            CollectionCardDisplay cardDisplay =
+    combatCards[i].GetComponentInChildren<CollectionCardDisplay>(true);
 
+            if (cardDisplay != null)
+            {
+                cardDisplay.Setup(card);
+            }
             combatCards[i].gameObject.SetActive(true);
 
             Debug.Log("Invocation configurée : " + card.cardId);

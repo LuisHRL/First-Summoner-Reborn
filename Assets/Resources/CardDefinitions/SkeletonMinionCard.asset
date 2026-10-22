@@ -27,4 +27,4 @@ MonoBehaviour:
   health: 100
   movementSpeed: 3
   numberOfUnits: 1
-  cardArtwork: {fileID: 0}
+  cardArtwork: {fileID: 21300000, guid: 56c154ce4644fa64bbbc223ca61ee545, type: 3}

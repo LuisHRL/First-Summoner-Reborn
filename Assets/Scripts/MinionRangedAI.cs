@@ -4,7 +4,6 @@ public class MinionRangedAI : MonoBehaviour
 {
     [Header("Déplacement")]
     public float speed = 3f;
-    public float lifetime = 20f;
     public float followDistance = 2f;
 
     [Header("Attaque à distance")]
@@ -23,8 +22,6 @@ public class MinionRangedAI : MonoBehaviour
     {
         player =
             FindAnyObjectByType<PlayerHealth>();
-
-        Destroy(gameObject, lifetime);
     }
 
     void Update()

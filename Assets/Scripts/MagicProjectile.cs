@@ -16,9 +16,18 @@ public class MagicProjectile : MonoBehaviour
         Destroy(gameObject, lifetime);
     }
 
-    void Update()
+    private Rigidbody rb;
+
+    void Awake()
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        rb = GetComponent<Rigidbody>();
+    }
+
+    void FixedUpdate()
+    {
+        rb.MovePosition(
+            rb.position + transform.forward * speed * Time.fixedDeltaTime
+        );
     }
 
     void OnTriggerEnter(Collider other)

@@ -9,7 +9,8 @@ public class ClosePanelButton : MonoBehaviour
     {
         MainMenu,
         Hero,
-        Settings
+        Settings,
+        Cards
     }
 
     [SerializeField]
@@ -38,6 +39,14 @@ public class ClosePanelButton : MonoBehaviour
                 break;
             case CloseAction.Settings:
                 menu.BackToSettings();
+                break;
+            case CloseAction.Cards:
+                CardDetailsUI details = GetComponentInParent<CardDetailsUI>(true);
+
+                if (details != null)
+                {
+                    details.Hide();
+                }
                 break;
         }
     }

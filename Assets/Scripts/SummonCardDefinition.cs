@@ -29,6 +29,8 @@ public class SummonCardDefinition : ScriptableObject
 
     public bool isRanged = false;
     public float attackRange = 1f;
+    [Header("Position d'invocation")]
+    public bool spawnBehindPlayer = false;
 
     public int health = 100;
     public float movementSpeed = 3f;

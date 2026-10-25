@@ -24,6 +24,7 @@ MonoBehaviour:
   attackSpeed: 1.5
   isRanged: 1
   attackRange: 5
+  spawnBehindPlayer: 1
   health: 70
   movementSpeed: 3
   numberOfUnits: 1

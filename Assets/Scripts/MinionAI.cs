@@ -19,6 +19,7 @@ public class MinionAI : MonoBehaviour
     private float nextAttackTime;
 
     private Animator animator;
+    private CharacterController controller;
     private Vector3 previousPosition;
 
     void Start()
@@ -27,6 +28,7 @@ public class MinionAI : MonoBehaviour
         playerTargeting = FindAnyObjectByType<PlayerTargeting>();
 
         animator = GetComponentInChildren<Animator>();
+        controller = GetComponent<CharacterController>();
         Debug.Log(
     "MINION ANIMATOR UTILISÉ : " +
     (animator != null ? animator.gameObject.name : "AUCUN")
@@ -82,8 +84,9 @@ public class MinionAI : MonoBehaviour
 
         if (direction.magnitude > attackRange)
         {
-            transform.position +=
-                direction.normalized * speed * Time.deltaTime;
+            controller.Move(
+            direction.normalized * speed * Time.deltaTime
+            );
 
             if (direction.sqrMagnitude > 0.001f)
             {
@@ -125,8 +128,9 @@ public class MinionAI : MonoBehaviour
 
         if (direction.magnitude > followDistance)
         {
-            transform.position +=
-                direction.normalized * speed * Time.deltaTime;
+            controller.Move(
+            direction.normalized * speed * Time.deltaTime
+            );
 
             if (direction.sqrMagnitude > 0.001f)
             {

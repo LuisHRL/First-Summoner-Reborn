@@ -17,12 +17,14 @@ public class MinionRangedAI : MonoBehaviour
 
     private PlayerHealth player;
     private PlayerTargeting playerTargeting;
+    private CharacterController controller;
     private float nextAttackTime;
 
     void Start()
     {
         player = FindAnyObjectByType<PlayerHealth>();
         playerTargeting = FindAnyObjectByType<PlayerTargeting>();
+        controller = GetComponent<CharacterController>();
     }
 
     void Update()
@@ -61,8 +63,9 @@ public class MinionRangedAI : MonoBehaviour
 
         if (distance > attackRange)
         {
-            transform.position +=
-                direction.normalized * speed * Time.deltaTime;
+            controller.Move(
+            direction.normalized * speed * Time.deltaTime
+            );
 
             if (direction.sqrMagnitude > 0.001f)
             {
@@ -135,8 +138,9 @@ public class MinionRangedAI : MonoBehaviour
 
         if (direction.magnitude > followDistance)
         {
-            transform.position +=
-                direction.normalized * speed * Time.deltaTime;
+            controller.Move(
+            direction.normalized * speed * Time.deltaTime
+            );
 
             if (direction.sqrMagnitude > 0.001f)
             {

@@ -17,6 +17,22 @@ public class SummonCard : MonoBehaviour
         }
 
         Vector3 spawnPosition = player.position + player.forward * 2f;
+
+        float spacing = 1.5f;
+        float checkRadius = 0.6f;
+
+        for (int i = 0; i < 12; i++)
+        {
+            Vector3 candidate = player.position
+                + Quaternion.Euler(0f, i * 30f, 0f)
+                * player.forward * (2f + (i / 6) * spacing);
+
+            if (!Physics.CheckSphere(candidate + Vector3.up, checkRadius))
+            {
+                spawnPosition = candidate;
+                break;
+            }
+        }
         if (summonSound != null)
         {
             AudioSource.PlayClipAtPoint(summonSound, spawnPosition);

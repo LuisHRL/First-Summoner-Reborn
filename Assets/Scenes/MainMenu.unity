@@ -5716,7 +5716,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 29729423}
-  m_Father: {fileID: 1285176572}
+  m_Father: {fileID: 1858484374}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -7515,7 +7515,6 @@ RectTransform:
   - {fileID: 2078005516}
   - {fileID: 1858484374}
   - {fileID: 176624838}
-  - {fileID: 942435101}
   - {fileID: 610718972}
   - {fileID: 1065875691}
   - {fileID: 1401220687}
@@ -7554,6 +7553,8 @@ MonoBehaviour:
   aboutPanel: {fileID: 557037858}
   backButtonAbout: {fileID: 610718971}
   quitConfirmPanel: {fileID: 176624837}
+  minSwipeDistance: 100
+  transitionDuration: 0.25
 --- !u!1 &1296911509
 GameObject:
   m_ObjectHideFlags: 0
@@ -10036,6 +10037,7 @@ RectTransform:
   m_Children:
   - {fileID: 200878410}
   - {fileID: 262284850}
+  - {fileID: 942435101}
   m_Father: {fileID: 1285176572}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

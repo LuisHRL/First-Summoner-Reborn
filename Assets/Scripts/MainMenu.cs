@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Localization.Settings;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class MainMenu : MonoBehaviour
 {
@@ -32,7 +33,18 @@ public class MainMenu : MonoBehaviour
 
     private Vector2 swipeStartPosition;
     private bool swipeInProgress;
+    private RectTransform draggedPanel;
+    private RectTransform adjacentPanel;
 
+    private Vector2 draggedPanelStart;
+    private Vector2 adjacentPanelStart;
+
+    private int dragTargetIndex = -1;
+    private float dragOffset;
+    [Header("Animation des menus")]
+    [SerializeField] private float transitionDuration = 0.25f;
+
+    private bool isTransitioning;
     private void Start()
     {
         ControlSettings.LoadSavedMode();
@@ -68,9 +80,13 @@ public class MainMenu : MonoBehaviour
         {
             BackToHero();
         }
-        else if (missionPanel.activeSelf)
+        else if (missionPanel.activeSelf ||
+         villagePanel.activeSelf ||
+         challengePanel.activeSelf ||
+         arenaPanel.activeSelf ||
+         clanPanel.activeSelf)
         {
-            BackToHero();
+            NavigateToPanel(0);
         }
         else
         {
@@ -82,84 +98,323 @@ public class MainMenu : MonoBehaviour
     // --------------------------------------------------
     // NAVIGATION PRINCIPALE
     // --------------------------------------------------
+    private bool TryGetPointerPosition(
+    out Vector2 position,
+    out bool pressed,
+    out bool released,
+    out bool held)
+    {
+        position = Vector2.zero;
+        pressed = false;
+        released = false;
+        held = false;
+
+        // Priorité au tactile sur Android.
+        if (Touchscreen.current != null &&
+        (Touchscreen.current.primaryTouch.press.isPressed ||
+        Touchscreen.current.primaryTouch.press.wasReleasedThisFrame))
+        {
+            var touch = Touchscreen.current.primaryTouch;
+
+            position = touch.position.ReadValue();
+            pressed = touch.press.wasPressedThisFrame;
+            released = touch.press.wasReleasedThisFrame;
+            held = touch.press.isPressed;
+            return true;
+        }
+
+        // Souris dans l'éditeur Unity.
+        if (Mouse.current != null)
+        {
+            var mouse = Mouse.current;
+
+            position = mouse.position.ReadValue();
+            pressed = mouse.leftButton.wasPressedThisFrame;
+            released = mouse.leftButton.wasReleasedThisFrame;
+            held = mouse.leftButton.isPressed;
+            return true;
+        }
+
+        return false;
+    }
+    private void BeginPanelDrag(int targetIndex)
+    {
+        GameObject[] panels = GetMainPanels();
+        int currentIndex = GetActivePanelIndex();
+
+        if (isTransitioning ||
+            currentIndex < 0 ||
+            targetIndex < 0 ||
+            targetIndex >= panels.Length ||
+            targetIndex == currentIndex)
+            return;
+
+        draggedPanel =
+            panels[currentIndex].GetComponent<RectTransform>();
+
+        adjacentPanel =
+            panels[targetIndex].GetComponent<RectTransform>();
+
+        draggedPanelStart = draggedPanel.anchoredPosition;
+        adjacentPanelStart = adjacentPanel.anchoredPosition;
+
+        dragTargetIndex = targetIndex;
+        dragOffset = 0f;
+
+        int direction = targetIndex > currentIndex ? 1 : -1;
+        float width = ((RectTransform)draggedPanel.parent).rect.width;
+
+        adjacentPanel.anchoredPosition =
+            adjacentPanelStart + Vector2.right * direction * width;
+
+        adjacentPanel.gameObject.SetActive(true);
+        if (targetIndex == 0)
+            topButtonsPanel.SetActive(true);
+    }
+    private void UpdateDraggedPanels(float offset)
+    {
+        if (draggedPanel == null || adjacentPanel == null)
+            return;
+
+        float width = ((RectTransform)draggedPanel.parent).rect.width;
+
+        dragOffset = Mathf.Clamp(offset, -width, width);
+
+        int direction = dragOffset < 0f ? 1 : -1;
+
+        draggedPanel.anchoredPosition =
+            draggedPanelStart + Vector2.right * dragOffset;
+
+        adjacentPanel.anchoredPosition =
+            adjacentPanelStart +
+            Vector2.right * (dragOffset + direction * width);
+    }
+    private IEnumerator FinishPanelDrag(bool complete)
+    {
+        if (draggedPanel == null || adjacentPanel == null)
+            yield break;
+
+        isTransitioning = true;
+
+        float width = ((RectTransform)draggedPanel.parent).rect.width;
+        int direction = dragOffset < 0f ? 1 : -1;
+
+        Vector2 outgoingFrom = draggedPanel.anchoredPosition;
+        Vector2 incomingFrom = adjacentPanel.anchoredPosition;
+
+        Vector2 outgoingTo = draggedPanelStart;
+        Vector2 incomingTo = adjacentPanelStart +
+            Vector2.right * direction * width;
+
+        if (complete)
+        {
+            outgoingTo -= Vector2.right * direction * width;
+            incomingTo = adjacentPanelStart;
+        }
+
+        float elapsed = 0f;
+
+        while (elapsed < transitionDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(elapsed / transitionDuration);
+            t = t * t * (3f - 2f * t);
+
+            draggedPanel.anchoredPosition =
+                Vector2.Lerp(outgoingFrom, outgoingTo, t);
+
+            adjacentPanel.anchoredPosition =
+                Vector2.Lerp(incomingFrom, incomingTo, t);
+
+            yield return null;
+        }
+
+        draggedPanel.anchoredPosition = draggedPanelStart;
+        adjacentPanel.anchoredPosition = adjacentPanelStart;
+
+        if (complete)
+            draggedPanel.gameObject.SetActive(false);
+        else
+            adjacentPanel.gameObject.SetActive(false);
+        if (complete)
+        {
+            topButtonsPanel.SetActive(
+                dragTargetIndex == 0
+            );
+        }
+        draggedPanel = null;
+        adjacentPanel = null;
+        dragTargetIndex = -1;
+        dragOffset = 0f;
+
+        isTransitioning = false;
+    }
     private void HandleSwipe()
     {
-        // Ne pas changer d'onglet dans les sous-menus.
-        if (cardsPanel.activeSelf ||
+        if (isTransitioning ||
+            cardsPanel.activeSelf ||
             settingsPanel.activeSelf ||
             aboutPanel.activeSelf ||
             quitConfirmPanel.activeSelf)
             return;
 
-        if (Touchscreen.current == null)
+        if (!TryGetPointerPosition(
+            out Vector2 position,
+            out bool pressed,
+            out bool released,
+            out bool held))
             return;
 
-        var touch = Touchscreen.current.primaryTouch;
-
-        if (touch.press.wasPressedThisFrame)
+        if (pressed)
         {
-            swipeStartPosition = touch.position.ReadValue();
+            swipeStartPosition = position;
             swipeInProgress = true;
         }
 
-        if (touch.press.wasReleasedThisFrame && swipeInProgress)
+        if (!swipeInProgress)
+            return;
+
+        Vector2 delta = position - swipeStartPosition;
+
+        if (held && draggedPanel == null)
         {
-            swipeInProgress = false;
-
-            Vector2 delta =
-                touch.position.ReadValue() - swipeStartPosition;
-
-            if (Mathf.Abs(delta.x) < minSwipeDistance ||
+            if (Mathf.Abs(delta.x) < 15f ||
                 Mathf.Abs(delta.x) <= Mathf.Abs(delta.y))
                 return;
 
-            int currentIndex = heroPanel.activeSelf ? 0 :
-                villagePanel.activeSelf ? 1 :
-                missionPanel.activeSelf ? 2 :
-                challengePanel.activeSelf ? 3 :
-                arenaPanel.activeSelf ? 4 :
-                clanPanel.activeSelf ? 5 : -1;
-
+            int currentIndex = GetActivePanelIndex();
             if (currentIndex < 0)
                 return;
 
-            int nextIndex = Mathf.Clamp(
-                currentIndex + (delta.x < 0f ? 1 : -1),
-                0,
-                5
-            );
+            int targetIndex = currentIndex + (delta.x < 0f ? 1 : -1);
 
-            switch (nextIndex)
+            if (targetIndex < 0 || targetIndex >= 6)
+                return;
+
+            BeginPanelDrag(targetIndex);
+        }
+
+        if (held && draggedPanel != null)
+        {
+            UpdateDraggedPanels(delta.x);
+        }
+
+        if (released)
+        {
+            swipeInProgress = false;
+
+            if (draggedPanel != null)
             {
-                case 0: OpenHero(); break;
-                case 1: OpenVillage(); break;
-                case 2: OpenMissions(); break;
-                case 3: OpenChallenge(); break;
-                case 4: OpenArena(); break;
-                case 5: OpenClan(); break;
+                bool complete =
+                    Mathf.Abs(dragOffset) >= minSwipeDistance;
+
+                StartCoroutine(FinishPanelDrag(complete));
             }
         }
     }
+    private GameObject[] GetMainPanels()
+    {
+        return new GameObject[]
+        {
+        heroPanel,
+        villagePanel,
+        missionPanel,
+        challengePanel,
+        arenaPanel,
+        clanPanel
+        };
+    }
+
+    private int GetActivePanelIndex()
+    {
+        GameObject[] panels = GetMainPanels();
+
+        for (int i = 0; i < panels.Length; i++)
+        {
+            if (panels[i] != null && panels[i].activeSelf)
+                return i;
+        }
+
+        return -1;
+    }
+    private void NavigateToPanel(int targetIndex)
+    {
+        if (isTransitioning)
+            return;
+
+        GameObject[] panels = GetMainPanels();
+
+        int currentIndex = GetActivePanelIndex();
+
+        if (currentIndex < 0 ||
+            targetIndex < 0 ||
+            targetIndex >= panels.Length ||
+            currentIndex == targetIndex)
+            return;
+
+        int direction = targetIndex > currentIndex ? 1 : -1;
+
+        RectTransform outgoing =
+            panels[currentIndex].GetComponent<RectTransform>();
+
+        RectTransform incoming =
+            panels[targetIndex].GetComponent<RectTransform>();
+
+        StartCoroutine(
+            AnimatePanels(outgoing, incoming, direction)
+        );
+    }
+    private IEnumerator AnimatePanels(
+    RectTransform outgoing,
+    RectTransform incoming,
+    int direction)
+    {
+        isTransitioning = true;
+        if (incoming.gameObject == heroPanel)
+            topButtonsPanel.SetActive(true);
+
+        float width = ((RectTransform)outgoing.parent).rect.width;
+
+        Vector2 outgoingStart = outgoing.anchoredPosition;
+        Vector2 incomingEnd = incoming.anchoredPosition;
+        Vector2 incomingStart = incomingEnd + Vector2.right * direction * width;
+
+        incoming.anchoredPosition = incomingStart;
+        incoming.gameObject.SetActive(true);
+
+        float elapsed = 0f;
+
+        while (elapsed < transitionDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(elapsed / transitionDuration);
+            t = t * t * (3f - 2f * t);
+
+            outgoing.anchoredPosition =
+                Vector2.Lerp(outgoingStart,
+                    outgoingStart - Vector2.right * direction * width, t);
+
+            incoming.anchoredPosition =
+                Vector2.Lerp(incomingStart, incomingEnd, t);
+
+            yield return null;
+        }
+
+        outgoing.anchoredPosition = outgoingStart;
+        incoming.anchoredPosition = incomingEnd;
+        outgoing.gameObject.SetActive(false);
+        topButtonsPanel.SetActive(incoming.gameObject == heroPanel);
+        isTransitioning = false;
+    }
     public void OpenHero()
     {
-        BackToHero();
+        NavigateToPanel(0);
     }
     public void OpenVillage()
     {
-        heroPanel.SetActive(false);
-        villagePanel.SetActive(true);
-        missionPanel.SetActive(false);
-        challengePanel.SetActive(false);
-        arenaPanel.SetActive(false);
-        clanPanel.SetActive(false);
-
-        cardsPanel.SetActive(false);
-        settingsPanel.SetActive(false);
-        aboutPanel.SetActive(false);
-        backButtonAbout.SetActive(false);
-
-        mainButtonsPanel.SetActive(true);
-        topButtonsPanel.SetActive(false);
+        NavigateToPanel(1);
     }
     private void OpenPlaceholder(GameObject selectedPanel)
     {
@@ -183,36 +438,21 @@ public class MainMenu : MonoBehaviour
 
     public void OpenChallenge()
     {
-        OpenPlaceholder(challengePanel);
+        NavigateToPanel(3);
     }
 
     public void OpenArena()
     {
-        OpenPlaceholder(arenaPanel);
+        NavigateToPanel(4);
     }
 
     public void OpenClan()
     {
-        OpenPlaceholder(clanPanel);
+        NavigateToPanel(5);
     }
     public void OpenMissions()
     {
-        heroPanel.SetActive(false);
-        missionPanel.SetActive(true);
-        villagePanel.SetActive(false);
-        challengePanel.SetActive(false);
-        arenaPanel.SetActive(false);
-        clanPanel.SetActive(false);
-        cardsPanel.SetActive(false);
-        settingsPanel.SetActive(false);
-        aboutPanel.SetActive(false);
-        backButtonAbout.SetActive(false);
-
-        // Navigation inférieure permanente.
-        mainButtonsPanel.SetActive(true);
-
-        // Réglages affichés uniquement dans Héros.
-        topButtonsPanel.SetActive(false);
+        NavigateToPanel(2);
     }
 
     public void BackToHero()

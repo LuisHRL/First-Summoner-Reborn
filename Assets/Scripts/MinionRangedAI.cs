@@ -64,7 +64,7 @@ public class MinionRangedAI : MonoBehaviour
         if (distance > attackRange)
         {
             controller.Move(
-            direction.normalized * speed * Time.deltaTime
+                direction.normalized * speed * Time.deltaTime
             );
 
             if (direction.sqrMagnitude > 0.001f)
@@ -87,10 +87,17 @@ public class MinionRangedAI : MonoBehaviour
         if (target == null || firePoint == null)
             return;
 
-        Vector3 direction =
-            target.transform.position - firePoint.position;
+        // Viser le centre du collider de l'ennemi.
+        Collider targetCollider =
+            target.GetComponentInChildren<Collider>();
 
-        direction.y = 0f;
+        Vector3 targetPosition = targetCollider != null
+            ? targetCollider.bounds.center
+            : target.transform.position;
+
+        // Conserver la différence de hauteur.
+        Vector3 direction =
+            targetPosition - firePoint.position;
 
         if (direction.sqrMagnitude <= 0.001f)
             return;
@@ -139,7 +146,7 @@ public class MinionRangedAI : MonoBehaviour
         if (direction.magnitude > followDistance)
         {
             controller.Move(
-            direction.normalized * speed * Time.deltaTime
+                direction.normalized * speed * Time.deltaTime
             );
 
             if (direction.sqrMagnitude > 0.001f)

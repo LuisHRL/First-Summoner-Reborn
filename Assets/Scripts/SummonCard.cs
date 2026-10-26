@@ -26,9 +26,11 @@ public class SummonCard : MonoBehaviour
             return;
         }
 
+        // Placement fixe selon le haut/bas de l'écran,
+        // indépendamment de l'orientation du héros.
         Vector3 direction = spawnBehindPlayer
-            ? -player.forward
-            : player.forward;
+            ? Vector3.back
+            : Vector3.forward;
 
         Vector3 center = player.position + direction * spawnDistance;
 
@@ -36,13 +38,16 @@ public class SummonCard : MonoBehaviour
 
         for (int unit = 0; unit < 2; unit++)
         {
-            // Une unité à gauche, l'autre à droite.
+            // Une unité à gauche, l'autre à droite de l'écran.
             float side = unit == 0 ? -0.5f : 0.5f;
 
             Vector3 desiredPosition =
-                center + player.right * side * unitSpacing;
+                center + Vector3.right * side * unitSpacing;
 
-            if (TryFindFreePosition(desiredPosition, out Vector3 spawnPosition))
+            if (TryFindFreePosition(
+                desiredPosition,
+                direction,
+                out Vector3 spawnPosition))
             {
                 Instantiate(
                     minionPrefab,
@@ -72,6 +77,7 @@ public class SummonCard : MonoBehaviour
 
     private bool TryFindFreePosition(
         Vector3 desiredPosition,
+        Vector3 direction,
         out Vector3 freePosition)
     {
         // Vérifier d'abord la position prévue.
@@ -92,20 +98,18 @@ public class SummonCard : MonoBehaviour
 
                 Vector3 offset =
                     Quaternion.Euler(0f, angle, 0f)
-                    * player.forward * radius;
+                    * direction * radius;
 
                 Vector3 candidate = desiredPosition + offset;
 
-                // Rester devant ou derrière selon la carte.
-                float forwardOffset = Vector3.Dot(
+                // Rester du bon côté du héros,
+                // même si celui-ci tourne.
+                float directionalOffset = Vector3.Dot(
                     candidate - player.position,
-                    player.forward
+                    direction
                 );
 
-                if (spawnBehindPlayer && forwardOffset >= 0f)
-                    continue;
-
-                if (!spawnBehindPlayer && forwardOffset <= 0f)
+                if (directionalOffset <= 0f)
                     continue;
 
                 if (IsPositionFree(candidate))

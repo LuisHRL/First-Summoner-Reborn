@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
@@ -21,15 +22,11 @@ public class EnemyAI : MonoBehaviour
     public float attackerMemoryDuration = 10f;
 
     private PlayerHealth player;
-
-    // La cible actuelle de l'ennemi.
     private Transform currentTarget;
-
-    // Temps jusqu'auquel l'ennemi se souvient
-    // de son attaquant à distance.
-    private float attackerMemoryEndTime;
-
     private float nextAttackTime;
+
+    // Cible globale commune au camp ennemi.
+    private static Transform sharedTarget;
 
     void Start()
     {
@@ -38,115 +35,50 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        // On récupère le joueur s'il n'a pas encore été trouvé.
         if (player == null)
         {
             player = FindAnyObjectByType<PlayerHealth>();
-
-            if (player == null)
-                return;
         }
 
         UpdateTarget();
 
-        if (currentTarget == null)
-            return;
-
-        MoveAndAttack();
+        if (currentTarget != null)
+        {
+            MoveAndAttack();
+        }
     }
 
-    // ---------------------------------------------------------
-    // GESTION DE LA CIBLE
-    // ---------------------------------------------------------
-
-    void UpdateTarget()
-    {
-        // Si la cible actuelle existe toujours et est encore valide,
-        // on la conserve.
-        if (IsTargetValid())
-        {
-            // Si nous sommes actuellement en mémoire d'un attaquant,
-            // nous vérifions si cette mémoire est expirée.
-            if (Time.time >= attackerMemoryEndTime)
-            {
-                // La mémoire est terminée.
-                // On abandonne la cible et on repart sur
-                // le comportement normal.
-                currentTarget = null;
-            }
-            else
-            {
-                return;
-            }
-        }
-
-        // -----------------------------------------------------
-        // COMPORTEMENT NORMAL
-        // -----------------------------------------------------
-
-        // 1. Cherche d'abord un minion proche.
-        MinionHealth closestMinion = FindClosestMinion();
-
-        if (closestMinion != null)
-        {
-            currentTarget = closestMinion.transform;
-            return;
-        }
-
-        // 2. Sinon, regarde si le joueur est assez proche.
-        if (player != null)
-        {
-            float playerDistance = Vector3.Distance(
-                transform.position,
-                player.transform.position
-            );
-
-            if (playerDistance <= playerAggroRange)
-            {
-                currentTarget = player.transform;
-                return;
-            }
-        }
-
-        // Aucune cible.
-        currentTarget = null;
-    }
-
-    // ---------------------------------------------------------
-    // MÉMOIRE DE L'ATTAQUANT
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // AGGRO GLOBAL
+    // --------------------------------------------------
 
     public void AlertedBy(Transform attacker)
     {
-        if (attacker == null)
+        if (!IsTargetValid(attacker))
             return;
 
-        // On mémorise l'attaquant.
-        currentTarget = attacker;
+        // Une cible collective vivante reste prioritaire.
+        if (IsTargetValid(sharedTarget))
+            return;
 
-        // L'ennemi se souviendra de cette cible pendant
-        // attackerMemoryDuration secondes.
-        attackerMemoryEndTime =
-            Time.time + attackerMemoryDuration;
+        sharedTarget = attacker;
+        currentTarget = attacker;
     }
 
-    // ---------------------------------------------------------
-    // VALIDATION DE LA CIBLE
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // VALIDATION
+    // --------------------------------------------------
 
-    bool IsTargetValid()
+    bool IsTargetValid(Transform target)
     {
-        if (currentTarget == null)
+        if (target == null ||
+            !target.gameObject.activeInHierarchy)
+        {
             return false;
-
-        // Vérifie si la cible est toujours présente dans la scène.
-        if (!currentTarget.gameObject.activeInHierarchy)
-            return false;
-
-        // Vérifie si la cible possède encore une santé valide.
+        }
 
         PlayerHealth targetPlayer =
-            currentTarget.GetComponent<PlayerHealth>();
+            target.GetComponent<PlayerHealth>();
 
         if (targetPlayer != null)
         {
@@ -154,7 +86,7 @@ public class EnemyAI : MonoBehaviour
         }
 
         MinionHealth targetMinion =
-            currentTarget.GetComponent<MinionHealth>();
+            target.GetComponent<MinionHealth>();
 
         if (targetMinion != null)
         {
@@ -164,30 +96,80 @@ public class EnemyAI : MonoBehaviour
         return false;
     }
 
-    // ---------------------------------------------------------
-    // RECHERCHE DU MINION LE PLUS PROCHE
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // CHOIX DE CIBLE
+    // --------------------------------------------------
+
+    void UpdateTarget()
+    {
+        if (!IsTargetValid(sharedTarget))
+        {
+            sharedTarget = null;
+        }
+
+        if (sharedTarget != null)
+        {
+            currentTarget = sharedTarget;
+            return;
+        }
+
+        // Conserver l'adversaire engagé.
+        if (IsTargetValid(currentTarget))
+            return;
+
+        currentTarget = null;
+
+        // Priorité aux invocations proches.
+        MinionHealth minion = FindClosestMinion();
+
+        if (minion != null)
+        {
+            currentTarget = minion.transform;
+            return;
+        }
+
+        // Sinon, détecter le héros.
+        if (player != null && player.CurrentHealth > 0)
+        {
+            float distance = Vector3.Distance(
+                transform.position,
+                player.transform.position
+            );
+
+            if (distance <= playerAggroRange)
+            {
+                currentTarget = player.transform;
+            }
+        }
+    }
+
+    // --------------------------------------------------
+    // DÉTECTION DES INVOCATIONS
+    // --------------------------------------------------
 
     MinionHealth FindClosestMinion()
     {
         MinionHealth[] minions =
-            FindObjectsByType<MinionHealth>();
+    FindObjectsByType<MinionHealth>();
 
         MinionHealth closest = null;
-
         float closestDistance = minionAggroRange;
 
         foreach (MinionHealth minion in minions)
         {
-            if (minion == null)
+            if (minion == null ||
+                !minion.gameObject.activeInHierarchy ||
+                minion.CurrentHealth <= 0)
+            {
                 continue;
+            }
 
             float distance = Vector3.Distance(
                 transform.position,
                 minion.transform.position
             );
 
-            if (distance <= closestDistance)
+            if (distance < closestDistance)
             {
                 closestDistance = distance;
                 closest = minion;
@@ -197,23 +179,22 @@ public class EnemyAI : MonoBehaviour
         return closest;
     }
 
-    // ---------------------------------------------------------
-    // DÉPLACEMENT ET ATTAQUE
-    // ---------------------------------------------------------
+    // --------------------------------------------------
+    // DÉPLACEMENT ET COMBAT
+    // --------------------------------------------------
 
     void MoveAndAttack()
     {
-        if (currentTarget == null)
+        if (!IsTargetValid(currentTarget))
             return;
 
         Vector3 direction =
             currentTarget.position - transform.position;
 
-        direction.y = 0;
+        direction.y = 0f;
 
         float distance = direction.magnitude;
 
-        // L'ennemi est trop loin.
         if (distance > attackRange)
         {
             Vector3 movement =
@@ -225,30 +206,27 @@ public class EnemyAI : MonoBehaviour
 
             if (direction.sqrMagnitude > 0.001f)
             {
-                transform.forward =
-                    direction.normalized;
+                transform.forward = direction.normalized;
             }
 
             return;
         }
 
-        // L'ennemi est à portée d'attaque.
-        if (Time.time >= nextAttackTime)
-        {
-            AttackTarget();
+        if (Time.time < nextAttackTime)
+            return;
 
-            nextAttackTime =
-                Time.time + attackCooldown;
-        }
+        AttackTarget();
+
+        nextAttackTime = Time.time + attackCooldown;
     }
 
-    // ---------------------------------------------------------
+    // --------------------------------------------------
     // ATTAQUE
-    // ---------------------------------------------------------
+    // --------------------------------------------------
 
     void AttackTarget()
     {
-        if (currentTarget == null)
+        if (!IsTargetValid(currentTarget))
             return;
 
         PlayerHealth targetPlayer =
@@ -265,7 +243,18 @@ public class EnemyAI : MonoBehaviour
 
         if (targetMinion != null)
         {
+            // Déclencher l'animation Hit existante.
             targetMinion.TakeDamage(damage);
+
+            // Alerter toutes les invocations.
+            EnemyHealth enemyHealth =
+                GetComponent<EnemyHealth>();
+
+            if (enemyHealth != null &&
+                enemyHealth.CurrentHealth > 0)
+            {
+                MinionAI.AlertAllMinions(enemyHealth);
+            }
         }
     }
 }

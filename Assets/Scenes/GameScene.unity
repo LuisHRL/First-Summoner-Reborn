@@ -2256,7 +2256,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 4215550931320413550, guid: 7baaccd26e6d7b74889e70f74fee8969, type: 3}
   firePoint: {fileID: 696435401}
   attackRange: 20
-  attackCooldown: 1
+  attackCooldown: 0.6
   moveToAttackSpeed: 5
   launchSound: {fileID: 8300000, guid: 0c426fbc03c43824caf9b856db955190, type: 3}
 --- !u!114 &899719381

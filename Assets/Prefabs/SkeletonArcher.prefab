@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 2470732046062540103}
   - component: {fileID: 1153028394026645363}
   - component: {fileID: 4306622674265561269}
-  - component: {fileID: -4748497196550721185}
   - component: {fileID: 4055979533745930184}
   - component: {fileID: 1690524808797361675}
   m_Layer: 7
@@ -137,25 +136,6 @@ MonoBehaviour:
   OnDeath:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-4748497196550721185
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2196625450366437133}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b33cb2d183a545749ad0ad13942ce834, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MinionRangedAI
-  speed: 3
-  followDistance: 2
-  attackRange: 20
-  attackCooldown: 1.5
-  projectilePrefab: {fileID: 4215550931320413550, guid: 7baaccd26e6d7b74889e70f74fee8969, type: 3}
-  firePoint: {fileID: 9137897918903131205}
-  launchSound: {fileID: 8300000, guid: 0c426fbc03c43824caf9b856db955190, type: 3}
 --- !u!143 &4055979533745930184
 CharacterController:
   m_ObjectHideFlags: 0
@@ -200,9 +180,9 @@ MonoBehaviour:
   damage: 5
   attackRange: 1.3
   attackCooldown: 1
-  attackSound: {fileID: 0}
-  projectilePrefab: {fileID: 0}
-  firePoint: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 0c426fbc03c43824caf9b856db955190, type: 3}
+  projectilePrefab: {fileID: 4215550931320413550, guid: 7baaccd26e6d7b74889e70f74fee8969, type: 3}
+  firePoint: {fileID: 9137897918903131205}
 --- !u!1 &6308809473176230226
 GameObject:
   m_ObjectHideFlags: 0

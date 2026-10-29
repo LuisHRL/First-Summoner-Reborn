@@ -44,6 +44,10 @@ public class MinionAI : MonoBehaviour
     // Cible partagée entre toutes les invocations.
     private static EnemyHealth sharedTarget;
 
+    // --------------------------------------------------
+    // INITIALISATION UNITY
+    // --------------------------------------------------
+
     void Start()
     {
         player = FindAnyObjectByType<PlayerHealth>();
@@ -53,6 +57,46 @@ public class MinionAI : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
 
         previousPosition = transform.position;
+    }
+
+    // --------------------------------------------------
+    // INITIALISATION DEPUIS LA CARTE
+    // --------------------------------------------------
+
+    public void Initialize(SummonCardDefinition card)
+    {
+        if (card == null)
+        {
+            Debug.LogWarning(
+                "MinionAI : définition de carte manquante.",
+                this
+            );
+            return;
+        }
+
+        // Type d'attaque automatique.
+        attackType = card.isRanged
+            ? AttackType.Ranged
+            : AttackType.Melee;
+
+        // Statistiques de déplacement et de combat.
+        speed = card.movementSpeed;
+        damage = card.attackDamage;
+        attackRange = card.attackRange;
+
+        // Nombre d'attaques par seconde.
+        attackCooldown = 1f / Mathf.Max(
+            0.01f,
+            card.attackSpeed
+        );
+
+        // Points de vie.
+        MinionHealth health = GetComponent<MinionHealth>();
+
+        if (health != null)
+        {
+            health.maxHealth = card.health;
+        }
     }
 
     // --------------------------------------------------
@@ -111,6 +155,7 @@ public class MinionAI : MonoBehaviour
 
     void UpdateTarget()
     {
+        // Vérifier la cible collective.
         if (!IsValidEnemy(sharedTarget))
         {
             sharedTarget = null;
@@ -147,13 +192,13 @@ public class MinionAI : MonoBehaviour
     }
 
     // --------------------------------------------------
-    // DÉTECTION
+    // DÉTECTION DES ENNEMIS
     // --------------------------------------------------
 
     EnemyHealth FindClosestEnemy()
     {
         EnemyHealth[] enemies =
-            FindObjectsByType<EnemyHealth>();
+    FindObjectsByType<EnemyHealth>();
 
         EnemyHealth closest = null;
         float closestDistance = detectionRange;
@@ -194,6 +239,29 @@ public class MinionAI : MonoBehaviour
 
         float distance = direction.magnitude;
 
+        // Pour les attaques de mêlée, calculer la
+        // distance jusqu'à la surface du collider.
+        if (attackType == AttackType.Melee)
+        {
+            Collider enemyCollider =
+                target.GetComponentInChildren<Collider>();
+
+            if (enemyCollider != null)
+            {
+                Vector3 closestPoint =
+                    enemyCollider.ClosestPoint(
+                        transform.position
+                    );
+
+                Vector3 offset =
+                    closestPoint - transform.position;
+
+                offset.y = 0f;
+
+                distance = offset.magnitude;
+            }
+        }
+
         // Avancer jusqu'à portée.
         if (distance > attackRange)
         {
@@ -217,10 +285,11 @@ public class MinionAI : MonoBehaviour
             transform.forward = direction.normalized;
         }
 
+        // Respecter le délai entre les attaques.
         if (Time.time < nextAttackTime)
             return;
 
-        // Animation d'attaque.
+        // Déclencher l'animation d'attaque.
         if (animator != null)
         {
             animator.SetTrigger("Attack");
@@ -250,6 +319,7 @@ public class MinionAI : MonoBehaviour
 
         PlayAttackSound();
 
+        // Prévenir l'ennemi de son attaquant.
         EnemyAI enemyAI =
             target.GetComponent<EnemyAI>();
 
@@ -258,6 +328,7 @@ public class MinionAI : MonoBehaviour
             enemyAI.AlertedBy(transform);
         }
 
+        // Appliquer les dégâts définis par la carte.
         target.TakeDamage(damage);
     }
 
@@ -300,6 +371,7 @@ public class MinionAI : MonoBehaviour
 
         PlayAttackSound();
 
+        // Créer le projectile.
         GameObject projectileObject = Instantiate(
             projectilePrefab,
             firePoint.position,
@@ -311,12 +383,16 @@ public class MinionAI : MonoBehaviour
 
         if (projectile != null)
         {
+            // Identifier le lanceur.
             projectile.owner = transform;
+
+            // Utiliser les dégâts de SummonCardDefinition.
+            projectile.damage = damage;
         }
     }
 
     // --------------------------------------------------
-    // SON
+    // SON D'ATTAQUE
     // --------------------------------------------------
 
     void PlayAttackSound()

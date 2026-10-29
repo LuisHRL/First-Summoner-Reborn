@@ -45,7 +45,10 @@ public class CombatDeckManager : MonoBehaviour
                 continue;
             }
 
-            // Configurer automatiquement l'invocation.
+            // Conserver la définition complète de la carte.
+            combatCards[i].cardDefinition = card;
+
+            // Conserver les paramètres existants.
             combatCards[i].minionPrefab = card.minionPrefab;
             combatCards[i].manaCost = card.manaCost;
             combatCards[i].spawnBehindPlayer = card.spawnBehindPlayer;

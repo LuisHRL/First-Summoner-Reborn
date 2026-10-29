@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class SummonCard : MonoBehaviour
 {
+    [Header("Définition de la carte")]
+    public SummonCardDefinition cardDefinition;
     public ManaSystem manaSystem;
     public GameObject minionPrefab;
     public Transform player;
@@ -34,12 +36,14 @@ public class SummonCard : MonoBehaviour
 
         Vector3 center = player.position + direction * spawnDistance;
 
+        int unitCount = cardDefinition != null
+    ? Mathf.Max(1, cardDefinition.numberOfUnits)
+    : 2;
         int spawnedCount = 0;
 
-        for (int unit = 0; unit < 2; unit++)
+        for (int unit = 0; unit < unitCount; unit++)
         {
-            // Une unité à gauche, l'autre à droite de l'écran.
-            float side = unit == 0 ? -0.5f : 0.5f;
+            float side = unit - (unitCount - 1) * 0.5f;
 
             Vector3 desiredPosition =
                 center + Vector3.right * side * unitSpacing;
@@ -49,11 +53,19 @@ public class SummonCard : MonoBehaviour
                 direction,
                 out Vector3 spawnPosition))
             {
-                Instantiate(
-                    minionPrefab,
-                    spawnPosition,
-                    Quaternion.identity
-                );
+                GameObject summonedUnit = Instantiate(
+    minionPrefab,
+    spawnPosition,
+    Quaternion.identity
+);
+
+                // Appliquer les statistiques de la carte à l'invocation.
+                MinionAI minionAI = summonedUnit.GetComponent<MinionAI>();
+
+                if (minionAI != null && cardDefinition != null)
+                {
+                    minionAI.Initialize(cardDefinition);
+                }
 
                 spawnedCount++;
 
@@ -67,7 +79,7 @@ public class SummonCard : MonoBehaviour
             }
         }
 
-        if (spawnedCount < 2)
+        if (spawnedCount < unitCount)
         {
             Debug.LogWarning(
                 "Invocation : emplacement libre introuvable pour une unité."

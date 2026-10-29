@@ -131,12 +131,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6654b5a1a429604a981f2e33090e7a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinionAI
+  attackType: 0
   speed: 3
   followDistance: 2
+  detectionRange: 5
   damage: 5
-  attackRange: 1.3
+  attackRange: 2
   attackCooldown: 1
   attackSound: {fileID: 8300000, guid: 92ab855be2838c746b0122036828350c, type: 3}
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
 --- !u!114 &-7110283887033248121
 MonoBehaviour:
   m_ObjectHideFlags: 0

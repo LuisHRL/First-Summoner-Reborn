@@ -27,5 +27,5 @@ MonoBehaviour:
   spawnBehindPlayer: 1
   health: 70
   movementSpeed: 3
-  numberOfUnits: 1
+  numberOfUnits: 2
   cardArtwork: {fileID: 0}

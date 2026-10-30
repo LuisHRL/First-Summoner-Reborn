@@ -39,4 +39,9 @@ public class SummonCardDefinition : ScriptableObject
 
     [Header("Apparence")]
     public Sprite cardArtwork;
+
+    [Header("Audio")]
+    public AudioClip summonSound;
+    public AudioClip attackSound;
+    public AudioClip enemyHitSound;
 }

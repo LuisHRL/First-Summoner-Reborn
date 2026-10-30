@@ -25,6 +25,7 @@ public class MinionAI : MonoBehaviour
     public float attackRange = 1.3f;
     public float attackCooldown = 1f;
     public AudioClip attackSound;
+    public AudioClip enemyHitSound;
 
     [Header("Attaque à distance")]
     public GameObject projectilePrefab;
@@ -83,6 +84,11 @@ public class MinionAI : MonoBehaviour
         speed = card.movementSpeed;
         damage = card.attackDamage;
         attackRange = card.attackRange;
+
+        // Récupérer le son d'attaque défini par la carte.
+        attackSound = card.attackSound;
+        enemyHitSound = card.enemyHitSound;
+
 
         // Nombre d'attaques par seconde.
         attackCooldown = 1f / Mathf.Max(
@@ -330,6 +336,15 @@ public class MinionAI : MonoBehaviour
 
         // Appliquer les dégâts définis par la carte.
         target.TakeDamage(damage);
+
+        if (enemyHitSound != null && GameAudioManager.Instance != null)
+        {
+            GameAudioManager.Instance.PlaySFX(
+                enemyHitSound,
+                target.transform.position
+            );
+        }
+
     }
 
     // --------------------------------------------------
@@ -388,6 +403,9 @@ public class MinionAI : MonoBehaviour
 
             // Utiliser les dégâts de SummonCardDefinition.
             projectile.damage = damage;
+
+            projectile.hitSound = enemyHitSound;
+
         }
     }
 
@@ -395,16 +413,23 @@ public class MinionAI : MonoBehaviour
     // SON D'ATTAQUE
     // --------------------------------------------------
 
+
     void PlayAttackSound()
     {
-        if (attackSound != null)
+
+
+        if (attackSound == null)
+            return;
+
+        if (GameAudioManager.Instance != null)
         {
-            AudioSource.PlayClipAtPoint(
+            GameAudioManager.Instance.PlaySFX(
                 attackSound,
                 transform.position
             );
         }
     }
+
 
     // --------------------------------------------------
     // SUIVI DU HÉROS

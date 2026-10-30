@@ -2601,6 +2601,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33f52c949ff154481bbfbe71d6816c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SummonCard
+  cardDefinition: {fileID: 0}
   manaSystem: {fileID: 899719379}
   minionPrefab: {fileID: 4101930223977777471, guid: 497e6748021d58e4390b5086d823662f, type: 3}
   player: {fileID: 899719377}
@@ -4095,6 +4096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33f52c949ff154481bbfbe71d6816c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SummonCard
+  cardDefinition: {fileID: 0}
   manaSystem: {fileID: 899719379}
   minionPrefab: {fileID: 4101930223977777471, guid: 497e6748021d58e4390b5086d823662f, type: 3}
   player: {fileID: 899719377}
@@ -4847,6 +4849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33f52c949ff154481bbfbe71d6816c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SummonCard
+  cardDefinition: {fileID: 0}
   manaSystem: {fileID: 899719379}
   minionPrefab: {fileID: 4101930223977777471, guid: 497e6748021d58e4390b5086d823662f, type: 3}
   player: {fileID: 899719377}
@@ -5114,6 +5117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33f52c949ff154481bbfbe71d6816c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SummonCard
+  cardDefinition: {fileID: 0}
   manaSystem: {fileID: 899719379}
   minionPrefab: {fileID: 4101930223977777471, guid: 497e6748021d58e4390b5086d823662f, type: 3}
   player: {fileID: 899719377}
@@ -5426,6 +5430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33f52c949ff154481bbfbe71d6816c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SummonCard
+  cardDefinition: {fileID: 0}
   manaSystem: {fileID: 899719379}
   minionPrefab: {fileID: 2196625450366437133, guid: 753c314d0d72daf48875a05a13e42a70, type: 3}
   player: {fileID: 899719377}
@@ -6154,6 +6159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c33f52c949ff154481bbfbe71d6816c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SummonCard
+  cardDefinition: {fileID: 0}
   manaSystem: {fileID: 899719379}
   minionPrefab: {fileID: 4101930223977777471, guid: 497e6748021d58e4390b5086d823662f, type: 3}
   player: {fileID: 899719377}
@@ -6745,6 +6751,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2107861672}
   m_CullTransparentMesh: 1
+--- !u!1 &2131580700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2131580702}
+  - component: {fileID: 2131580701}
+  m_Layer: 0
+  m_Name: GameAudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2131580701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131580700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 045a01ad6093f36448ee365ba59ceddc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameAudioManager
+  sfxMixerGroup: {fileID: -8078257210487933805, guid: 928ecfc53f1ca114e97bf3c5beaabeed, type: 2}
+--- !u!4 &2131580702
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131580700}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 298.1642, y: 1799.16, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &8931743290679500789
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6824,3 +6875,4 @@ SceneRoots:
   - {fileID: 1253982565}
   - {fileID: 757166177}
   - {fileID: 1301730067}
+  - {fileID: 2131580702}

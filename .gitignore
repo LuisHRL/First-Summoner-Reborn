@@ -11,7 +11,10 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 *.log
-
+# Dossiers de test des animations
+/Assets/tests-animations/
+/Assets/tests-animations2/
+/Assets/tests-animations3/
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
 /[Mm]emoryCaptures/

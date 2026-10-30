@@ -8,8 +8,6 @@ public class SummonCard : MonoBehaviour
     public GameObject minionPrefab;
     public Transform player;
     public int manaCost = 25;
-    public AudioClip summonSound;
-
     [Header("Double invocation")]
     public bool spawnBehindPlayer = false;
     public float spawnDistance = 2f;
@@ -69,13 +67,17 @@ public class SummonCard : MonoBehaviour
 
                 spawnedCount++;
 
-                if (summonSound != null)
+
+                if (cardDefinition != null &&
+                    cardDefinition.summonSound != null &&
+                    GameAudioManager.Instance != null)
                 {
-                    AudioSource.PlayClipAtPoint(
-                        summonSound,
+                    GameAudioManager.Instance.PlaySFX(
+                        cardDefinition.summonSound,
                         spawnPosition
                     );
                 }
+
             }
         }
 

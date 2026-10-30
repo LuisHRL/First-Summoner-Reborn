@@ -29,3 +29,6 @@ MonoBehaviour:
   movementSpeed: 3
   numberOfUnits: 2
   cardArtwork: {fileID: 21300000, guid: 56c154ce4644fa64bbbc223ca61ee545, type: 3}
+  summonSound: {fileID: 8300000, guid: 4abc584f973dcd54c8a62dfc9e934044, type: 3}
+  attackSound: {fileID: 8300000, guid: 92ab855be2838c746b0122036828350c, type: 3}
+  enemyHitSound: {fileID: 0}

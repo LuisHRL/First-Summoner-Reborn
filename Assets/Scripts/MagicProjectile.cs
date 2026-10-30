@@ -49,10 +49,11 @@ public class MagicProjectile : MonoBehaviour
             enemyAI.AlertedBy(owner);
         }
 
-        // Joue le son d'impact.
-        if (hitSound != null)
+
+        // Joue le son d'impact via le gestionnaire audio.
+        if (hitSound != null && GameAudioManager.Instance != null)
         {
-            AudioSource.PlayClipAtPoint(
+            GameAudioManager.Instance.PlaySFX(
                 hitSound,
                 transform.position
             );

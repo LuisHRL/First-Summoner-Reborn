@@ -71,17 +71,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: SkeletonArcher
-    second: {fileID: 2100000, guid: 06a4eeaf0509f804a8d87cd82686b2ff, type: 2}
+    second: {fileID: 2100000, guid: cc250f38d6a6dbf4c9298efd3b596a93, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: SkeletonArcherDoubleside
-    second: {fileID: 2100000, guid: 7fe3e21f2c17b304eba4aed3308dfef2, type: 2}
+    second: {fileID: 2100000, guid: da26a811070f9d74fae72d492f603597, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: TwoSide
-    second: {fileID: 2100000, guid: 7fe3e21f2c17b304eba4aed3308dfef2, type: 2}
+    second: {fileID: 2100000, guid: da26a811070f9d74fae72d492f603597, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

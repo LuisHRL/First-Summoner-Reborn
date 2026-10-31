@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Arrow.001
-    second: {fileID: 2100000, guid: c356a75c58571f24a82e5b8c12741930, type: 2}
+    second: {fileID: 2100000, guid: ee63af445c21f364eaec354a3a7a16f1, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

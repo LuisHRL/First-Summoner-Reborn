@@ -1,0 +1,19 @@
+BLOCKED (fileID 100100000): Assets/Prefabs/New-Troops/SkeletonArcher-new/Prefab/SkeletonArcher-new.prefab -> Assets/tests-animations3/SkeletonArcher/Prefab/Bow.prefab
+CHANGED (21): Assets/Prefabs/New-Troops/SkeletonArcher-new/Prefab/SkeletonArcher-new.prefab
+CHANGED (3): Assets/Prefabs/New-Troops/SkeletonArcher-new/DemoScene/SkeletonArcher.controller
+BLOCKED (fileID 100100000): Assets/Prefabs/New-Troops/SkeletonArcher-new/Prefab/Arrow.prefab -> Assets/tests-animations3/SkeletonArcher/Mesh/Arrow.fbx
+CHANGED (19): Assets/Prefabs/New-Troops/SkeletonArcher-new/Prefab/Arrow.prefab
+CHANGED (1): Assets/Prefabs/New-Troops/SkeletonArcher-new/Mesh/Bow.fbx.meta
+CHANGED (1): Assets/Prefabs/New-Troops/SkeletonArcher-new/Mesh/Arrow.fbx.meta
+CHANGED (1): Assets/tests-animations3/SkeletonMage/Materials/SkeletonMage1TwoSided.mat
+CHANGED (1): Assets/tests-animations3/SkeletonMage/Materials/SkeletonMage2TwoSided.mat
+CHANGED (3): Assets/Prefabs/New-Troops/SkeletonArcher-new/Mesh/SkeletonArcher.fbx.meta
+BLOCKED (fileID 100100000): Assets/Prefabs/New-Troops/SkeletonArcher-new/SkeletonArcher-new.prefab -> Assets/tests-animations3/SkeletonArcher/Prefab/Bow.prefab
+CHANGED (21): Assets/Prefabs/New-Troops/SkeletonArcher-new/SkeletonArcher-new.prefab
+BLOCKED (fileID -876546973899608171): Assets/Prefabs/New-Troops/SkeletonArcher-new/Prefab/Bow.prefab -> Assets/tests-animations3/SkeletonArcher/Mesh/Bow.fbx
+CHANGED (2): Assets/Prefabs/New-Troops/SkeletonArcher-new/Prefab/Bow.prefab
+CHANGED (1): Assets/Prefabs/New-Troops/SkeletonArcher-new/Materials/SkeletonArcherTwoSide.mat
+BLOCKED (fileID 100100000): Assets/Prefabs/New-Troops/SkeletonArcher-new/DemoScene/DemoScene.unity -> Assets/tests-animations3/SkeletonArcher/Prefab/SkeletonArcher.prefab
+CHANGED (15): Assets/Prefabs/New-Troops/SkeletonArcher-new/DemoScene/DemoScene.unity
+CHANGED (1): Assets/tests-animations3/SkeletonMage/Materials/SkeletonMage3TwoSided.mat
+CHANGED (5): Assets/Prefabs/New-Troops/SkeletonArcher-new/Materials/Arrow.mat

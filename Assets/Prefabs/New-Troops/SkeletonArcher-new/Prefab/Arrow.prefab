@@ -257,7 +257,7 @@ PrefabInstance:
       value: Arrow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: ab0ea41e020f0b74d87f872b6e987d09, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: a7bd026870411594db226c1fa5f60aea, type: 3}
 --- !u!4 &7517215785043426708 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: a7bd026870411594db226c1fa5f60aea,

@@ -677,4 +677,4 @@ PrefabInstance:
       value: SkeletonArcher
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: bdb0bca954f90ab4db751b957b132666, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}

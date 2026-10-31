@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4306622674265561269}
   - component: {fileID: 4055979533745930184}
   - component: {fileID: 1690524808797361675}
+  - component: {fileID: 4112815314979797539}
   m_Layer: 7
   m_Name: SkeletonArcher
   m_TagString: Untagged
@@ -37,6 +38,7 @@ Transform:
   m_Children:
   - {fileID: 9137897918903131205}
   - {fileID: 5051653500250861884}
+  - {fileID: 5209753207693122748}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2716993321759225636
@@ -54,7 +56,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2196625450366437133}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -160,7 +162,7 @@ CharacterController:
   m_StepOffset: 0
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1690524808797361675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,8 +183,31 @@ MonoBehaviour:
   attackRange: 1.3
   attackCooldown: 1
   attackSound: {fileID: 8300000, guid: 0c426fbc03c43824caf9b856db955190, type: 3}
+  enemyHitSound: {fileID: 0}
   projectilePrefab: {fileID: 4215550931320413550, guid: 7baaccd26e6d7b74889e70f74fee8969, type: 3}
   firePoint: {fileID: 9137897918903131205}
+--- !u!95 &4112815314979797539
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2196625450366437133}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 16789f224107e344f8aff662863dc516, type: 2}
+  m_Controller: {fileID: 9100000, guid: dd4cb5389122b1342849d24e47b285ca, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6308809473176230226
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,4 +352,86 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4742349987991243703, guid: b50b1b23f3c730744a588afcde24e5bf, type: 3}
   m_PrefabInstance: {fileID: 561580133060999819}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1906616270422486240
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2791413246454718210}
+    m_Modifications:
+    - target: {fileID: 2167432490053166442, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cc250f38d6a6dbf4c9298efd3b596a93, type: 2}
+    - target: {fileID: 2167432490053166442, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: da26a811070f9d74fae72d492f603597, type: 2}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7220291996711303265, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 79a06fd65e329af4eb47775a8000cec8, type: 2}
+    - target: {fileID: 7233399258845921871, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_Name
+      value: SkeletonArcher-new
+      objectReference: {fileID: 0}
+    - target: {fileID: 8533725055369312959, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8533725055369312959, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+--- !u!4 &5209753207693122748 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5924885075991933020, guid: f43b6800bf1275c4c9c5eac34723553d, type: 3}
+  m_PrefabInstance: {fileID: 1906616270422486240}
   m_PrefabAsset: {fileID: 0}

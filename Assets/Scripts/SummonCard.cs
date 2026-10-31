@@ -33,6 +33,8 @@ public class SummonCard : MonoBehaviour
             : Vector3.forward;
 
         Vector3 center = player.position + direction * spawnDistance;
+        // Positionner les invocations au niveau du sol.
+        center.y = 0f;
 
         int unitCount = cardDefinition != null
     ? Mathf.Max(1, cardDefinition.numberOfUnits)

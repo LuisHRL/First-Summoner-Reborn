@@ -14,7 +14,17 @@ public class MinionHealth : Health
     {
         if (animator != null && CurrentHealth > damage)
         {
-            animator.SetTrigger("Hit");
+
+            foreach (AnimatorControllerParameter parameter in animator.parameters)
+            {
+                if (parameter.name == "Hit" &&
+                    parameter.type == AnimatorControllerParameterType.Trigger)
+                {
+                    animator.SetTrigger("Hit");
+                    break;
+                }
+            }
+
         }
 
         base.TakeDamage(damage);

@@ -41,6 +41,7 @@ public class MinionAI : MonoBehaviour
     private float nextAttackTime;
 
     private EnemyHealth currentTarget;
+    private EnemyHealth pendingShotTarget;
 
     // Cible partagée entre toutes les invocations.
     private static EnemyHealth sharedTarget;
@@ -362,51 +363,11 @@ public class MinionAI : MonoBehaviour
                 "MinionAI : ProjectilePrefab ou FirePoint manquant.",
                 this
             );
-
             return;
         }
 
-        // Viser le centre du collider.
-        Collider targetCollider =
-            target.GetComponentInChildren<Collider>();
-
-        Vector3 targetPosition =
-            targetCollider != null
-                ? targetCollider.bounds.center
-                : target.transform.position;
-
-        Vector3 direction =
-            targetPosition - firePoint.position;
-
-        if (direction.sqrMagnitude <= 0.001f)
-            return;
-
-        Quaternion rotation =
-            Quaternion.LookRotation(direction.normalized);
-
-        PlayAttackSound();
-
-        // Créer le projectile.
-        GameObject projectileObject = Instantiate(
-            projectilePrefab,
-            firePoint.position,
-            rotation
-        );
-
-        MagicProjectile projectile =
-            projectileObject.GetComponent<MagicProjectile>();
-
-        if (projectile != null)
-        {
-            // Identifier le lanceur.
-            projectile.owner = transform;
-
-            // Utiliser les dégâts de SummonCardDefinition.
-            projectile.damage = damage;
-
-            projectile.hitSound = enemyHitSound;
-
-        }
+        // Mémoriser la cible jusqu'au relâchement de la corde.
+        pendingShotTarget = target;
     }
 
     // --------------------------------------------------
@@ -478,6 +439,68 @@ public class MinionAI : MonoBehaviour
             (transform.position - previousPosition)
             .sqrMagnitude > 0.000001f;
 
-        animator.SetBool("IsMoving", isMoving);
+
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        {
+            if (parameter.name == "IsMoving" &&
+                parameter.type == AnimatorControllerParameterType.Bool)
+            {
+                animator.SetBool("IsMoving", isMoving);
+            }
+            else if (parameter.name == "Speed" &&
+                     parameter.type == AnimatorControllerParameterType.Float)
+            {
+                animator.SetFloat("Speed", isMoving ? speed : 0f);
+            }
+        }
+
+    }
+    public void ReleaseArrow()
+    {
+        EnemyHealth target = pendingShotTarget;
+        pendingShotTarget = null;
+
+        if (!IsValidEnemy(target))
+            return;
+
+        if (projectilePrefab == null || firePoint == null)
+            return;
+
+        // Viser le centre du collider de l'ennemi.
+        Collider targetCollider =
+            target.GetComponentInChildren<Collider>();
+
+        Vector3 targetPosition =
+            targetCollider != null
+                ? targetCollider.bounds.center
+                : target.transform.position;
+
+        Vector3 direction = targetPosition - firePoint.position;
+
+        if (direction.sqrMagnitude <= 0.001f)
+            return;
+
+        Quaternion rotation =
+            Quaternion.LookRotation(direction.normalized);
+
+        // Jouer le son au moment du tir.
+        PlayAttackSound();
+
+        // Créer la flèche.
+        GameObject projectileObject = Instantiate(
+            projectilePrefab,
+            firePoint.position,
+            rotation
+        );
+
+        MagicProjectile projectile =
+            projectileObject.GetComponent<MagicProjectile>();
+
+        if (projectile != null)
+        {
+            projectile.owner = transform;
+            projectile.damage = damage;
+            projectile.hitSound = enemyHitSound;
+        }
     }
 }

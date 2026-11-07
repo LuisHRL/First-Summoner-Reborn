@@ -1834,9 +1834,54 @@ public sealed class AssetDependencyManager : EditorWindow
             string destinationGuid;
             if (!mapping.TryGetValue(AssetDatabase.AssetPathToGUID(sourcePath), out destinationGuid)) continue;
             string destinationPath = AssetDatabase.GUIDToAssetPath(destinationGuid);
-            rows.Add(string.Join("\t", new[] { "CANDIDATE_REQUIRES_SUBASSET_CHECK", SafeTsv(owner),
-                SafeTsv(obj.name), SafeTsv(property.propertyPath), SafeTsv(sourcePath), SafeTsv(destinationPath) }));
+            UnityEngine.Object destinationObject;
+            string reason;
+            bool verified = TryResolveSerializedDestination(referenced, destinationPath, out destinationObject, out reason);
+            rows.Add(string.Join("\t", new[] { verified ? "VERIFIED_OBJECT_MATCH" : "BLOCKED_OBJECT_MATCH",
+                SafeTsv(owner), SafeTsv(obj.name), SafeTsv(property.propertyPath),
+                SafeTsv(sourcePath), SafeTsv(destinationPath) + " [" + SafeTsv(reason) + "]" }));
         } while (property.Next(true));
+    }
+
+    // Resolves an actual Unity object, not merely an asset GUID. Reject ambiguous
+    // name/type matches and verify imported local identifiers before any future apply.
+    private static bool TryResolveSerializedDestination(UnityEngine.Object original, string destinationPath,
+        out UnityEngine.Object destination, out string reason)
+    {
+        destination = null;
+        reason = "";
+        if (original == null || string.IsNullOrEmpty(destinationPath))
+        {
+            reason = "Missing source object or destination path";
+            return false;
+        }
+        string sourceGuid, destinationGuid;
+        long sourceId, destinationId;
+        if (!AssetDatabase.TryGetGUIDAndLocalFileIdentifier(original, out sourceGuid, out sourceId))
+        {
+            reason = "Source local identifier unavailable";
+            return false;
+        }
+        var candidates = AssetDatabase.LoadAllAssetsAtPath(destinationPath)
+            .Where(o => o != null && o.GetType() == original.GetType() && o.name == original.name).ToArray();
+        if (candidates.Length != 1)
+        {
+            reason = "Missing or ambiguous destination subasset: " + candidates.Length;
+            return false;
+        }
+        if (!AssetDatabase.TryGetGUIDAndLocalFileIdentifier(candidates[0], out destinationGuid, out destinationId))
+        {
+            reason = "Destination local identifier unavailable";
+            return false;
+        }
+        if (sourceId != destinationId)
+        {
+            reason = "Different local identifiers: " + sourceId + " / " + destinationId;
+            return false;
+        }
+        destination = candidates[0];
+        reason = "Same type, name and local identifier";
+        return true;
     }
 
     // Shared strict mapping for YAML and SerializedObject previews; no duplicate matching rules.

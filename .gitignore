@@ -80,3 +80,6 @@ crashlytics-build.properties
 
 # Unity environment assets - local only
 /Assets/Environment/
+
+/AssetDependencyManagerReports/
+*.unity.backup

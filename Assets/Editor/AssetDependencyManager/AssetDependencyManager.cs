@@ -152,6 +152,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Audit scene and prefab mesh materials (TSV)", GUILayout.Height(30))) AuditMeshMaterials();
                 if (GUILayout.Button("Audit unresolved serialized GUIDs (TSV)", GUILayout.Height(30))) AuditUnresolvedGuids();
                 if (GUILayout.Button("Trace scene FBX dependency owners (TSV)", GUILayout.Height(30))) AuditFbxDependencyChains();
+                if (GUILayout.Button("Audit serialized asset object references (TSV)", GUILayout.Height(30))) AuditSerializedObjectReferences();
                 break;
             case 4:
                 EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Temporary scene reserialization is available; isolated FBX removal simulation is not yet integrated.", MessageType.Info);
@@ -368,6 +369,73 @@ public sealed class AssetDependencyManager : EditorWindow
         Debug.Log("[AssetDependencyManager] FBX dependency chains: " + reportPath);
     }
 
+
+    // Inspect serialized Unity object references without writing to any scene or asset.
+    private void AuditSerializedObjectReferences()
+    {
+        string source = Normalize(settings.sourceFolder);
+        var rows = new List<string> { "Result\tOwner\tObject\tProperty\tReferencedAsset" };
+        if (!AssetDatabase.IsValidFolder(source) || source == "Assets")
+            rows.Add("BLOCKED\t\t\t\tConfigure a valid source folder");
+        else if (settings.scenes == null || settings.scenes.Count == 0)
+            rows.Add("BLOCKED\t\t\t\tConfigure scenes to inspect");
+        else
+        {
+            var owners = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string scene in settings.scenes)
+            {
+                if (AssetDatabase.LoadAssetAtPath<SceneAsset>(scene) == null)
+                {
+                    rows.Add("BLOCKED\t" + SafeTsv(scene) + "\t\t\tScene missing");
+                    continue;
+                }
+                foreach (string path in AssetDatabase.GetDependencies(scene, true))
+                    if (path.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase) &&
+                        !Inside(path, source) && InspectableExtensions.Contains(Path.GetExtension(path)))
+                        owners.Add(path);
+            }
+            foreach (string owner in owners.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    if (owner.EndsWith(".unity", StringComparison.OrdinalIgnoreCase))
+                    {
+                        // Scene contents require opening a scene; do not change the user's loaded scene setup.
+                        rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t\t\tScene object scan requires isolated scene loading");
+                        continue;
+                    }
+                    foreach (UnityEngine.Object obj in AssetDatabase.LoadAllAssetsAtPath(owner))
+                    {
+                        if (obj == null || obj is AssetImporter) continue;
+                        SerializedObject serialized = new SerializedObject(obj);
+                        SerializedProperty property = serialized.GetIterator();
+                        if (!property.Next(true)) continue;
+                        do
+                        {
+                            if (property.propertyType != SerializedPropertyType.ObjectReference) continue;
+                            UnityEngine.Object referenced = property.objectReferenceValue;
+                            if (referenced == null) continue;
+                            string referencedPath = AssetDatabase.GetAssetPath(referenced);
+                            if (!Inside(referencedPath, source)) continue;
+                            rows.Add("REFERENCE\t" + SafeTsv(owner) + "\t" + SafeTsv(obj.name) +
+                                "\t" + SafeTsv(property.propertyPath) + "\t" + SafeTsv(referencedPath));
+                        } while (property.Next(true));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    rows.Add("FAIL\t" + SafeTsv(owner) + "\t\t\t" + SafeTsv(ex.Message));
+                }
+            }
+            rows.Add("SUMMARY\t\t\t\tInspected " + owners.Count + " reachable serialized asset owners; scene object scan excluded");
+        }
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        reportPath = Path.Combine(folder, "serialized_object_references_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(reportPath, rows, new UTF8Encoding(true));
+        Debug.Log("[AssetDependencyManager] Serialized object reference audit: " + reportPath);
+    }
+
     private void AuditUnresolvedGuids()
     {
         var known = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -494,6 +562,7 @@ public sealed class AssetDependencyManager : EditorWindow
         stage("Source reachability", AuditSourceReachability, validSource);
         stage("FBX subasset mapping", AuditFbxSubassetMatches, separated);
         stage("FBX owner chains", AuditFbxDependencyChains, validSource && settings.scenes != null && settings.scenes.Count > 0);
+        stage("Serialized asset object references", AuditSerializedObjectReferences, validSource && settings.scenes != null && settings.scenes.Count > 0);
         stage("Scene/prefab mesh materials", AuditMeshMaterials, !EditorApplication.isPlayingOrWillChangePlaymode);
         stage("Serialized GUID integrity", AuditUnresolvedGuids, true);
         rows.Add("SUMMARY\t\t\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportStatusesInspected=true;unityWorkerNotExecuted=true"));

@@ -214,10 +214,32 @@ public sealed class AssetDependencyManager : EditorWindow
                 }
                 else
                 {
-                    passed++;
-                    rows.Add("PASS\\t" + SafeTsv(name) + "\\t" + SafeTsv(reportPath) +
-                        "\\tCompleted; inspect report for findings, BLOCKED and FAIL rows");
-                    Debug.Log("[AssetDependencyManager] PASS - " + name + " (report generated: " + reportPath + ")");
+                    string stageStatus = "PASS";
+                    int findingCount = 0;
+                    foreach (string line in File.ReadLines(reportPath).Skip(1))
+                    {
+                        string status = line.Split('\\t')[0].Trim();
+                        if (status == "FAIL" || status == "ERROR" || status == "INCOMPLETE" ||
+                            status == "INCOMPLETE_AUDIT" || status == "CANCELLED_PARTIAL" ||
+                            status == "CHANGED_WARNING")
+                            stageStatus = "FAIL";
+                        else if (stageStatus != "FAIL" && (status == "BLOCKED" ||
+                            status == "NO_CANDIDATE" || status == "AMBIGUOUS_CANDIDATES" ||
+                            status == "DIFFERENT_FILE_BYTES" || status == "SUBASSET_READ_ERROR" ||
+                            status == "AMBIGUOUS_OR_MISSING_SUBASSET"))
+                            stageStatus = "BLOCKED";
+                        if (status != "PASS" && status != "SUMMARY" && status.Length > 0) findingCount++;
+                    }
+                    if (stageStatus == "FAIL") failed++;
+                    else if (stageStatus == "BLOCKED") blocked++;
+                    else passed++;
+                    rows.Add(stageStatus + "\\t" + SafeTsv(name) + "\\t" + SafeTsv(reportPath) +
+                        "\\tReport inspected; non-PASS rows=" + findingCount);
+                    string stageMessage = "[AssetDependencyManager] " + stageStatus + " - " + name +
+                        " (non-PASS rows=" + findingCount + "; report=" + reportPath + ")";
+                    if (stageStatus == "FAIL") Debug.LogError(stageMessage);
+                    else if (stageStatus == "BLOCKED") Debug.LogWarning(stageMessage);
+                    else Debug.Log(stageMessage);
                 }
             }
             catch (Exception ex)
@@ -241,13 +263,13 @@ public sealed class AssetDependencyManager : EditorWindow
         stage("Source reachability", AuditSourceReachability, validSource);
         stage("FBX subasset mapping", AuditFbxSubassetMatches, separated);
         stage("Scene/prefab mesh materials", AuditMeshMaterials, !EditorApplication.isPlayingOrWillChangePlaymode);
-        rows.Add("SUMMARY\\t\\t\\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportFindingsNotAggregated=true;unityWorkerNotExecuted=true"));
+        rows.Add("SUMMARY\\t\\t\\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportStatusesInspected=true;unityWorkerNotExecuted=true"));
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
         string output = Path.Combine(folder, "diagnostic_suite_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
         File.WriteAllLines(output, rows, new UTF8Encoding(true));
         reportPath = output;
-        string summary = $"[AssetDependencyManager] Suite finished: {passed} reports generated, {failed} execution failures, {blocked} blocked stages. Report findings must be reviewed separately. {output}";
+        string summary = $"[AssetDependencyManager] Suite finished: {passed} stages passed, {failed} failed, {blocked} blocked. Review individual findings. {output}";
         if (failed > 0) Debug.LogError(summary);
         else if (blocked > 0) Debug.LogWarning(summary);
         else Debug.Log(summary);

@@ -43,7 +43,7 @@ internal static class AssetDependencyManagerSafetyTests
 
             object[] good = { source, destinationPath, null, null };
             bool accepted = (bool)resolver.Invoke(null, good);
-            if (!accepted || good[2] != destination)
+            if (!accepted || !ReferenceEquals(good[2], destination))
                 throw new InvalidOperationException("Matching type/name/fileID reference was rejected: " + good[3]);
 
             object[] bad = { source, mismatchPath, null, null };
@@ -55,7 +55,7 @@ internal static class AssetDependencyManagerSafetyTests
         catch (Exception ex)
         {
             Debug.LogError("[ADM] Reference matching self-test FAILED: " + ex);
-            throw;
+            // Do not throw from OnGUI: it can corrupt Unity IMGUI layout state.
         }
         finally
         {
@@ -110,5 +110,3 @@ internal static class AssetDependencyManagerSafetyTests
     }
 }
 
-// Editor-only fixture type; no production asset depends on it.
-internal sealed class ADMReferenceFixture : ScriptableObject { }

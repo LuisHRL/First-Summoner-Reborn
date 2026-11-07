@@ -443,14 +443,14 @@ public sealed class AssetDependencyManager : EditorWindow
 
     private void TestIsolatedSceneCopies()
     {
-        var rows = new List<string> { "Result\\tScene\\tCheck\\tDetails" };
+        var rows = new List<string> { "Result\tScene\tCheck\tDetails" };
         string temp = Path.Combine(Path.GetTempPath(), "AssetDependencyManager_Isolation_" + Guid.NewGuid().ToString("N"));
         bool allPassed = true;
         bool cleanupPassed = true;
         var scenes = settings.scenes == null ? new string[0] : settings.scenes.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         if (scenes.Length == 0)
         {
-            rows.Add("BLOCKED\\t\\tConfigured scenes\\tNo scenes selected");
+            rows.Add("BLOCKED\t\tConfigured scenes\tNo scenes selected");
             allPassed = false;
         }
         try
@@ -461,7 +461,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (string.IsNullOrEmpty(scene) || !scene.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase) ||
                     AssetDatabase.LoadAssetAtPath<SceneAsset>(scene) == null)
                 {
-                    rows.Add("BLOCKED\\t" + SafeTsv(scene ?? "") + "\\tScene validation\\tMissing or invalid scene");
+                    rows.Add("BLOCKED\t" + SafeTsv(scene ?? "") + "\tScene validation\tMissing or invalid scene");
                     allPassed = false;
                     continue;
                 }
@@ -478,8 +478,8 @@ public sealed class AssetDependencyManager : EditorWindow
                         string after = Hash(scene);
                         bool passed = string.Equals(before, copyHash, StringComparison.OrdinalIgnoreCase) &&
                                       string.Equals(before, after, StringComparison.OrdinalIgnoreCase);
-                        rows.Add((passed ? "PASS" : "FAIL") + "\\t" + SafeTsv(scene) +
-                            "\\tCopy hash and original integrity\\t" +
+                        rows.Add((passed ? "PASS" : "FAIL") + "\t" + SafeTsv(scene) +
+                            "\tCopy hash and original integrity\t" +
                             (passed ? "Temporary copy identical; original unchanged" : "Hash mismatch; investigate immediately"));
                         if (!passed) allPassed = false;
                     }
@@ -487,14 +487,14 @@ public sealed class AssetDependencyManager : EditorWindow
                 catch (Exception ex)
                 {
                     allPassed = false;
-                    rows.Add("FAIL\\t" + SafeTsv(scene) + "\\tCopy operation\\t" + SafeTsv(ex.Message));
+                    rows.Add("FAIL\t" + SafeTsv(scene) + "\tCopy operation\t" + SafeTsv(ex.Message));
                 }
             }
         }
         catch (Exception ex)
         {
             allPassed = false;
-            rows.Add("FAIL\\t\\tTemporary folder\\t" + SafeTsv(ex.Message));
+            rows.Add("FAIL\t\tTemporary folder\t" + SafeTsv(ex.Message));
         }
         finally
         {
@@ -502,11 +502,11 @@ public sealed class AssetDependencyManager : EditorWindow
             catch (Exception ex)
             {
                 cleanupPassed = false;
-                rows.Add("FAIL\\t\\tTemporary cleanup\\t" + SafeTsv(temp + ": " + ex.Message));
+                rows.Add("FAIL\t\tTemporary cleanup\t" + SafeTsv(temp + ": " + ex.Message));
             }
         }
-        rows.Add((allPassed && cleanupPassed ? "PASS" : "FAIL") +
-            "\\t\\tSUMMARY\\tOnly file-copy integrity tested; no Unity worker, scene resave or FBX removal was executed");
+        rows.Add((scenes.Length == 0 ? "BLOCKED" : allPassed && cleanupPassed ? "PASS" : "FAIL") +
+            "\t\tSUMMARY\tOnly file-copy integrity tested; no Unity worker, scene resave or FBX removal was executed");
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
         string output = Path.Combine(folder, "isolated_scene_copy_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");

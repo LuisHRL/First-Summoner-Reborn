@@ -584,11 +584,11 @@ public sealed class AssetDependencyManager : EditorWindow
 
     private void RunPreflightTests()
     {
-        var rows = new List<string> { "Result\\tCheck\\tAsset\\tDetails" };
+        var rows = new List<string> { "Result\tCheck\tAsset\tDetails" };
         int pass = 0, fail = 0, blocked = 0;
         Action<string, string, string, string> record = (result, check, asset, detail) =>
         {
-            rows.Add(string.Join("\\t", new[] { result, SafeTsv(check), SafeTsv(asset), SafeTsv(detail) }));
+            rows.Add(string.Join("\t", new[] { result, SafeTsv(check), SafeTsv(asset), SafeTsv(detail) }));
             if (result == "PASS") pass++;
             else if (result == "FAIL") fail++;
             else blocked++;
@@ -646,7 +646,7 @@ public sealed class AssetDependencyManager : EditorWindow
             }
             record("PASS", "Read-only execution", "", "No asset writes, imports, scene opens, or migration apply performed");
         }
-        rows.Add(string.Join("\\t", new[] { fail > 0 ? "FAIL" : blocked > 0 ? "BLOCKED" : "PASS",
+        rows.Add(string.Join("\t", new[] { fail > 0 ? "FAIL" : blocked > 0 ? "BLOCKED" : "PASS",
             "SUMMARY", "", $"pass={pass};fail={fail};blocked={blocked};migrationSafetyNotProven=true" }));
         var folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
@@ -670,7 +670,7 @@ public sealed class AssetDependencyManager : EditorWindow
         var targets = AssetsIn(target).Where(x => x.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase)).ToArray();
         var byName = targets.GroupBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
-        var rows = new List<string> { "Status\\tSourceFBX\\tDestinationFBX\\tSourceSubasset\\tSourceFileID\\tDestinationFileID\\tDetails" };
+        var rows = new List<string> { "Status\tSourceFBX\tDestinationFBX\tSourceSubasset\tSourceFileID\tDestinationFileID\tDetails" };
         int matched = 0, blocked = 0;
         bool cancelled = false;
         try
@@ -687,7 +687,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (candidates.Length != 1)
                 {
                     blocked++;
-                    rows.Add(string.Join("\\t", new[] { candidates.Length == 0 ? "NO_CANDIDATE" : "AMBIGUOUS_CANDIDATES",
+                    rows.Add(string.Join("\t", new[] { candidates.Length == 0 ? "NO_CANDIDATE" : "AMBIGUOUS_CANDIDATES",
                         SafeTsv(src), "", "", "", "", candidates.Length.ToString() }));
                     continue;
                 }
@@ -697,7 +697,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     if (new FileInfo(FullPath(src)).Length != new FileInfo(FullPath(dst)).Length || Hash(src) != Hash(dst))
                     {
                         blocked++;
-                        rows.Add(string.Join("\\t", new[] { "DIFFERENT_FILE_BYTES", SafeTsv(src), SafeTsv(dst), "", "", "", "No automatic relink" }));
+                        rows.Add(string.Join("\t", new[] { "DIFFERENT_FILE_BYTES", SafeTsv(src), SafeTsv(dst), "", "", "", "No automatic relink" }));
                         continue;
                     }
                     string srcError, dstError;
@@ -706,7 +706,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     if (!string.IsNullOrEmpty(srcError) || !string.IsNullOrEmpty(dstError))
                     {
                         blocked++;
-                        rows.Add(string.Join("\\t", new[] { "SUBASSET_READ_ERROR", SafeTsv(src), SafeTsv(dst), "", "", "",
+                        rows.Add(string.Join("\t", new[] { "SUBASSET_READ_ERROR", SafeTsv(src), SafeTsv(dst), "", "", "",
                             SafeTsv(srcError + " " + dstError) }));
                         continue;
                     }
@@ -716,14 +716,14 @@ public sealed class AssetDependencyManager : EditorWindow
                         if (group.Count() != 1 || !destGroups.TryGetValue(group.Key, out var destGroup) || destGroup.Length != 1)
                         {
                             blocked++;
-                            rows.Add(string.Join("\\t", new[] { "AMBIGUOUS_OR_MISSING_SUBASSET", SafeTsv(src), SafeTsv(dst),
+                            rows.Add(string.Join("\t", new[] { "AMBIGUOUS_OR_MISSING_SUBASSET", SafeTsv(src), SafeTsv(dst),
                                 SafeTsv(group.Key), "", "", "Requires manual investigation" }));
                             continue;
                         }
                         var sourceId = group.First().fileId;
                         var targetId = destGroup[0].fileId;
                         matched++;
-                        rows.Add(string.Join("\\t", new[] { sourceId == targetId ? "IDENTICAL_BYTES_AND_FILEID" : "IDENTICAL_BYTES_DIFFERENT_FILEID",
+                        rows.Add(string.Join("\t", new[] { sourceId == targetId ? "IDENTICAL_BYTES_AND_FILEID" : "IDENTICAL_BYTES_DIFFERENT_FILEID",
                             SafeTsv(src), SafeTsv(dst), SafeTsv(group.Key), sourceId.ToString(), targetId.ToString(),
                             "Diagnostic only; FBX prefab instance links are not automatically rewritten" }));
                     }
@@ -731,12 +731,12 @@ public sealed class AssetDependencyManager : EditorWindow
                 catch (Exception ex)
                 {
                     blocked++;
-                    rows.Add(string.Join("\\t", new[] { "ERROR", SafeTsv(src), SafeTsv(dst), "", "", "", SafeTsv(ex.Message) }));
+                    rows.Add(string.Join("\t", new[] { "ERROR", SafeTsv(src), SafeTsv(dst), "", "", "", SafeTsv(ex.Message) }));
                 }
             }
         }
         finally { EditorUtility.ClearProgressBar(); }
-        rows.Add(string.Join("\\t", new[] { cancelled ? "CANCELLED_PARTIAL" : "SUMMARY", "", "", "", "", "",
+        rows.Add(string.Join("\t", new[] { cancelled ? "CANCELLED_PARTIAL" : "SUMMARY", "", "", "", "", "",
             $"sourceFBX={sources.Length};matchedSubassets={matched};blocked={blocked};cancelled={cancelled}" }));
         var folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
@@ -754,7 +754,7 @@ public sealed class AssetDependencyManager : EditorWindow
             return;
         }
         if (!UnityEditor.SceneManagement.EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
-        var rows = new List<string> { "Status\\tAssetPath\\tObjectPath\\tMesh\\tMaterialSlots\\tSubmeshes\\tDetail" };
+        var rows = new List<string> { "Status\tAssetPath\tObjectPath\tMesh\tMaterialSlots\tSubmeshes\tDetail" };
         var paths = AssetDatabase.FindAssets("t:Scene t:Prefab", new[] { "Assets" })
             .Select(AssetDatabase.GUIDToAssetPath)
             .Where(p => p.EndsWith(".unity", StringComparison.OrdinalIgnoreCase) || p.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
@@ -780,7 +780,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     catch (Exception ex)
                     {
                         failures++;
-                        rows.Add(string.Join("\\t", new[] { "ERROR", SafeTsv(path), "", "", "", "", SafeTsv(ex.Message) }));
+                        rows.Add(string.Join("\t", new[] { "ERROR", SafeTsv(path), "", "", "", "", SafeTsv(ex.Message) }));
                     }
                     finally { if (root != null) PrefabUtility.UnloadPrefabContents(root); }
                 }
@@ -795,7 +795,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     catch (Exception ex)
                     {
                         failures++;
-                        rows.Add(string.Join("\\t", new[] { "ERROR", SafeTsv(path), "", "", "", "", SafeTsv(ex.Message) }));
+                        rows.Add(string.Join("\t", new[] { "ERROR", SafeTsv(path), "", "", "", "", SafeTsv(ex.Message) }));
                     }
                     finally
                     {
@@ -810,7 +810,7 @@ public sealed class AssetDependencyManager : EditorWindow
             EditorUtility.ClearProgressBar();
             UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup);
         }
-        rows.Add(string.Join("\\t", new[] { cancelled || failures > 0 ? "INCOMPLETE" : "SUMMARY", "", "", "", "", "",
+        rows.Add(string.Join("\t", new[] { cancelled || failures > 0 ? "INCOMPLETE" : "SUMMARY", "", "", "", "", "",
             $"inspected={inspected};issues={issues};failures={failures};cancelled={cancelled}" }));
         var folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
@@ -926,20 +926,20 @@ public sealed class AssetDependencyManager : EditorWindow
             }
         }
         finally { EditorUtility.ClearProgressBar(); }
-        var rows = new List<string> { "Status\\tAssetPath\\tReachable\\tExternalReferences\\tReferencers\\tGUID" };
+        var rows = new List<string> { "Status\tAssetPath\tReachable\tExternalReferences\tReferencers\tGUID" };
         foreach (var asset in candidates.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
         {
             refs.TryGetValue(asset, out var owners);
             bool used = reachable.Contains(asset);
             string status = cancelled || errors.Count > 0 ? "INCOMPLETE_AUDIT" :
                 used ? "PROTECT_REACHABLE" : owners != null && owners.Count > 0 ? "REVIEW_EXTERNAL_UNUSED" : "REVIEW_UNREFERENCED";
-            rows.Add(string.Join("\\t", new[] { status, SafeTsv(asset), used.ToString(),
+            rows.Add(string.Join("\t", new[] { status, SafeTsv(asset), used.ToString(),
                 (owners == null ? 0 : owners.Count).ToString(),
                 SafeTsv(owners == null ? "" : string.Join(" | ", owners.OrderBy(x => x))),
                 AssetDatabase.AssetPathToGUID(asset) }));
         }
-        foreach (var error in errors) rows.Add("ERROR\\t" + SafeTsv(error) + "\\t\\t\\t\\t");
-        rows.Add("SUMMARY\\t" + SafeTsv(source) + "\\t\\t\\t" + SafeTsv($"roots={roots.Count};errors={errors.Count};cancelled={cancelled};dynamicLoadsNotProven=true") + "\\t");
+        foreach (var error in errors) rows.Add("ERROR\t" + SafeTsv(error) + "\t\t\t\t");
+        rows.Add("SUMMARY\t" + SafeTsv(source) + "\t\t\t" + SafeTsv($"roots={roots.Count};errors={errors.Count};cancelled={cancelled};dynamicLoadsNotProven=true") + "\t");
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
         string output = Path.Combine(folder, "source_reachability_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");

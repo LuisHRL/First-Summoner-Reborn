@@ -328,6 +328,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     var targets = new HashSet<string>(closure.Where(x => Inside(x, source) &&
                         x.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase)), StringComparer.OrdinalIgnoreCase);
                     var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { scene };
+                    var foundTargets = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                     var queue = new Queue<KeyValuePair<string, int>>();
                     queue.Enqueue(new KeyValuePair<string, int>(scene, 0));
                     int edges = 0;
@@ -344,14 +345,13 @@ public sealed class AssetDependencyManager : EditorWindow
                                 rows.Add("TRACE\t" + SafeTsv(scene) + "\t" + SafeTsv(current.Key) +
                                     "\t" + SafeTsv(dependency) + "\t" + (current.Value + 1));
                                 edges++;
+                                foundTargets.Add(dependency);
                             }
                             if (visited.Add(dependency))
                                 queue.Enqueue(new KeyValuePair<string, int>(dependency, current.Value + 1));
                         }
                     }
-                    foreach (string missing in targets.Where(x => !rows.Any(row =>
-                        row.StartsWith("TRACE\t" + SafeTsv(scene) + "\t", StringComparison.Ordinal) &&
-                        row.Contains("\t" + SafeTsv(x) + "\t"))))
+                    foreach (string missing in targets.Except(foundTargets, StringComparer.OrdinalIgnoreCase))
                         rows.Add("BLOCKED\t" + SafeTsv(scene) + "\t\t" + SafeTsv(missing) + "\tNo direct owner chain found");
                     rows.Add("SUMMARY\t" + SafeTsv(scene) + "\t\t" + targets.Count + "\tDirect FBX owner edges=" + edges);
                 }

@@ -2174,9 +2174,13 @@ public sealed class AssetDependencyManager : EditorWindow
         else
         {
             foreach (UnityEngine.Object obj in AssetDatabase.LoadAllAssetsAtPath(owner))
-                if (obj != null && !(obj is AssetImporter))
-                    count += UpdateSerializedObject(obj, owner, mapping, apply, blocked);
-            if (apply && count > 0) AssetDatabase.SaveAssets();
+            {
+                if (obj == null || obj is AssetImporter) continue;
+                int changed = UpdateSerializedObject(obj, owner, mapping, apply, blocked);
+                count += changed;
+                // Save only the owner being migrated, not unrelated dirty project assets.
+                if (apply && changed > 0) AssetDatabase.SaveAssetIfDirty(obj);
+            }
         }
         return count;
     }

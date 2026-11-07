@@ -853,13 +853,19 @@ public sealed class AssetDependencyManager : EditorWindow
             Debug.LogWarning("[AssetDependencyManager] Exit Play mode before auditing meshes.");
             return;
         }
-        if (!UnityEditor.SceneManagement.EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty)
+            {
+                Debug.LogWarning("[ADM] Mesh audit blocked: save or discard dirty scenes manually.");
+                return;
+            }
         var rows = new List<string> { "Status\tAssetPath\tObjectPath\tMesh\tMaterialSlots\tSubmeshes\tDetail" };
         var paths = AssetDatabase.FindAssets("t:Scene t:Prefab", new[] { "Assets" })
             .Select(AssetDatabase.GUIDToAssetPath)
             .Where(p => p.EndsWith(".unity", StringComparison.OrdinalIgnoreCase) || p.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
             .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToArray();
         var setup = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
+        var protectedScenePaths = new HashSet<string>(setup.Select(x => x.path), StringComparer.OrdinalIgnoreCase);
         int inspected = 0, issues = 0, failures = 0;
         bool cancelled = false;
         try
@@ -886,6 +892,11 @@ public sealed class AssetDependencyManager : EditorWindow
                 }
                 else
                 {
+                    if (protectedScenePaths.Contains(path))
+                    {
+                        rows.Add("BLOCKED\t" + SafeTsv(path) + "\t\t\t\t\tAlready open; skipped to preserve scene setup");
+                        continue;
+                    }
                     UnityEngine.SceneManagement.Scene scene = default(UnityEngine.SceneManagement.Scene);
                     try
                     {
@@ -899,7 +910,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     }
                     finally
                     {
-                        if (scene.IsValid() && scene.isLoaded)
+                        if (scene.IsValid() && scene.isLoaded && UnityEngine.SceneManagement.SceneManager.sceneCount > 1)
                             UnityEditor.SceneManagement.EditorSceneManager.CloseScene(scene, true);
                     }
                 }
@@ -908,7 +919,8 @@ public sealed class AssetDependencyManager : EditorWindow
         finally
         {
             EditorUtility.ClearProgressBar();
-            UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup);
+            if (setup.Length > 0)
+                UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup);
         }
         rows.Add(string.Join("\t", new[] { cancelled || failures > 0 ? "INCOMPLETE" : "SUMMARY", "", "", "", "", "",
             $"inspected={inspected};issues={issues};failures={failures};cancelled={cancelled}" }));

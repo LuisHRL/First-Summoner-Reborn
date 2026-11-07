@@ -1780,7 +1780,7 @@ public sealed class AssetDependencyManager : EditorWindow
             if (!InspectableExtensions.Contains(Path.GetExtension(owner))) continue;
             if (owner.EndsWith(".unity", StringComparison.OrdinalIgnoreCase))
             {
-                rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t\t\t\tScene requires isolated loading; no scene modified");
+                PreviewSerializedScene(owner, mapping, rows);
                 continue;
             }
             try
@@ -1817,6 +1817,56 @@ public sealed class AssetDependencyManager : EditorWindow
         File.WriteAllLines(reportPath, rows, new UTF8Encoding(false));
         Debug.Log("[ADM] Read-only serialized migration preview: " + reportPath);
         EditorUtility.RevealInFinder(reportPath);
+    }
+
+    // Read-only scene preview. Refuse to change the scene setup when there are unsaved
+    // scenes; otherwise restore the exact previous editor scene setup in finally.
+    private static void PreviewSerializedScene(string scenePath, Dictionary<string, string> mapping,
+        List<string> rows)
+    {
+        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+        {
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty)
+            {
+                rows.Add("BLOCKED\t" + SafeTsv(scenePath) +
+                    "\t\t\t\tUnsaved open scene; save or discard edits before preview");
+                return;
+            }
+        }
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            rows.Add("BLOCKED\t" + SafeTsv(scenePath) + "\t\t\t\tPlay mode active");
+            return;
+        }
+        var setup = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
+        try
+        {
+            // Additive loading preserves the current scene setup while we inspect.
+            var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath,
+                UnityEditor.SceneManagement.OpenSceneMode.Additive);
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
+                {
+                    PreviewSerializedObject(transform.gameObject, scenePath, mapping, rows);
+                    foreach (Component component in transform.GetComponents<Component>())
+                        if (component != null) PreviewSerializedObject(component, scenePath, mapping, rows);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            rows.Add("BLOCKED\t" + SafeTsv(scenePath) + "\t\t\t\t" + SafeTsv(ex.Message));
+        }
+        finally
+        {
+            try { UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup); }
+            catch (Exception ex)
+            {
+                Debug.LogError("[ADM] Could not restore editor scene setup after read-only preview: " + ex);
+                rows.Add("RESTORE_ERROR\t" + SafeTsv(scenePath) + "\t\t\t\t" + SafeTsv(ex.Message));
+            }
+        }
     }
 
     private static void PreviewSerializedObject(UnityEngine.Object obj, string owner,

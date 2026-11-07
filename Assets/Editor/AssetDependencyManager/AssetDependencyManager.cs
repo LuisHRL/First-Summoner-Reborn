@@ -199,7 +199,23 @@ public sealed class AssetDependencyManager : EditorWindow
             Debug.LogWarning("[AssetDependencyManager] BLOCKED - Exit Play mode before scene resave tests.");
             return;
         }
-        if (!UnityEditor.SceneManagement.EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        // Never save user scenes as a side effect of a read-only test.
+        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+        {
+            var loaded = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+            if (loaded.isDirty)
+            {
+                string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+                Directory.CreateDirectory(folder);
+                reportPath = Path.Combine(folder, "unity_temporary_resave_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+                File.WriteAllLines(reportPath, new[] {
+                    "Result\\tScene\\tCheck\\tDetails",
+                    "BLOCKED\\t" + SafeTsv(loaded.path) + "\\tUnsaved scene\\tSave or discard scene changes manually before testing"
+                }, new UTF8Encoding(true));
+                Debug.LogWarning("[AssetDependencyManager] BLOCKED - Dirty scene detected; no original scene was saved. " + reportPath);
+                return;
+            }
+        }
         var configured = settings.scenes == null ? new string[0] : settings.scenes.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
         var rows = new List<string> { "Result\\tScene\\tCheck\\tDetails" };
         var setup = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();

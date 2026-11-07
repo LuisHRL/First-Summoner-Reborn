@@ -1898,6 +1898,12 @@ public sealed class AssetDependencyManager : EditorWindow
             EditorUtility.DisplayDialog("Scene migration blocked", "Exit Play mode first.", "OK");
             return;
         }
+        if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null)
+        {
+            EditorUtility.DisplayDialog("Scene migration blocked",
+                "Close Prefab Mode before opening and modifying scenes.", "OK");
+            return;
+        }
         for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
             if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty)
             {
@@ -2060,6 +2066,18 @@ public sealed class AssetDependencyManager : EditorWindow
     private void ApplySerializedMigration()
     {
         if (!analyzed || !Validate()) return;
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            EditorUtility.DisplayDialog("Serialized migration blocked",
+                "Exit Play mode before modifying project assets.", "OK");
+            return;
+        }
+        if (UnityEditor.SceneManagement.PrefabStageUtility.GetCurrentPrefabStage() != null)
+        {
+            EditorUtility.DisplayDialog("Serialized migration blocked",
+                "Close Prefab Mode before migrating serialized assets to avoid conflicting in-memory edits.", "OK");
+            return;
+        }
         var mapping = BuildSafeGuidMapping();
         if (mapping.Count == 0)
         {

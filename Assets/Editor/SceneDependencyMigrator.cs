@@ -1263,13 +1263,13 @@ public sealed class SceneDependencyMigrator : EditorWindow
                 if (!File.Exists(cfg[3])) throw new IOException("Comparison report missing: " + cfg[3]);
                 // Multisets preserve duplicate hierarchy paths, unlike simple set comparison.
                 var previous = File.ReadAllLines(cfg[3]).Skip(1)
-                    .Where(line => line.StartsWith("MISSING_REFERENCE\\t", StringComparison.Ordinal) ||
-                                   line.StartsWith("MISSING_SCRIPTS\\t", StringComparison.Ordinal))
+                    .Where(line => line.StartsWith("MISSING_REFERENCE\t", StringComparison.Ordinal) ||
+                                   line.StartsWith("MISSING_SCRIPTS\t", StringComparison.Ordinal))
                     .GroupBy(line => line, StringComparer.Ordinal)
                     .ToDictionary(g => g.Key, g => g.Count(), StringComparer.Ordinal);
                 var current = rows.Skip(1)
-                    .Where(line => line.StartsWith("MISSING_REFERENCE\\t", StringComparison.Ordinal) ||
-                                   line.StartsWith("MISSING_SCRIPTS\\t", StringComparison.Ordinal))
+                    .Where(line => line.StartsWith("MISSING_REFERENCE\t", StringComparison.Ordinal) ||
+                                   line.StartsWith("MISSING_SCRIPTS\t", StringComparison.Ordinal))
                     .GroupBy(line => line, StringComparer.Ordinal)
                     .ToDictionary(g => g.Key, g => g.Count(), StringComparer.Ordinal);
                 int introduced = 0, baselineOnly = 0;

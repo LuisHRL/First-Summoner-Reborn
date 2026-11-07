@@ -171,6 +171,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     if (GUILayout.Button("Apply safe YAML replacements (with backups)")) MigrateReferences(true);
                     if (GUILayout.Button("Preview Unity serialized object reference migration (TSV)")) PreviewSerializedMigration();
                     if (GUILayout.Button("Apply verified serialized references in prefabs/assets (backups)")) ApplySerializedMigration();
+                    if (GUILayout.Button("Apply verified serialized scene references (backups)")) ApplySerializedSceneMigration();
                 }
                 break;
             case 6:
@@ -1892,6 +1893,143 @@ public sealed class AssetDependencyManager : EditorWindow
                 SafeTsv(owner), SafeTsv(obj.name), SafeTsv(property.propertyPath),
                 SafeTsv(sourcePath), SafeTsv(destinationPath) + " [" + SafeTsv(reason) + "]" }));
         } while (property.Next(true));
+    }
+
+    // Scene migration reuses the same strict mapping and object-level remapping.
+    // All configured scenes are backed up before any write, and all touched scenes
+    // are restored on failure. The user's original scene setup is restored in finally.
+    private void ApplySerializedSceneMigration()
+    {
+        if (!analyzed || !Validate()) return;
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            EditorUtility.DisplayDialog("Scene migration blocked", "Exit Play mode first.", "OK");
+            return;
+        }
+        for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+            if (UnityEngine.SceneManagement.SceneManager.GetSceneAt(i).isDirty)
+            {
+                EditorUtility.DisplayDialog("Scene migration blocked",
+                    "Save or discard all unsaved scene changes before continuing.", "OK");
+                return;
+            }
+        var mapping = BuildSafeGuidMapping();
+        var scenes = (settings.scenes ?? new List<string>())
+            .Where(p => p.EndsWith(".unity", StringComparison.OrdinalIgnoreCase) &&
+                AssetDatabase.LoadAssetAtPath<SceneAsset>(p) != null)
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p).ToArray();
+        if (mapping.Count == 0 || scenes.Length == 0)
+        {
+            EditorUtility.DisplayDialog("Nothing to migrate", "No safe mapping or configured scene.", "OK");
+            return;
+        }
+        var setup = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
+        var blocked = new List<string>();
+        var candidates = new List<string>();
+        var report = new List<string> { "Status\tScene\tDetail" };
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        string stamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+        string backup = Path.Combine(folder, "scene_serialized_backup_" + stamp);
+        var touched = new List<string>();
+        bool backupsReady = false, completed = false, startedWriting = false;
+        try
+        {
+            // Read-only pass before confirmation.
+            foreach (string path in scenes)
+            {
+                var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path,
+                    UnityEditor.SceneManagement.OpenSceneMode.Single);
+                int count = VisitSerializedScene(scene, path, mapping, false, blocked);
+                if (count > 0) candidates.Add(path);
+            }
+            UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup);
+            if (candidates.Count == 0)
+            {
+                EditorUtility.DisplayDialog("No verified changes",
+                    "No eligible scene references. Blocked: " + blocked.Count, "OK");
+                return;
+            }
+            if (!EditorUtility.DisplayDialog("Apply serialized scene migration?",
+                "Modify " + candidates.Count + " scenes using verified object references? " +
+                "All originals will be backed up first. " + blocked.Count +
+                " blocked references will be skipped. Commit your project before applying.",
+                "Apply with backups", "Cancel")) return;
+            foreach (string path in candidates)
+            {
+                string target = Path.Combine(backup, path.Replace('/', Path.DirectorySeparatorChar));
+                Directory.CreateDirectory(Path.GetDirectoryName(target));
+                File.Copy(FullPath(path), target, false);
+            }
+            backupsReady = true;
+            startedWriting = true;
+            foreach (string path in candidates)
+            {
+                touched.Add(path);
+                var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path,
+                    UnityEditor.SceneManagement.OpenSceneMode.Single);
+                int count = VisitSerializedScene(scene, path, mapping, true, blocked);
+                if (count > 0 && !UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene))
+                    throw new IOException("Could not save migrated scene: " + path);
+                report.Add("APPLIED\t" + SafeTsv(path) + "\t" + count);
+            }
+            completed = true;
+        }
+        catch (Exception ex)
+        {
+            report.Add("FAILED\t\t" + SafeTsv(ex.Message));
+            Debug.LogError("[ADM] Scene migration failed: " + ex);
+        }
+        finally
+        {
+            // Close migrated scenes before replacing files to prevent Unity saving stale data.
+            try { UnityEditor.SceneManagement.EditorSceneManager.NewScene(
+                UnityEditor.SceneManagement.NewSceneSetup.EmptyScene,
+                UnityEditor.SceneManagement.NewSceneMode.Single); }
+            catch (Exception ex) { report.Add("SCENE_CLOSE_ERROR\t\t" + SafeTsv(ex.Message)); }
+            if (startedWriting && !completed && backupsReady)
+                foreach (string path in touched)
+                {
+                    try
+                    {
+                        File.Copy(Path.Combine(backup, path.Replace('/', Path.DirectorySeparatorChar)),
+                            FullPath(path), true);
+                        report.Add("ROLLED_BACK\t" + SafeTsv(path) + "\tRestored original");
+                    }
+                    catch (Exception ex)
+                    {
+                        report.Add("ROLLBACK_INCOMPLETE\t" + SafeTsv(path) + "\t" + SafeTsv(ex.Message));
+                        Debug.LogError("[ADM] Manual scene restoration needed: " + path + ": " + ex);
+                    }
+                }
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
+            try { UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup); }
+            catch (Exception ex)
+            {
+                report.Add("SETUP_RESTORE_ERROR\t\t" + SafeTsv(ex.Message));
+                Debug.LogError("[ADM] Restore editor scene setup manually: " + ex);
+            }
+            analyzed = false;
+            foreach (string item in blocked) report.Add("BLOCKED\t\t" + SafeTsv(item));
+            Directory.CreateDirectory(folder);
+            reportPath = Path.Combine(folder, "scene_serialized_migration_" + stamp + ".tsv");
+            File.WriteAllLines(reportPath, report, new UTF8Encoding(false));
+            Debug.Log("[ADM] Scene migration report: " + reportPath + " | Backup: " + backup);
+        }
+    }
+
+    private static int VisitSerializedScene(UnityEngine.SceneManagement.Scene scene, string owner,
+        Dictionary<string, string> mapping, bool apply, List<string> blocked)
+    {
+        int count = 0;
+        foreach (GameObject root in scene.GetRootGameObjects())
+            foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
+            {
+                count += UpdateSerializedObject(transform.gameObject, owner, mapping, apply, blocked);
+                foreach (Component component in transform.GetComponents<Component>())
+                    if (component != null)
+                        count += UpdateSerializedObject(component, owner, mapping, apply, blocked);
+            }
+        return count;
     }
 
     // Serialized migration is separate from YAML migration but shares its mapping and

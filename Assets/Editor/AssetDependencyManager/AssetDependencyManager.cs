@@ -154,6 +154,7 @@ public sealed class AssetDependencyManager : EditorWindow
             case 4:
                 EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Isolated migration simulations are not yet integrated.", MessageType.Info);
                 if (GUILayout.Button("Run all read-only preflight tests (TSV)", GUILayout.Height(30))) RunPreflightTests();
+                if (GUILayout.Button("Run isolated scene copy and integrity test (TSV)", GUILayout.Height(30))) TestIsolatedSceneCopies();
                 break;
             case 5:
                 EditorGUILayout.HelpBox("Migration can modify serialized references. Run Analyze and review the dry-run before Apply.", MessageType.Warning);
@@ -183,6 +184,82 @@ public sealed class AssetDependencyManager : EditorWindow
     // Conservative, read-only audit of any selected source folder; no HDRP/Demo paths baked in.
     // Read-only mesh/material audit across selected scenes and all project prefabs.
     // Compare imported FBX subassets without changing prefab instances or serialized references.
+    // Tests scene-file copying in a temporary OS folder, without loading or saving project scenes.
+    // This is a prerequisite integrity test, not a Unity import/reserialization simulation.
+    private void TestIsolatedSceneCopies()
+    {
+        var rows = new List<string> { "Result\\tScene\\tCheck\\tDetails" };
+        string temp = Path.Combine(Path.GetTempPath(), "AssetDependencyManager_Isolation_" + Guid.NewGuid().ToString("N"));
+        bool allPassed = true;
+        bool cleanupPassed = true;
+        var scenes = settings.scenes == null ? new string[0] : settings.scenes.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        if (scenes.Length == 0)
+        {
+            rows.Add("BLOCKED\\t\\tConfigured scenes\\tNo scenes selected");
+            allPassed = false;
+        }
+        try
+        {
+            Directory.CreateDirectory(temp);
+            foreach (var scene in scenes)
+            {
+                if (string.IsNullOrEmpty(scene) || !scene.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase) ||
+                    AssetDatabase.LoadAssetAtPath<SceneAsset>(scene) == null)
+                {
+                    rows.Add("BLOCKED\\t" + SafeTsv(scene ?? "") + "\\tScene validation\\tMissing or invalid scene");
+                    allPassed = false;
+                    continue;
+                }
+                try
+                {
+                    string original = FullPath(scene);
+                    string before = Hash(scene);
+                    string copied = Path.Combine(temp, Guid.NewGuid().ToString("N") + ".unity");
+                    File.Copy(original, copied, false);
+                    using (var sha = SHA256.Create())
+                    using (var stream = File.OpenRead(copied))
+                    {
+                        var copyHash = BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
+                        string after = Hash(scene);
+                        bool passed = string.Equals(before, copyHash, StringComparison.OrdinalIgnoreCase) &&
+                                      string.Equals(before, after, StringComparison.OrdinalIgnoreCase);
+                        rows.Add((passed ? "PASS" : "FAIL") + "\\t" + SafeTsv(scene) +
+                            "\\tCopy hash and original integrity\\t" +
+                            (passed ? "Temporary copy identical; original unchanged" : "Hash mismatch; investigate immediately"));
+                        if (!passed) allPassed = false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    allPassed = false;
+                    rows.Add("FAIL\\t" + SafeTsv(scene) + "\\tCopy operation\\t" + SafeTsv(ex.Message));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            allPassed = false;
+            rows.Add("FAIL\\t\\tTemporary folder\\t" + SafeTsv(ex.Message));
+        }
+        finally
+        {
+            try { if (Directory.Exists(temp)) Directory.Delete(temp, true); }
+            catch (Exception ex)
+            {
+                cleanupPassed = false;
+                rows.Add("FAIL\\t\\tTemporary cleanup\\t" + SafeTsv(temp + ": " + ex.Message));
+            }
+        }
+        rows.Add((allPassed && cleanupPassed ? "PASS" : "FAIL") +
+            "\\t\\tSUMMARY\\tOnly file-copy integrity tested; no Unity worker, scene resave or FBX removal was executed");
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        string output = Path.Combine(folder, "isolated_scene_copy_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Isolated scene copy test report: " + output);
+    }
+
     private void RunPreflightTests()
     {
         var rows = new List<string> { "Result\\tCheck\\tAsset\\tDetails" };

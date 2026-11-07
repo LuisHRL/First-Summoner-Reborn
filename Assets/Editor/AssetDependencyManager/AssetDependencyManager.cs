@@ -1199,7 +1199,7 @@ public sealed class AssetDependencyManager : EditorWindow
     {
         using (var sha = SHA256.Create())
         using (var stream = File.OpenRead(FullPath(path)))
-            return BitConverter.ToString(sha.ComputeHash(stream));
+            return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
     }
 
     private void Analyze()

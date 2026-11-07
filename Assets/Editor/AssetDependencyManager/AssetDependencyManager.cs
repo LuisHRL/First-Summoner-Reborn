@@ -276,7 +276,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 catch (Exception ex) { rows.Add("FAIL\\t" + SafeTsv(temp) + "\\tTemporary cleanup\\t" + SafeTsv(ex.Message)); }
             }
         }
-        rows.Add((cancelled ? "BLOCKED" : "PASS") + "\\t\\tSUMMARY\\t" +
+        rows.Add((cancelled || configured.Length == 0 ? "BLOCKED" : "PASS") + "\\t\\tSUMMARY\\t" +
             SafeTsv($"configuredScenes={configured.Length};cancelled={cancelled};temporaryCopiesCleaned={tempAssets.Count}"));
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
@@ -407,6 +407,7 @@ public sealed class AssetDependencyManager : EditorWindow
         Debug.Log("[AssetDependencyManager] Starting read-only diagnostic suite. No migration apply will be invoked.");
         stage("Preflight", RunPreflightTests, true);
         stage("Isolated scene copy integrity", TestIsolatedSceneCopies, true);
+        stage("Unity temporary scene resave", TestTemporarySceneResave, !EditorApplication.isPlayingOrWillChangePlaymode && settings.scenes != null && settings.scenes.Count > 0);
         stage("Global dependencies", AuditGlobalDependencies, validSource);
         stage("Source reachability", AuditSourceReachability, validSource);
         stage("FBX subasset mapping", AuditFbxSubassetMatches, separated);

@@ -27,6 +27,22 @@ internal static class AssetDependencyManagerSafetyTests
             mismatch.name = "DifferentName";
             AssetDatabase.CreateAsset(mismatch, mismatchPath);
             AssetDatabase.SaveAssets();
+            AssetDatabase.ImportAsset(sourcePath, ImportAssetOptions.ForceSynchronousImport);
+            AssetDatabase.ImportAsset(destinationPath, ImportAssetOptions.ForceSynchronousImport);
+            AssetDatabase.ImportAsset(mismatchPath, ImportAssetOptions.ForceSynchronousImport);
+            source = AssetDatabase.LoadAssetAtPath<ADMReferenceFixture>(sourcePath);
+            destination = AssetDatabase.LoadAssetAtPath<ADMReferenceFixture>(destinationPath);
+            mismatch = AssetDatabase.LoadAssetAtPath<ADMReferenceFixture>(mismatchPath);
+            if (source == null || destination == null || mismatch == null)
+                throw new InvalidOperationException("Temporary fixture assets could not be imported.");
+            // Unity may rename main assets on import to match their filenames.
+            source.name = "ReferenceFixture";
+            destination.name = "ReferenceFixture";
+            mismatch.name = "DifferentName";
+            EditorUtility.SetDirty(source);
+            EditorUtility.SetDirty(destination);
+            EditorUtility.SetDirty(mismatch);
+            AssetDatabase.SaveAssets();
 
             MethodInfo resolver = typeof(AssetDependencyManager).GetMethod(
                 "TryResolveSerializedDestination", BindingFlags.Static | BindingFlags.NonPublic);

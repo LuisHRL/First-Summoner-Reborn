@@ -355,14 +355,14 @@ public sealed class AssetDependencyManager : EditorWindow
 
     private void RunDiagnosticSuite()
     {
-        var rows = new List<string> { "Result\\tStage\\tReport\\tDetails" };
+        var rows = new List<string> { "Result\tStage\tReport\tDetails" };
         int passed = 0, failed = 0, blocked = 0;
         Action<string, Action, bool> stage = (name, action, enabled) =>
         {
             if (!enabled)
             {
                 blocked++;
-                rows.Add("BLOCKED\\t" + SafeTsv(name) + "\\t\\tPrerequisites unavailable");
+                rows.Add("BLOCKED\t" + SafeTsv(name) + "\t\tPrerequisites unavailable");
                 Debug.LogWarning("[AssetDependencyManager] BLOCKED - " + name + " (prerequisites unavailable)");
                 return;
             }
@@ -373,7 +373,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (string.IsNullOrEmpty(reportPath) || !File.Exists(reportPath))
                 {
                     failed++;
-                    rows.Add("FAIL\\t" + SafeTsv(name) + "\\t\\tNo report was produced");
+                    rows.Add("FAIL\t" + SafeTsv(name) + "\t\tNo report was produced");
                     Debug.LogError("[AssetDependencyManager] FAIL - " + name + " (no report)");
                 }
                 else
@@ -382,7 +382,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     int findingCount = 0;
                     foreach (string line in File.ReadLines(reportPath).Skip(1))
                     {
-                        string status = line.Split('\\t')[0].Trim();
+                        string status = line.Split('\t')[0].Trim();
                         if (status == "FAIL" || status == "ERROR" || status == "INCOMPLETE" ||
                             status == "INCOMPLETE_AUDIT" || status == "CANCELLED_PARTIAL" ||
                             status == "CHANGED_WARNING")
@@ -397,8 +397,8 @@ public sealed class AssetDependencyManager : EditorWindow
                     if (stageStatus == "FAIL") failed++;
                     else if (stageStatus == "BLOCKED") blocked++;
                     else passed++;
-                    rows.Add(stageStatus + "\\t" + SafeTsv(name) + "\\t" + SafeTsv(reportPath) +
-                        "\\tReport inspected; non-PASS rows=" + findingCount);
+                    rows.Add(stageStatus + "\t" + SafeTsv(name) + "\t" + SafeTsv(reportPath) +
+                        "\tReport inspected; non-PASS rows=" + findingCount);
                     string stageMessage = "[AssetDependencyManager] " + stageStatus + " - " + name +
                         " (non-PASS rows=" + findingCount + "; report=" + reportPath + ")";
                     if (stageStatus == "FAIL") Debug.LogError(stageMessage);
@@ -409,7 +409,7 @@ public sealed class AssetDependencyManager : EditorWindow
             catch (Exception ex)
             {
                 failed++;
-                rows.Add("FAIL\\t" + SafeTsv(name) + "\\t\\t" + SafeTsv(ex.ToString()));
+                rows.Add("FAIL\t" + SafeTsv(name) + "\t\t" + SafeTsv(ex.ToString()));
                 Debug.LogError("[AssetDependencyManager] FAIL - " + name + ": " + ex);
             }
         };
@@ -429,7 +429,7 @@ public sealed class AssetDependencyManager : EditorWindow
         stage("FBX subasset mapping", AuditFbxSubassetMatches, separated);
         stage("Scene/prefab mesh materials", AuditMeshMaterials, !EditorApplication.isPlayingOrWillChangePlaymode);
         stage("Serialized GUID integrity", AuditUnresolvedGuids, true);
-        rows.Add("SUMMARY\\t\\t\\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportStatusesInspected=true;unityWorkerNotExecuted=true"));
+        rows.Add("SUMMARY\t\t\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportStatusesInspected=true;unityWorkerNotExecuted=true"));
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
         string output = Path.Combine(folder, "diagnostic_suite_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");

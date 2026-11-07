@@ -404,22 +404,34 @@ public sealed class AssetDependencyManager : EditorWindow
                         rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t\t\tScene object scan requires isolated scene loading");
                         continue;
                     }
-                    foreach (UnityEngine.Object obj in AssetDatabase.LoadAllAssetsAtPath(owner))
+                    if (owner.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
                     {
-                        if (obj == null || obj is AssetImporter) continue;
-                        SerializedObject serialized = new SerializedObject(obj);
-                        SerializedProperty property = serialized.GetIterator();
-                        if (!property.Next(true)) continue;
-                        do
+                        GameObject root = null;
+                        try
                         {
-                            if (property.propertyType != SerializedPropertyType.ObjectReference) continue;
-                            UnityEngine.Object referenced = property.objectReferenceValue;
-                            if (referenced == null) continue;
-                            string referencedPath = AssetDatabase.GetAssetPath(referenced);
-                            if (!Inside(referencedPath, source)) continue;
-                            rows.Add("REFERENCE\t" + SafeTsv(owner) + "\t" + SafeTsv(obj.name) +
-                                "\t" + SafeTsv(property.propertyPath) + "\t" + SafeTsv(referencedPath));
-                        } while (property.Next(true));
+                            root = PrefabUtility.LoadPrefabContents(owner);
+                            foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
+                            {
+                                AuditObjectReferenceProperties(transform.gameObject, owner, source, rows);
+                                foreach (Component component in transform.GetComponents<Component>())
+                                {
+                                    if (component == null)
+                                    {
+                                        rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t" + SafeTsv(transform.name) +
+                                            "\t\tMissing component script");
+                                        continue;
+                                    }
+                                    AuditObjectReferenceProperties(component, owner, source, rows);
+                                }
+                            }
+                        }
+                        finally { if (root != null) PrefabUtility.UnloadPrefabContents(root); }
+                    }
+                    else
+                    {
+                        foreach (UnityEngine.Object obj in AssetDatabase.LoadAllAssetsAtPath(owner))
+                            if (obj != null && !(obj is AssetImporter))
+                                AuditObjectReferenceProperties(obj, owner, source, rows);
                     }
                 }
                 catch (Exception ex)
@@ -427,7 +439,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     rows.Add("FAIL\t" + SafeTsv(owner) + "\t\t\t" + SafeTsv(ex.Message));
                 }
             }
-            rows.Add("SUMMARY\t\t\t\tInspected " + owners.Count + " reachable serialized asset owners; scene object scan excluded");
+            rows.Add("SUMMARY\t\t\t\tInspected " + owners.Count + " reachable serialized asset owners including prefab contents; scene object scan excluded");
         }
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
@@ -435,6 +447,25 @@ public sealed class AssetDependencyManager : EditorWindow
         File.WriteAllLines(reportPath, rows, new UTF8Encoding(true));
         Debug.Log("[AssetDependencyManager] Serialized object reference audit: " + reportPath);
     }
+
+
+    private static void AuditObjectReferenceProperties(UnityEngine.Object obj, string owner, string source, List<string> rows)
+    {
+        var serialized = new SerializedObject(obj);
+        var property = serialized.GetIterator();
+        if (!property.Next(true)) return;
+        do
+        {
+            if (property.propertyType != SerializedPropertyType.ObjectReference) continue;
+            UnityEngine.Object referenced = property.objectReferenceValue;
+            if (referenced == null) continue;
+            string referencedPath = AssetDatabase.GetAssetPath(referenced);
+            if (!Inside(referencedPath, source)) continue;
+            rows.Add("REFERENCE\t" + SafeTsv(owner) + "\t" + SafeTsv(obj.name) +
+                "\t" + SafeTsv(property.propertyPath) + "\t" + SafeTsv(referencedPath));
+        } while (property.Next(true));
+    }
+
 
     private void AuditUnresolvedGuids()
     {

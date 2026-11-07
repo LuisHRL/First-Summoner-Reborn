@@ -50,6 +50,8 @@ public sealed class AssetDependencyManager : EditorWindow
     private readonly List<string> messages = new List<string>();
     private readonly List<string[]> crossReferences = new List<string[]>();
     private Vector2 scroll;
+    private int activeTab;
+    private static readonly string[] TabNames = { "Configuration", "Dependencies", "Matching", "Diagnostics", "Tests", "Migration", "Reports" };
     private bool analyzed;
     private string reportPath = "";
 
@@ -80,9 +82,13 @@ public sealed class AssetDependencyManager : EditorWindow
 
     private void OnGUI()
     {
-        scroll = EditorGUILayout.BeginScrollView(scroll);
         EditorGUILayout.LabelField("Asset Dependency Manager", EditorStyles.boldLabel);
-        EditorGUILayout.HelpBox("Audit and guarded reference migration. Apply changes only after reviewing the dry-run and backing up the project. Git files are never modified directly.", MessageType.Info);
+        activeTab = GUILayout.Toolbar(activeTab, TabNames);
+        scroll = EditorGUILayout.BeginScrollView(scroll);
+        switch (activeTab)
+        {
+            case 0:
+                EditorGUILayout.HelpBox("Shared settings for the dependency inventory and migration. Select project folders and scene scope.", MessageType.Info);
         EditorGUI.BeginChangeCheck();
         DrawFolder("Original folder (optional)", ref settings.sourceFolder);
         DrawFolder("Copied / inventory folder", ref settings.targetFolder);
@@ -127,19 +133,35 @@ public sealed class AssetDependencyManager : EditorWindow
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.HelpBox("Scene scope is explicit. Only assets in the selected scenes' dependency graph are eligible for a future migration. Dynamic loads and editor-driven references remain uncertain.", MessageType.Warning);
 
-        EditorGUILayout.Space(8);
-        if (GUILayout.Button("1. Analyze dependencies and inventory", GUILayout.Height(30))) Analyze();
-        using (new EditorGUI.DisabledScope(!analyzed))
-        {
-            if (GUILayout.Button("2. Export audit report (TSV)")) ExportReport();
-            if (GUILayout.Button("3. Export v4 migration preview (TSV)")) ExportMigrationPreview();
-        }
-        using (new EditorGUI.DisabledScope(!analyzed))
-        {
-            if (GUILayout.Button("4. Dry-run safe YAML replacements")) MigrateReferences(false);
-            if (GUILayout.Button("5. Apply safe YAML replacements (with backups)")) MigrateReferences(true);
-        }
-
+                break;
+            case 1:
+                EditorGUILayout.HelpBox("Read-only dependency inventory and global reverse-reference audit.", MessageType.Info);
+                if (GUILayout.Button("Analyze dependencies and inventory", GUILayout.Height(30))) Analyze();
+                if (GUILayout.Button("Audit all project dependencies (TSV)", GUILayout.Height(30))) AuditGlobalDependencies();
+                break;
+            case 2:
+                EditorGUILayout.HelpBox("Match source and destination assets using the configured folders.", MessageType.Info);
+                using (new EditorGUI.DisabledScope(!analyzed))
+                    if (GUILayout.Button("Export mapping preview (TSV)", GUILayout.Height(30))) ExportMigrationPreview();
+                break;
+            case 3:
+                EditorGUILayout.HelpBox("Diagnostic functions are being integrated here. No assets are modified by this tab.", MessageType.Info);
+                if (GUILayout.Button("Audit all project dependencies (TSV)")) AuditGlobalDependencies();
+                break;
+            case 4:
+                EditorGUILayout.HelpBox("Automated isolated tests will be integrated before the legacy test tools are removed. No destructive test is available here yet.", MessageType.Warning);
+                break;
+            case 5:
+                EditorGUILayout.HelpBox("Migration can modify serialized references. Run Analyze and review the dry-run before Apply.", MessageType.Warning);
+                using (new EditorGUI.DisabledScope(!analyzed))
+                {
+                    if (GUILayout.Button("Dry-run safe YAML replacements")) MigrateReferences(false);
+                    if (GUILayout.Button("Apply safe YAML replacements (with backups)")) MigrateReferences(true);
+                }
+                break;
+            case 6:
+                using (new EditorGUI.DisabledScope(!analyzed))
+                    if (GUILayout.Button("Export inventory audit report (TSV)")) ExportReport();
         EditorGUILayout.Space(8);
         EditorGUILayout.LabelField("Assets in inventory: " + inventory.Count);
         EditorGUILayout.LabelField("Scene dependencies: " + dependencies.Count);
@@ -149,7 +171,80 @@ public sealed class AssetDependencyManager : EditorWindow
         EditorGUILayout.LabelField("Diagnostic findings: " + findings.Count);
         EditorGUILayout.LabelField("Assets with explicit scene graph references: " + inventory.Count(e => e.category == "Used by selected scenes"));
         foreach (string message in messages.Take(12)) EditorGUILayout.LabelField(message, EditorStyles.wordWrappedMiniLabel);
+                break;
+        }
         EditorGUILayout.EndScrollView();
+    }
+
+    private void AuditGlobalDependencies()
+    {
+        string source = Normalize(settings.sourceFolder);
+        if (!AssetDatabase.IsValidFolder(source) || source == "Assets")
+        {
+            EditorUtility.DisplayDialog("Source folder required", "Select a specific source folder in Configuration.", "OK");
+            return;
+        }
+        var all = AssetDatabase.GetAllAssetPaths()
+            .Where(p => Inside(p, "Assets") && !AssetDatabase.IsValidFolder(p))
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToArray();
+        var sourceAssets = new HashSet<string>(all.Where(p => Inside(p, source)), StringComparer.OrdinalIgnoreCase);
+        var reverse = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+        var rows = new List<string> { "TYPE\tOWNER\tDEPENDENCY\tDETAIL" };
+        var directOwners = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        int errors = 0, inspected = 0;
+        bool cancelled = false;
+        try
+        {
+            for (int i = 0; i < all.Length; i++)
+            {
+                string owner = all[i];
+                if (EditorUtility.DisplayCancelableProgressBar("Global dependency audit", owner, (float)i / Math.Max(1, all.Length)))
+                {
+                    cancelled = true;
+                    break;
+                }
+                try
+                {
+                    foreach (var dep in AssetDatabase.GetDependencies(owner, false))
+                    {
+                        if (string.Equals(dep, owner, StringComparison.OrdinalIgnoreCase)) continue;
+                        if (!reverse.TryGetValue(dep, out var parents)) reverse[dep] = parents = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                        parents.Add(owner);
+                        if (!Inside(owner, source) && Inside(dep, source))
+                        {
+                            directOwners.Add(owner);
+                            rows.Add(string.Join("\t", new[] { "DIRECT", SafeTsv(owner), SafeTsv(dep), "AssetDatabase.GetDependencies(false)" }));
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errors++;
+                    rows.Add(string.Join("\t", new[] { "ERROR", SafeTsv(owner), "", SafeTsv(ex.Message) }));
+                }
+                inspected++;
+            }
+            if (!cancelled)
+            {
+                var reachable = new HashSet<string>(sourceAssets, StringComparer.OrdinalIgnoreCase);
+                var queue = new Queue<string>(sourceAssets);
+                while (queue.Count > 0)
+                {
+                    if (!reverse.TryGetValue(queue.Dequeue(), out var parents)) continue;
+                    foreach (var owner in parents) if (reachable.Add(owner)) queue.Enqueue(owner);
+                }
+                foreach (var owner in reachable.Where(p => !Inside(p, source) && !directOwners.Contains(p)).OrderBy(p => p))
+                    rows.Add(string.Join("\t", new[] { "INDIRECT", SafeTsv(owner), SafeTsv(source), "Transitive reverse dependency" }));
+            }
+            rows.Add(string.Join("\t", new[] { "SUMMARY", SafeTsv(source), "", $"inspected={inspected};errors={errors};cancelled={cancelled}" }));
+        }
+        finally { EditorUtility.ClearProgressBar(); }
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        string output = Path.Combine(folder, "global_dependency_audit_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Global dependency audit: " + output + (cancelled ? " (partial/cancelled)" : ""));
     }
 
     private static string Normalize(string path) { return (path ?? "").Replace('\\', '/').TrimEnd('/'); }

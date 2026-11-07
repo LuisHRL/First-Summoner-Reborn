@@ -550,7 +550,9 @@ public sealed class AssetDependencyManager : EditorWindow
                         string status = line.Split('\t')[0].Trim();
                         if (status == "FAIL" || status == "ERROR" || status == "INCOMPLETE" ||
                             status == "INCOMPLETE_AUDIT" || status == "CANCELLED_PARTIAL" ||
-                            status == "CHANGED_WARNING")
+                            status == "CHANGED_WARNING" || status == "MISSING_MESH" ||
+                            status == "EXTRA_MATERIAL_SLOTS" || status == "FEWER_MATERIAL_SLOTS" ||
+                            status == "NULL_MATERIAL_SLOT")
                             stageStatus = "FAIL";
                         else if (stageStatus != "FAIL" && (status == "BLOCKED" ||
                             status == "NO_CANDIDATE" || status == "AMBIGUOUS_CANDIDATES" ||
@@ -956,7 +958,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (mesh == null)
                 {
                     issues++;
-                    rows.Add(string.Join("\\t", new[] { "MISSING_MESH", SafeTsv(assetPath), objectPath, "", renderer.sharedMaterials.Length.ToString(), "0", "Renderer has no mesh" }));
+                    rows.Add(string.Join("\t", new[] { "MISSING_MESH", SafeTsv(assetPath), objectPath, "", renderer.sharedMaterials.Length.ToString(), "0", "Renderer has no mesh" }));
                     continue;
                 }
                 int slots = renderer.sharedMaterials.Length;
@@ -965,7 +967,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     renderer.sharedMaterials.Any(m => m == null) ? "NULL_MATERIAL_SLOT" : "";
                 if (status.Length == 0) continue;
                 issues++;
-                rows.Add(string.Join("\\t", new[] { status, SafeTsv(assetPath), objectPath, SafeTsv(mesh.name),
+                rows.Add(string.Join("\t", new[] { status, SafeTsv(assetPath), objectPath, SafeTsv(mesh.name),
                     slots.ToString(), submeshes.ToString(), "Inspect material assignment" }));
             }
         }

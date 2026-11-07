@@ -155,11 +155,13 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Audit serialized asset object references (TSV)", GUILayout.Height(30))) AuditSerializedObjectReferences();
                 break;
             case 4:
-                EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Temporary scene reserialization is available; isolated FBX removal simulation is not yet integrated.", MessageType.Info);
+                EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Temporary scene reserialization is available; isolated FBX baseline/removal worker available; requires separate review of worker TSV.", MessageType.Info);
                 if (GUILayout.Button("Run full read-only diagnostic suite (TSV + Console)", GUILayout.Height(34))) RunDiagnosticSuite();
                 if (GUILayout.Button("Run all read-only preflight tests (TSV)", GUILayout.Height(30))) RunPreflightTests();
                 if (GUILayout.Button("Run isolated scene copy and integrity test (TSV)", GUILayout.Height(30))) TestIsolatedSceneCopies();
                 if (GUILayout.Button("Test Unity scene reserialization on temporary copies (TSV)", GUILayout.Height(30))) TestTemporarySceneResave();
+                if (GUILayout.Button("Run isolated FBX baseline (separate Unity process)", GUILayout.Height(30))) LaunchFbxIsolation(false);
+                if (GUILayout.Button("Run isolated FBX removal comparison (separate Unity process)", GUILayout.Height(30))) LaunchFbxIsolation(true);
                 break;
             case 5:
                 EditorGUILayout.HelpBox("Migration can modify serialized references. Run Analyze and review the dry-run before Apply.", MessageType.Warning);
@@ -682,6 +684,225 @@ public sealed class AssetDependencyManager : EditorWindow
         File.WriteAllLines(output, rows, new UTF8Encoding(true));
         reportPath = output;
         Debug.Log("[AssetDependencyManager] Isolated scene copy test report: " + output);
+    }
+
+
+    // Isolated FBX test: the original project is never opened by the worker.
+    // Run baseline first, then removal; both runs use independent disposable project copies.
+    private void LaunchFbxIsolation(bool remove)
+    {
+        string source = Normalize(settings.sourceFolder);
+        string target = Normalize(settings.targetFolder);
+        string[] scenes = (settings.scenes ?? new List<string>()).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        if (EditorApplication.isPlayingOrWillChangePlaymode || !AssetDatabase.IsValidFolder(source) ||
+            !AssetDatabase.IsValidFolder(target) || source == target || Inside(source, target) ||
+            Inside(target, source) || scenes.Length == 0 ||
+            scenes.Any(p => string.IsNullOrEmpty(p) || !p.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase) ||
+                            AssetDatabase.LoadAssetAtPath<SceneAsset>(p) == null))
+        {
+            EditorUtility.DisplayDialog("Isolation blocked", "Configure separate source/target folders and valid scenes; exit Play Mode.", "OK");
+            return;
+        }
+        if (UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup()
+            .Any(x => x.isLoaded && UnityEngine.SceneManagement.SceneManager.GetSceneByPath(x.path).isDirty))
+        {
+            EditorUtility.DisplayDialog("Isolation blocked", "Save or discard modified scenes before testing.", "OK");
+            return;
+        }
+        string project = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+        string reportDir = Path.Combine(project, "AssetDependencyManagerReports");
+        Directory.CreateDirectory(reportDir);
+        string baseline = Path.Combine(reportDir, "fbx_isolation_baseline.tsv");
+        if (remove && !File.Exists(baseline))
+        {
+            EditorUtility.DisplayDialog("Baseline required", "Run the isolated baseline test first.", "OK");
+            return;
+        }
+        string[] affected = scenes.SelectMany(p => AssetDatabase.GetDependencies(p, true))
+            .Where(p => Inside(p, source) && p.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p).ToArray();
+        if (affected.Length == 0)
+        {
+            EditorUtility.DisplayDialog("Nothing to test", "Configured scenes do not depend on source-folder FBX assets.", "OK");
+            return;
+        }
+        if (!EditorUtility.DisplayDialog("Standalone FBX isolation",
+            "This will copy Assets, Packages and ProjectSettings to a temporary folder outside the project. " +
+            (remove ? "Only the COPIED FBX files will be removed. " : "No FBX will be removed. ") +
+            "The copy can require several GB. Original files remain untouched.", "Continue", "Cancel")) return;
+        string sandbox = Path.Combine(Path.GetTempPath(), "ADM_Fbx_" + Guid.NewGuid().ToString("N"));
+        string stamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+        string report = remove ? Path.Combine(reportDir, "fbx_isolation_removal_" + stamp + ".tsv") : baseline;
+        var rows = new List<string> { "Kind\tAsset\tStatus\tDetail" };
+        try
+        {
+            Directory.CreateDirectory(sandbox);
+            foreach (string folder in new[] { "Assets", "Packages", "ProjectSettings" })
+                CopyIsolationTree(Path.Combine(project, folder), Path.Combine(sandbox, folder));
+            if (remove)
+                foreach (string asset in affected)
+                {
+                    string copied = Path.GetFullPath(Path.Combine(sandbox, asset));
+                    if (!copied.StartsWith(Path.GetFullPath(sandbox) + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ||
+                        !File.Exists(copied)) throw new IOException("Unsafe or missing copied FBX: " + asset);
+                    File.Delete(copied);
+                    if (File.Exists(copied + ".meta")) File.Delete(copied + ".meta");
+                    rows.Add("COPIED_FBX\t" + SafeTsv(asset) + "\tREMOVED_FROM_SANDBOX_ONLY\t");
+                }
+            string config = Path.Combine(sandbox, "adm_fbx_config.txt");
+            File.WriteAllLines(config, new[] { report, baseline, remove ? "remove" : "baseline" }.Concat(scenes).ToArray());
+            string log = Path.Combine(reportDir, "fbx_isolation_unity_" + stamp + ".log");
+            var start = new System.Diagnostics.ProcessStartInfo(EditorApplication.applicationPath)
+            {
+                Arguments = "-batchmode -nographics -quit -projectPath " + IsolationQuote(sandbox) +
+                    " -executeMethod AssetDependencyManager.RunFbxIsolationWorker -admFbxConfig " +
+                    IsolationQuote(config) + " -logFile " + IsolationQuote(log),
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            var process = System.Diagnostics.Process.Start(start);
+            if (process == null) throw new IOException("Unity worker did not launch");
+            rows.Add("WORKER\t\tLAUNCHED\tpid=" + process.Id + ";log=" + SafeTsv(log));
+            rows.Add("SANDBOX\t" + SafeTsv(sandbox) + "\tPRESERVED\tDelete manually after reviewing worker results");
+            Debug.Log("[ADM] Isolation worker launched; report will be written after batchmode completes: " + report);
+        }
+        catch (Exception ex)
+        {
+            rows.Add("ERROR\t\tFAILED\t" + SafeTsv(ex.Message));
+            Debug.LogException(ex);
+        }
+        finally
+        {
+            string launcher = Path.Combine(reportDir, "fbx_isolation_launcher_" + stamp + ".tsv");
+            File.WriteAllLines(launcher, rows);
+            reportPath = launcher;
+        }
+    }
+
+    private static string IsolationQuote(string value) { return "\"" + value.Replace("\"", "\\\"") + "\""; }
+
+    private static void CopyIsolationTree(string source, string destination)
+    {
+        if (!Directory.Exists(source)) throw new DirectoryNotFoundException(source);
+        if ((File.GetAttributes(source) & FileAttributes.ReparsePoint) != 0)
+            throw new IOException("Symlink directory blocked: " + source);
+        Directory.CreateDirectory(destination);
+        foreach (string file in Directory.GetFiles(source))
+        {
+            if ((File.GetAttributes(file) & FileAttributes.ReparsePoint) != 0)
+                throw new IOException("Symlink file blocked: " + file);
+            File.Copy(file, Path.Combine(destination, Path.GetFileName(file)));
+        }
+        foreach (string dir in Directory.GetDirectories(source))
+        {
+            string name = Path.GetFileName(dir);
+            if (name == ".git" || name == "Library" || name == "Temp" || name == "Obj") continue;
+            CopyIsolationTree(dir, Path.Combine(destination, name));
+        }
+    }
+
+    // Called by a separate Unity process with its projectPath pointing to the sandbox.
+    public static void RunFbxIsolationWorker()
+    {
+        string[] args = Environment.GetCommandLineArgs();
+        int index = Array.IndexOf(args, "-admFbxConfig");
+        if (index < 0 || index + 1 >= args.Length) throw new ArgumentException("Missing isolated worker configuration");
+        string[] cfg = File.ReadAllLines(args[index + 1]);
+        if (cfg.Length < 4 || (cfg[2] != "remove" && cfg[2] != "baseline"))
+            throw new IOException("Invalid isolated worker configuration");
+        string report = cfg[0], baseline = cfg[1];
+        var rows = new List<string> { "Kind\tAsset\tStatus\tDetail" };
+        int missing = 0, errors = 0;
+        try
+        {
+            AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+            foreach (string scenePath in cfg.Skip(3))
+            {
+                var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(scenePath,
+                    UnityEditor.SceneManagement.OpenSceneMode.Single);
+                if (!scene.IsValid() || !scene.isLoaded) throw new IOException("Could not load: " + scenePath);
+                foreach (var root in scene.GetRootGameObjects())
+                    foreach (var transform in root.GetComponentsInChildren<Transform>(true))
+                    {
+                        var go = transform.gameObject;
+                        int scripts = GameObjectUtility.GetMonoBehavioursWithMissingScriptCount(go);
+                        if (scripts > 0)
+                        {
+                            missing += scripts;
+                            rows.Add("MISSING_SCRIPT\t" + SafeTsv(scenePath + "/" + HierarchyForIsolation(transform)) +
+                                "\tFOUND\tcount=" + scripts);
+                        }
+                        foreach (var component in go.GetComponents<Component>())
+                        {
+                            if (component == null) continue;
+                            var serialized = new SerializedObject(component);
+                            var prop = serialized.GetIterator();
+                            if (!prop.Next(true)) continue;
+                            do
+                            {
+                                if (prop.propertyType != SerializedPropertyType.ObjectReference) continue;
+                                if (prop.objectReferenceValue != null ||
+                                    prop.objectReferenceEntityIdValue.Equals(default(UnityEngine.EntityId))) continue;
+                                missing++;
+                                rows.Add("MISSING_REFERENCE\t" + SafeTsv(scenePath + "/" + HierarchyForIsolation(transform) +
+                                    "/" + component.GetType().Name + "/" + prop.propertyPath) + "\tFOUND\t");
+                            } while (prop.Next(true));
+                        }
+                    }
+                rows.Add("SCENE\t" + SafeTsv(scenePath) + "\tSCANNED\t");
+            }
+            if (cfg[2] == "remove")
+            {
+                if (!File.Exists(baseline)) throw new IOException("Baseline report missing");
+                var before = File.ReadAllLines(baseline).Skip(1)
+                    .Where(p => p.StartsWith("MISSING_REFERENCE\t", StringComparison.Ordinal) ||
+                                p.StartsWith("MISSING_SCRIPT\t", StringComparison.Ordinal))
+                    .GroupBy(p => p).ToDictionary(p => p.Key, p => p.Count());
+                var after = rows.Skip(1)
+                    .Where(p => p.StartsWith("MISSING_REFERENCE\t", StringComparison.Ordinal) ||
+                                p.StartsWith("MISSING_SCRIPT\t", StringComparison.Ordinal))
+                    .GroupBy(p => p).ToDictionary(p => p.Key, p => p.Count());
+                int introduced = 0;
+                foreach (string key in after.Keys)
+                {
+                    int previous;
+                    before.TryGetValue(key, out previous);
+                    if (after[key] > previous)
+                    {
+                        introduced += after[key] - previous;
+                        rows.Add("INTRODUCED\t" + SafeTsv(key) + "\tFAIL\tcount=" + (after[key] - previous));
+                    }
+                }
+                rows.Add("COMPARISON\t\t" + (introduced == 0 ? "NO_NEW_MISSING" : "NEW_MISSING") +
+                    "\tintroduced=" + introduced);
+            }
+            rows.Add("SUMMARY\t\tCOMPLETED\tmissing=" + missing + ";errors=" + errors +
+                ";notVisualOrRuntimeProof=true");
+        }
+        catch (Exception ex)
+        {
+            errors++;
+            rows.Add("ERROR\t\tFAILED\t" + SafeTsv(ex.ToString()));
+            Debug.LogException(ex);
+        }
+        finally
+        {
+            File.WriteAllLines(report, rows);
+            Debug.Log("[ADM] FBX isolation worker report: " + report);
+        }
+        if (errors != 0) EditorApplication.Exit(1);
+    }
+
+    private static string HierarchyForIsolation(Transform transform)
+    {
+        var parts = new List<string>();
+        while (transform != null)
+        {
+            parts.Add(transform.name);
+            transform = transform.parent;
+        }
+        parts.Reverse();
+        return string.Join("/", parts.ToArray());
     }
 
     private void RunPreflightTests()

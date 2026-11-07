@@ -151,6 +151,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Audit source-folder reachability and external references (TSV)", GUILayout.Height(30))) AuditSourceReachability();
                 if (GUILayout.Button("Audit scene and prefab mesh materials (TSV)", GUILayout.Height(30))) AuditMeshMaterials();
                 if (GUILayout.Button("Audit unresolved serialized GUIDs (TSV)", GUILayout.Height(30))) AuditUnresolvedGuids();
+                if (GUILayout.Button("Trace scene FBX dependency owners (TSV)", GUILayout.Height(30))) AuditFbxDependencyChains();
                 break;
             case 4:
                 EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Temporary scene reserialization is available; isolated FBX removal simulation is not yet integrated.", MessageType.Info);
@@ -302,6 +303,71 @@ public sealed class AssetDependencyManager : EditorWindow
         Debug.Log("[AssetDependencyManager] Temporary Unity scene resave report: " + output);
     }
 
+
+    // Traces direct asset-to-asset edges rather than assuming every recursive dependency is a direct owner.
+    private void AuditFbxDependencyChains()
+    {
+        string source = Normalize(settings.sourceFolder);
+        var rows = new List<string> { "Result\tScene\tOwner\tSourceFBX\tDepth" };
+        if (!AssetDatabase.IsValidFolder(source) || source == "Assets")
+            rows.Add("BLOCKED\t\t\t\tConfigure a specific valid source folder");
+        else if (settings.scenes == null || settings.scenes.Count == 0)
+            rows.Add("BLOCKED\t\t\t\tConfigure at least one scene");
+        else
+        {
+            foreach (string scene in settings.scenes.Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                if (string.IsNullOrEmpty(scene) || AssetDatabase.LoadAssetAtPath<SceneAsset>(scene) == null)
+                {
+                    rows.Add("BLOCKED\t" + SafeTsv(scene ?? "") + "\t\t\tScene not found");
+                    continue;
+                }
+                try
+                {
+                    var closure = new HashSet<string>(AssetDatabase.GetDependencies(scene, true), StringComparer.OrdinalIgnoreCase);
+                    var targets = new HashSet<string>(closure.Where(x => Inside(x, source) &&
+                        x.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase)), StringComparer.OrdinalIgnoreCase);
+                    var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { scene };
+                    var queue = new Queue<KeyValuePair<string, int>>();
+                    queue.Enqueue(new KeyValuePair<string, int>(scene, 0));
+                    int edges = 0;
+                    while (queue.Count > 0)
+                    {
+                        var current = queue.Dequeue();
+                        foreach (string dependency in AssetDatabase.GetDependencies(current.Key, false)
+                            .Distinct(StringComparer.OrdinalIgnoreCase))
+                        {
+                            if (string.Equals(dependency, current.Key, StringComparison.OrdinalIgnoreCase)) continue;
+                            if (!closure.Contains(dependency)) continue;
+                            if (targets.Contains(dependency))
+                            {
+                                rows.Add("TRACE\t" + SafeTsv(scene) + "\t" + SafeTsv(current.Key) +
+                                    "\t" + SafeTsv(dependency) + "\t" + (current.Value + 1));
+                                edges++;
+                            }
+                            if (visited.Add(dependency))
+                                queue.Enqueue(new KeyValuePair<string, int>(dependency, current.Value + 1));
+                        }
+                    }
+                    foreach (string missing in targets.Where(x => !rows.Any(row =>
+                        row.StartsWith("TRACE\t" + SafeTsv(scene) + "\t", StringComparison.Ordinal) &&
+                        row.Contains("\t" + SafeTsv(x) + "\t"))))
+                        rows.Add("BLOCKED\t" + SafeTsv(scene) + "\t\t" + SafeTsv(missing) + "\tNo direct owner chain found");
+                    rows.Add("SUMMARY\t" + SafeTsv(scene) + "\t\t" + targets.Count + "\tDirect FBX owner edges=" + edges);
+                }
+                catch (Exception ex)
+                {
+                    rows.Add("FAIL\t" + SafeTsv(scene) + "\t\t\t" + SafeTsv(ex.Message));
+                }
+            }
+        }
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        reportPath = Path.Combine(folder, "fbx_dependency_chains_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(reportPath, rows, new UTF8Encoding(true));
+        Debug.Log("[AssetDependencyManager] FBX dependency chains: " + reportPath);
+    }
+
     private void AuditUnresolvedGuids()
     {
         var known = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -427,6 +493,7 @@ public sealed class AssetDependencyManager : EditorWindow
         stage("Global dependencies", AuditGlobalDependencies, validSource);
         stage("Source reachability", AuditSourceReachability, validSource);
         stage("FBX subasset mapping", AuditFbxSubassetMatches, separated);
+        stage("FBX owner chains", AuditFbxDependencyChains, validSource && settings.scenes != null && settings.scenes.Count > 0);
         stage("Scene/prefab mesh materials", AuditMeshMaterials, !EditorApplication.isPlayingOrWillChangePlaymode);
         stage("Serialized GUID integrity", AuditUnresolvedGuids, true);
         rows.Add("SUMMARY\t\t\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportStatusesInspected=true;unityWorkerNotExecuted=true"));

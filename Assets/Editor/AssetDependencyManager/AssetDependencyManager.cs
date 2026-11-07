@@ -155,6 +155,8 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Audit serialized asset object references (TSV)", GUILayout.Height(30))) AuditSerializedObjectReferences();
                 break;
             case 4:
+                if (GUILayout.Button("Run backup and rollback self-test (temporary files)", GUILayout.Height(30)))
+                    AssetDependencyManagerSafetyTests.Run();
                 EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Temporary scene reserialization is available; isolated FBX baseline/removal worker available; requires separate review of worker TSV.", MessageType.Info);
                 if (GUILayout.Button("Run full read-only diagnostic suite (TSV + Console)", GUILayout.Height(34))) RunDiagnosticSuite();
                 if (GUILayout.Button("Run all read-only preflight tests (TSV)", GUILayout.Height(30))) RunPreflightTests();

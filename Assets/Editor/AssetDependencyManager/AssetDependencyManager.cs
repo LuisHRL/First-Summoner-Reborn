@@ -1931,18 +1931,20 @@ public sealed class AssetDependencyManager : EditorWindow
         string stamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
         string backup = Path.Combine(folder, "scene_serialized_backup_" + stamp);
         var touched = new List<string>();
-        bool backupsReady = false, completed = false, startedWriting = false;
+        bool backupsReady = false, completed = false, startedWriting = false, sceneSetupChanged = false;
         try
         {
             // Read-only pass before confirmation.
             foreach (string path in scenes)
             {
+                sceneSetupChanged = true;
                 var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path,
                     UnityEditor.SceneManagement.OpenSceneMode.Single);
                 int count = VisitSerializedScene(scene, path, mapping, false, blocked);
                 if (count > 0) candidates.Add(path);
             }
             UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup);
+            sceneSetupChanged = false;
             if (candidates.Count == 0)
             {
                 EditorUtility.DisplayDialog("No verified changes",
@@ -1982,10 +1984,13 @@ public sealed class AssetDependencyManager : EditorWindow
         finally
         {
             // Close migrated scenes before replacing files to prevent Unity saving stale data.
-            try { UnityEditor.SceneManagement.EditorSceneManager.NewScene(
-                UnityEditor.SceneManagement.NewSceneSetup.EmptyScene,
-                UnityEditor.SceneManagement.NewSceneMode.Single); }
-            catch (Exception ex) { report.Add("SCENE_CLOSE_ERROR\t\t" + SafeTsv(ex.Message)); }
+            if (sceneSetupChanged)
+            {
+                try { UnityEditor.SceneManagement.EditorSceneManager.NewScene(
+                    UnityEditor.SceneManagement.NewSceneSetup.EmptyScene,
+                    UnityEditor.SceneManagement.NewSceneMode.Single); }
+                catch (Exception ex) { report.Add("SCENE_CLOSE_ERROR\t\t" + SafeTsv(ex.Message)); }
+            }
             if (startedWriting && !completed && backupsReady)
                 foreach (string path in touched)
                 {
@@ -2002,7 +2007,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     }
                 }
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
-            try { UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup); }
+            try { if (sceneSetupChanged) UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup); }
             catch (Exception ex)
             {
                 report.Add("SETUP_RESTORE_ERROR\t\t" + SafeTsv(ex.Message));

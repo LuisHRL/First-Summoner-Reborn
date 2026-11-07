@@ -147,6 +147,7 @@ public sealed class AssetDependencyManager : EditorWindow
             case 3:
                 EditorGUILayout.HelpBox("Diagnostic functions are being integrated here. No assets are modified by this tab.", MessageType.Info);
                 if (GUILayout.Button("Audit all project dependencies (TSV)")) AuditGlobalDependencies();
+                if (GUILayout.Button("Audit source-folder reachability and external references (TSV)", GUILayout.Height(30))) AuditSourceReachability();
                 break;
             case 4:
                 EditorGUILayout.HelpBox("Automated isolated tests will be integrated before the legacy test tools are removed. No destructive test is available here yet.", MessageType.Warning);
@@ -174,6 +175,96 @@ public sealed class AssetDependencyManager : EditorWindow
                 break;
         }
         EditorGUILayout.EndScrollView();
+    }
+
+    // Conservative, read-only audit of any selected source folder; no HDRP/Demo paths baked in.
+    private void AuditSourceReachability()
+    {
+        string source = Normalize(settings.sourceFolder);
+        if (!AssetDatabase.IsValidFolder(source) || source == "Assets")
+        {
+            EditorUtility.DisplayDialog("Source folder required", "Select a specific source folder in Configuration.", "OK");
+            return;
+        }
+        var all = AssetDatabase.GetAllAssetPaths()
+            .Where(p => Inside(p, "Assets") && !AssetDatabase.IsValidFolder(p))
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToArray();
+        var candidates = new HashSet<string>(all.Where(p => Inside(p, source)), StringComparer.OrdinalIgnoreCase);
+        var roots = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var errors = new List<string>();
+        foreach (var scene in EditorBuildSettings.scenes.Where(x => x.enabled))
+        {
+            if (string.IsNullOrEmpty(scene.path) || !File.Exists(FullPath(scene.path)))
+                errors.Add("Missing build scene: " + scene.path);
+            else roots.Add(scene.path);
+        }
+        foreach (var path in all)
+        {
+            if (path.Split('/').Any(x => string.Equals(x, "Resources", StringComparison.OrdinalIgnoreCase)))
+                roots.Add(path);
+            try
+            {
+                var importer = AssetImporter.GetAtPath(path);
+                if (importer != null && !string.IsNullOrEmpty(importer.assetBundleName)) roots.Add(path);
+                var main = AssetDatabase.LoadMainAssetAtPath(path);
+                if (main != null && AssetDatabase.GetLabels(main).Any(x => x.IndexOf("addressable", StringComparison.OrdinalIgnoreCase) >= 0))
+                    roots.Add(path);
+            }
+            catch (Exception ex) { errors.Add(path + ": " + ex.Message); }
+        }
+        var reachable = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var root in roots)
+        {
+            try
+            {
+                reachable.Add(root);
+                foreach (var dep in AssetDatabase.GetDependencies(root, true)) reachable.Add(dep);
+            }
+            catch (Exception ex) { errors.Add(root + ": " + ex.Message); }
+        }
+        var refs = new Dictionary<string, HashSet<string>>(StringComparer.OrdinalIgnoreCase);
+        bool cancelled = false;
+        try
+        {
+            for (int i = 0; i < all.Length; i++)
+            {
+                var owner = all[i];
+                if (EditorUtility.DisplayCancelableProgressBar("Source reachability audit", owner, (float)i / Math.Max(1, all.Length)))
+                { cancelled = true; break; }
+                if (candidates.Contains(owner)) continue;
+                try
+                {
+                    foreach (var dep in AssetDatabase.GetDependencies(owner, false))
+                        if (candidates.Contains(dep))
+                        {
+                            if (!refs.TryGetValue(dep, out var owners)) refs[dep] = owners = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+                            owners.Add(owner);
+                        }
+                }
+                catch (Exception ex) { errors.Add(owner + ": " + ex.Message); }
+            }
+        }
+        finally { EditorUtility.ClearProgressBar(); }
+        var rows = new List<string> { "Status\\tAssetPath\\tReachable\\tExternalReferences\\tReferencers\\tGUID" };
+        foreach (var asset in candidates.OrderBy(x => x, StringComparer.OrdinalIgnoreCase))
+        {
+            refs.TryGetValue(asset, out var owners);
+            bool used = reachable.Contains(asset);
+            string status = cancelled || errors.Count > 0 ? "INCOMPLETE_AUDIT" :
+                used ? "PROTECT_REACHABLE" : owners != null && owners.Count > 0 ? "REVIEW_EXTERNAL_UNUSED" : "REVIEW_UNREFERENCED";
+            rows.Add(string.Join("\\t", new[] { status, SafeTsv(asset), used.ToString(),
+                (owners == null ? 0 : owners.Count).ToString(),
+                SafeTsv(owners == null ? "" : string.Join(" | ", owners.OrderBy(x => x))),
+                AssetDatabase.AssetPathToGUID(asset) }));
+        }
+        foreach (var error in errors) rows.Add("ERROR\\t" + SafeTsv(error) + "\\t\\t\\t\\t");
+        rows.Add("SUMMARY\\t" + SafeTsv(source) + "\\t\\t\\t" + SafeTsv($"roots={roots.Count};errors={errors.Count};cancelled={cancelled};dynamicLoadsNotProven=true") + "\\t");
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        string output = Path.Combine(folder, "source_reachability_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Read-only reachability report: " + output + ". REVIEW is never permission to delete.");
     }
 
     private void AuditGlobalDependencies()

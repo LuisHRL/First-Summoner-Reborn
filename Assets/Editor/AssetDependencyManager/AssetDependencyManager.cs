@@ -1950,9 +1950,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 "Apply with backups", "Cancel")) return;
             foreach (string path in candidates)
             {
-                string target = Path.Combine(backup, path.Replace('/', Path.DirectorySeparatorChar));
-                Directory.CreateDirectory(Path.GetDirectoryName(target));
-                File.Copy(FullPath(path), target, false);
+                BackupMigrationFile(backup, path);
             }
             backupsReady = true;
             startedWriting = true;
@@ -1989,8 +1987,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 {
                     try
                     {
-                        File.Copy(Path.Combine(backup, path.Replace('/', Path.DirectorySeparatorChar)),
-                            FullPath(path), true);
+                        RestoreMigrationFile(backup, path);
                         report.Add("ROLLED_BACK\t" + SafeTsv(path) + "\tRestored original");
                     }
                     catch (Exception ex)
@@ -2013,6 +2010,28 @@ public sealed class AssetDependencyManager : EditorWindow
             File.WriteAllLines(reportPath, report, new UTF8Encoding(false));
             Debug.Log("[ADM] Scene migration report: " + reportPath + " | Backup: " + backup);
         }
+    }
+
+    // Shared backup path and file operations for scene, prefab and asset migrations.
+    private static string MigrationBackupPath(string backupRoot, string assetPath)
+    {
+        if (string.IsNullOrEmpty(assetPath) ||
+            !assetPath.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase) ||
+            assetPath.Contains("..") || Path.IsPathRooted(assetPath))
+            throw new InvalidOperationException("Unsafe migration asset path: " + assetPath);
+        return Path.Combine(backupRoot, assetPath.Replace('/', Path.DirectorySeparatorChar));
+    }
+
+    private static void BackupMigrationFile(string backupRoot, string assetPath)
+    {
+        string destination = MigrationBackupPath(backupRoot, assetPath);
+        Directory.CreateDirectory(Path.GetDirectoryName(destination));
+        File.Copy(FullPath(assetPath), destination, false);
+    }
+
+    private static void RestoreMigrationFile(string backupRoot, string assetPath)
+    {
+        File.Copy(MigrationBackupPath(backupRoot, assetPath), FullPath(assetPath), true);
     }
 
     // One traversal for scene and prefab serialized-object migration.
@@ -2087,9 +2106,7 @@ public sealed class AssetDependencyManager : EditorWindow
             // Stage every backup before the first edit. Never continue after a failed backup.
             foreach (string owner in candidates)
             {
-                string destination = Path.Combine(backup, owner.Replace('/', Path.DirectorySeparatorChar));
-                Directory.CreateDirectory(Path.GetDirectoryName(destination));
-                File.Copy(FullPath(owner), destination, false);
+                BackupMigrationFile(backup, owner);
             }
             allBackupsReady = true;
             foreach (string owner in candidates)
@@ -2116,8 +2133,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 {
                     try
                     {
-                        string original = Path.Combine(backup, owner.Replace('/', Path.DirectorySeparatorChar));
-                        File.Copy(original, FullPath(owner), true);
+                        RestoreMigrationFile(backup, owner);
                         report.Add("ROLLED_BACK\t" + SafeTsv(owner) + "\tRestored from backup");
                     }
                     catch (Exception restoreError)

@@ -207,9 +207,9 @@ public sealed class AssetDependencyManager : EditorWindow
             var loaded = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
             if (loaded.isDirty)
             {
-                string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
-                Directory.CreateDirectory(folder);
-                reportPath = Path.Combine(folder, "unity_temporary_resave_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+                string dirtySceneReportFolder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+                Directory.CreateDirectory(dirtySceneReportFolder);
+                reportPath = Path.Combine(dirtySceneReportFolder, "unity_temporary_resave_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
                 File.WriteAllLines(reportPath, new[] {
                     "Result\tScene\tCheck\tDetails",
                     "BLOCKED\t" + SafeTsv(loaded.path) + "\tUnsaved scene\tSave or discard scene changes manually before testing"

@@ -8,6 +8,63 @@ using UnityEngine;
 
 internal static class AssetDependencyManagerSafetyTests
 {
+    // Uses disposable ScriptableObject assets to exercise the real destination resolver.
+    internal static void RunReferenceMatching()
+    {
+        string token = Guid.NewGuid().ToString("N");
+        string sourcePath = "Assets/__ADM_Source_" + token + ".asset";
+        string destinationPath = "Assets/__ADM_Destination_" + token + ".asset";
+        string mismatchPath = "Assets/__ADM_Mismatch_" + token + ".asset";
+        try
+        {
+            var source = ScriptableObject.CreateInstance<ADMReferenceFixture>();
+            source.name = "ReferenceFixture";
+            AssetDatabase.CreateAsset(source, sourcePath);
+            var destination = ScriptableObject.CreateInstance<ADMReferenceFixture>();
+            destination.name = "ReferenceFixture";
+            AssetDatabase.CreateAsset(destination, destinationPath);
+            var mismatch = ScriptableObject.CreateInstance<ADMReferenceFixture>();
+            mismatch.name = "DifferentName";
+            AssetDatabase.CreateAsset(mismatch, mismatchPath);
+            AssetDatabase.SaveAssets();
+
+            MethodInfo resolver = typeof(AssetDependencyManager).GetMethod(
+                "TryResolveSerializedDestination", BindingFlags.Static | BindingFlags.NonPublic);
+            if (resolver == null) throw new InvalidOperationException("Reference resolver not found.");
+
+            // Separate main assets should share a local ID, but have distinct GUIDs.
+            string sourceGuid, destinationGuid;
+            long sourceId, destinationId;
+            if (!AssetDatabase.TryGetGUIDAndLocalFileIdentifier(source, out sourceGuid, out sourceId) ||
+                !AssetDatabase.TryGetGUIDAndLocalFileIdentifier(destination, out destinationGuid, out destinationId))
+                throw new InvalidOperationException("Could not read fixture GUID/fileID.");
+            if (sourceGuid == destinationGuid || sourceId != destinationId)
+                throw new InvalidOperationException("Test fixtures have unexpected GUID/fileID.");
+
+            object[] good = { source, destinationPath, null, null };
+            bool accepted = (bool)resolver.Invoke(null, good);
+            if (!accepted || good[2] != destination)
+                throw new InvalidOperationException("Matching type/name/fileID reference was rejected: " + good[3]);
+
+            object[] bad = { source, mismatchPath, null, null };
+            if ((bool)resolver.Invoke(null, bad) || bad[2] != null)
+                throw new InvalidOperationException("Mismatched object name was accepted.");
+
+            Debug.Log("[ADM] Reference matching self-test PASSED (temporary assets only).");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("[ADM] Reference matching self-test FAILED: " + ex);
+            throw;
+        }
+        finally
+        {
+            AssetDatabase.DeleteAsset(sourcePath);
+            AssetDatabase.DeleteAsset(destinationPath);
+            AssetDatabase.DeleteAsset(mismatchPath);
+        }
+    }
+
     internal static void Run()
     {
         string assetRelative = "Assets/__ADM_SafetyTest_" + Guid.NewGuid().ToString("N") + ".txt";
@@ -52,3 +109,6 @@ internal static class AssetDependencyManagerSafetyTests
         }
     }
 }
+
+// Editor-only fixture type; no production asset depends on it.
+internal sealed class ADMReferenceFixture : ScriptableObject { }

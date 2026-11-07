@@ -1792,12 +1792,8 @@ public sealed class AssetDependencyManager : EditorWindow
                     try
                     {
                         root = PrefabUtility.LoadPrefabContents(owner);
-                        foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
-                        {
-                            PreviewSerializedObject(transform.gameObject, owner, mapping, rows);
-                            foreach (Component component in transform.GetComponents<Component>())
-                                if (component != null) PreviewSerializedObject(component, owner, mapping, rows);
-                        }
+                        VisitHierarchyObjects(root, obj =>
+                            PreviewSerializedObject(obj, owner, mapping, rows));
                     }
                     finally { if (root != null) PrefabUtility.UnloadPrefabContents(root); }
                 }
@@ -1847,12 +1843,8 @@ public sealed class AssetDependencyManager : EditorWindow
                 UnityEditor.SceneManagement.OpenSceneMode.Additive);
             foreach (GameObject root in scene.GetRootGameObjects())
             {
-                foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
-                {
-                    PreviewSerializedObject(transform.gameObject, scenePath, mapping, rows);
-                    foreach (Component component in transform.GetComponents<Component>())
-                        if (component != null) PreviewSerializedObject(component, scenePath, mapping, rows);
-                }
+                VisitHierarchyObjects(root, obj =>
+                    PreviewSerializedObject(obj, scenePath, mapping, rows));
             }
         }
         catch (Exception ex)
@@ -2023,18 +2015,24 @@ public sealed class AssetDependencyManager : EditorWindow
         }
     }
 
+    // One traversal for scene and prefab serialized-object migration.
+    private static void VisitHierarchyObjects(GameObject root, Action<UnityEngine.Object> visitor)
+    {
+        foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
+        {
+            visitor(transform.gameObject);
+            foreach (Component component in transform.GetComponents<Component>())
+                if (component != null) visitor(component);
+        }
+    }
+
     private static int VisitSerializedScene(UnityEngine.SceneManagement.Scene scene, string owner,
         Dictionary<string, string> mapping, bool apply, List<string> blocked)
     {
         int count = 0;
         foreach (GameObject root in scene.GetRootGameObjects())
-            foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
-            {
-                count += UpdateSerializedObject(transform.gameObject, owner, mapping, apply, blocked);
-                foreach (Component component in transform.GetComponents<Component>())
-                    if (component != null)
-                        count += UpdateSerializedObject(component, owner, mapping, apply, blocked);
-            }
+            VisitHierarchyObjects(root, obj =>
+                count += UpdateSerializedObject(obj, owner, mapping, apply, blocked));
         return count;
     }
 
@@ -2151,13 +2149,8 @@ public sealed class AssetDependencyManager : EditorWindow
             try
             {
                 root = PrefabUtility.LoadPrefabContents(owner);
-                foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
-                {
-                    count += UpdateSerializedObject(t.gameObject, owner, mapping, apply, blocked);
-                    foreach (Component component in t.GetComponents<Component>())
-                        if (component != null)
-                            count += UpdateSerializedObject(component, owner, mapping, apply, blocked);
-                }
+                VisitHierarchyObjects(root, obj =>
+                    count += UpdateSerializedObject(obj, owner, mapping, apply, blocked));
                 if (apply && count > 0) PrefabUtility.SaveAsPrefabAsset(root, owner);
             }
             finally { if (root != null) PrefabUtility.UnloadPrefabContents(root); }

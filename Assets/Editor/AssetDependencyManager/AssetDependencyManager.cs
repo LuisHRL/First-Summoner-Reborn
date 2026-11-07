@@ -170,6 +170,7 @@ public sealed class AssetDependencyManager : EditorWindow
                     if (GUILayout.Button("Dry-run safe YAML replacements")) MigrateReferences(false);
                     if (GUILayout.Button("Apply safe YAML replacements (with backups)")) MigrateReferences(true);
                     if (GUILayout.Button("Preview Unity serialized object reference migration (TSV)")) PreviewSerializedMigration();
+                    if (GUILayout.Button("Apply verified serialized references in prefabs/assets (backups)")) ApplySerializedMigration();
                 }
                 break;
             case 6:
@@ -1841,6 +1842,159 @@ public sealed class AssetDependencyManager : EditorWindow
                 SafeTsv(owner), SafeTsv(obj.name), SafeTsv(property.propertyPath),
                 SafeTsv(sourcePath), SafeTsv(destinationPath) + " [" + SafeTsv(reason) + "]" }));
         } while (property.Next(true));
+    }
+
+    // Serialized migration is separate from YAML migration but shares its mapping and
+    // object resolution. Scene files are intentionally excluded until isolated editing is supported.
+    private void ApplySerializedMigration()
+    {
+        if (!analyzed || !Validate()) return;
+        var mapping = BuildSafeGuidMapping();
+        if (mapping.Count == 0)
+        {
+            EditorUtility.DisplayDialog("Nothing to apply", "No verified GUID mappings exist.", "OK");
+            return;
+        }
+        var owners = dependencies.Where(p => Inside(p, settings.targetFolder))
+            .Where(p => p.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase) ||
+                (InspectableExtensions.Contains(Path.GetExtension(p)) &&
+                 !p.EndsWith(".unity", StringComparison.OrdinalIgnoreCase)))
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p).ToArray();
+        var candidates = new List<string>();
+        var blocked = new List<string>();
+        // Read-only pass: all candidate owners must be known before prompting to write.
+        foreach (string owner in owners)
+        {
+            try
+            {
+                int count = VisitSerializedOwner(owner, mapping, false, blocked);
+                if (count > 0) candidates.Add(owner);
+            }
+            catch (Exception ex) { blocked.Add(owner + ": " + ex.Message); }
+        }
+        if (candidates.Count == 0)
+        {
+            EditorUtility.DisplayDialog("No verified changes", "No eligible serialized references found. " +
+                blocked.Count + " blocked references/owners.", "OK");
+            return;
+        }
+        if (!EditorUtility.DisplayDialog("Apply serialized reference migration?",
+            "Modify " + candidates.Count + " prefab/asset files with verified object matches? " +
+            "Original files will be backed up first. Scenes are excluded. " +
+            blocked.Count + " blocked references/owners will remain unchanged. " +
+            "Commit or back up your project before proceeding.", "Apply with backups", "Cancel")) return;
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        string stamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+        string backup = Path.Combine(folder, "serialized_backup_" + stamp);
+        var report = new List<string> { "Status\tOwner\tDetail" };
+        try
+        {
+            // Fail before touching Unity objects if any backup cannot be created.
+            foreach (string owner in candidates)
+            {
+                string destination = Path.Combine(backup, owner.Replace('/', Path.DirectorySeparatorChar));
+                Directory.CreateDirectory(Path.GetDirectoryName(destination));
+                File.Copy(FullPath(owner), destination, false);
+            }
+            foreach (string owner in candidates)
+            {
+                try
+                {
+                    int changed = VisitSerializedOwner(owner, mapping, true, blocked);
+                    report.Add("APPLIED\t" + SafeTsv(owner) + "\t" + changed);
+                }
+                catch (Exception ex)
+                {
+                    // Restore the failed owner's bytes; earlier successfully applied owners
+                    // remain backed up for explicit manual rollback.
+                    File.Copy(Path.Combine(backup, owner.Replace('/', Path.DirectorySeparatorChar)),
+                        FullPath(owner), true);
+                    report.Add("RESTORED_AFTER_ERROR\t" + SafeTsv(owner) + "\t" + SafeTsv(ex.Message));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            report.Add("BACKUP_OR_WRITE_ERROR\t\t" + SafeTsv(ex.Message));
+            Debug.LogError("[ADM] Serialized migration error: " + ex);
+        }
+        finally
+        {
+            AssetDatabase.Refresh();
+            analyzed = false;
+        }
+        foreach (string item in blocked) report.Add("BLOCKED\t\t" + SafeTsv(item));
+        Directory.CreateDirectory(folder);
+        reportPath = Path.Combine(folder, "serialized_apply_" + stamp + ".tsv");
+        File.WriteAllLines(reportPath, report, new UTF8Encoding(false));
+        Debug.Log("[ADM] Serialized migration report: " + reportPath + " | Backups: " + backup);
+        EditorUtility.RevealInFinder(reportPath);
+    }
+
+    private static int VisitSerializedOwner(string owner, Dictionary<string, string> mapping,
+        bool apply, List<string> blocked)
+    {
+        int count = 0;
+        if (owner.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+        {
+            GameObject root = null;
+            try
+            {
+                root = PrefabUtility.LoadPrefabContents(owner);
+                foreach (Transform t in root.GetComponentsInChildren<Transform>(true))
+                {
+                    count += UpdateSerializedObject(t.gameObject, owner, mapping, apply, blocked);
+                    foreach (Component component in t.GetComponents<Component>())
+                        if (component != null)
+                            count += UpdateSerializedObject(component, owner, mapping, apply, blocked);
+                }
+                if (apply && count > 0) PrefabUtility.SaveAsPrefabAsset(root, owner);
+            }
+            finally { if (root != null) PrefabUtility.UnloadPrefabContents(root); }
+        }
+        else
+        {
+            foreach (UnityEngine.Object obj in AssetDatabase.LoadAllAssetsAtPath(owner))
+                if (obj != null && !(obj is AssetImporter))
+                    count += UpdateSerializedObject(obj, owner, mapping, apply, blocked);
+            if (apply && count > 0) AssetDatabase.SaveAssets();
+        }
+        return count;
+    }
+
+    private static int UpdateSerializedObject(UnityEngine.Object obj, string owner,
+        Dictionary<string, string> mapping, bool apply, List<string> blocked)
+    {
+        int count = 0;
+        var serialized = new SerializedObject(obj);
+        var property = serialized.GetIterator();
+        if (!property.Next(true)) return 0;
+        do
+        {
+            if (property.propertyType != SerializedPropertyType.ObjectReference) continue;
+            var referenced = property.objectReferenceValue;
+            if (referenced == null) continue;
+            string sourcePath = AssetDatabase.GetAssetPath(referenced);
+            if (string.IsNullOrEmpty(sourcePath)) continue;
+            string targetGuid;
+            if (!mapping.TryGetValue(AssetDatabase.AssetPathToGUID(sourcePath), out targetGuid)) continue;
+            UnityEngine.Object destination;
+            string reason;
+            if (!TryResolveSerializedDestination(referenced, AssetDatabase.GUIDToAssetPath(targetGuid),
+                out destination, out reason))
+            {
+                blocked.Add(owner + " / " + obj.name + " / " + property.propertyPath + ": " + reason);
+                continue;
+            }
+            count++;
+            if (apply) property.objectReferenceValue = destination;
+        } while (property.Next(true));
+        if (apply && count > 0)
+        {
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(obj);
+        }
+        return count;
     }
 
     // Resolves an actual Unity object, not merely an asset GUID. Reject ambiguous

@@ -143,6 +143,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 EditorGUILayout.HelpBox("Match source and destination assets using the configured folders.", MessageType.Info);
                 using (new EditorGUI.DisabledScope(!analyzed))
                     if (GUILayout.Button("Export mapping preview (TSV)", GUILayout.Height(30))) ExportMigrationPreview();
+                if (GUILayout.Button("Audit FBX subasset matches and local IDs (TSV)", GUILayout.Height(30))) AuditFbxSubassetMatches();
                 break;
             case 3:
                 EditorGUILayout.HelpBox("Diagnostic functions are being integrated here. No assets are modified by this tab.", MessageType.Info);
@@ -180,6 +181,97 @@ public sealed class AssetDependencyManager : EditorWindow
 
     // Conservative, read-only audit of any selected source folder; no HDRP/Demo paths baked in.
     // Read-only mesh/material audit across selected scenes and all project prefabs.
+    // Compare imported FBX subassets without changing prefab instances or serialized references.
+    private void AuditFbxSubassetMatches()
+    {
+        string source = Normalize(settings.sourceFolder), target = Normalize(settings.targetFolder);
+        if (!AssetDatabase.IsValidFolder(source) || !AssetDatabase.IsValidFolder(target) ||
+            source == "Assets" || target == "Assets" || source == target ||
+            Inside(source, target) || Inside(target, source))
+        {
+            EditorUtility.DisplayDialog("Invalid folders", "Select two different non-overlapping folders in Configuration.", "OK");
+            return;
+        }
+        var sources = AssetsIn(source).Where(x => x.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase)).ToArray();
+        var targets = AssetsIn(target).Where(x => x.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase)).ToArray();
+        var byName = targets.GroupBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
+        var rows = new List<string> { "Status\\tSourceFBX\\tDestinationFBX\\tSourceSubasset\\tSourceFileID\\tDestinationFileID\\tDetails" };
+        int matched = 0, blocked = 0;
+        bool cancelled = false;
+        try
+        {
+            for (int i = 0; i < sources.Length; i++)
+            {
+                string src = sources[i];
+                if (EditorUtility.DisplayCancelableProgressBar("FBX subasset matching", src, (float)i / Math.Max(1, sources.Length)))
+                { cancelled = true; break; }
+                string relative = src.Substring(source.Length + 1);
+                string sameRelative = target + "/" + relative;
+                string[] candidates = targets.Contains(sameRelative, StringComparer.OrdinalIgnoreCase)
+                    ? new[] { sameRelative } : byName.TryGetValue(Path.GetFileName(src), out var sameNames) ? sameNames : new string[0];
+                if (candidates.Length != 1)
+                {
+                    blocked++;
+                    rows.Add(string.Join("\\t", new[] { candidates.Length == 0 ? "NO_CANDIDATE" : "AMBIGUOUS_CANDIDATES",
+                        SafeTsv(src), "", "", "", "", candidates.Length.ToString() }));
+                    continue;
+                }
+                string dst = candidates[0];
+                try
+                {
+                    if (new FileInfo(FullPath(src)).Length != new FileInfo(FullPath(dst)).Length || Hash(src) != Hash(dst))
+                    {
+                        blocked++;
+                        rows.Add(string.Join("\\t", new[] { "DIFFERENT_FILE_BYTES", SafeTsv(src), SafeTsv(dst), "", "", "", "No automatic relink" }));
+                        continue;
+                    }
+                    string srcError, dstError;
+                    var srcIds = GetLocalIds(src, out srcError);
+                    var dstIds = GetLocalIds(dst, out dstError);
+                    if (!string.IsNullOrEmpty(srcError) || !string.IsNullOrEmpty(dstError))
+                    {
+                        blocked++;
+                        rows.Add(string.Join("\\t", new[] { "SUBASSET_READ_ERROR", SafeTsv(src), SafeTsv(dst), "", "", "",
+                            SafeTsv(srcError + " " + dstError) }));
+                        continue;
+                    }
+                    var destGroups = dstIds.GroupBy(x => x.key).ToDictionary(g => g.Key, g => g.ToArray());
+                    foreach (var group in srcIds.GroupBy(x => x.key))
+                    {
+                        if (group.Count() != 1 || !destGroups.TryGetValue(group.Key, out var destGroup) || destGroup.Length != 1)
+                        {
+                            blocked++;
+                            rows.Add(string.Join("\\t", new[] { "AMBIGUOUS_OR_MISSING_SUBASSET", SafeTsv(src), SafeTsv(dst),
+                                SafeTsv(group.Key), "", "", "Requires manual investigation" }));
+                            continue;
+                        }
+                        var sourceId = group.First().fileId;
+                        var targetId = destGroup[0].fileId;
+                        matched++;
+                        rows.Add(string.Join("\\t", new[] { sourceId == targetId ? "IDENTICAL_BYTES_AND_FILEID" : "IDENTICAL_BYTES_DIFFERENT_FILEID",
+                            SafeTsv(src), SafeTsv(dst), SafeTsv(group.Key), sourceId.ToString(), targetId.ToString(),
+                            "Diagnostic only; FBX prefab instance links are not automatically rewritten" }));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    blocked++;
+                    rows.Add(string.Join("\\t", new[] { "ERROR", SafeTsv(src), SafeTsv(dst), "", "", "", SafeTsv(ex.Message) }));
+                }
+            }
+        }
+        finally { EditorUtility.ClearProgressBar(); }
+        rows.Add(string.Join("\\t", new[] { cancelled ? "CANCELLED_PARTIAL" : "SUMMARY", "", "", "", "", "",
+            $"sourceFBX={sources.Length};matchedSubassets={matched};blocked={blocked};cancelled={cancelled}" }));
+        var folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        var output = Path.Combine(folder, "fbx_subasset_matches_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Read-only FBX matching report: " + output);
+    }
+
     private void AuditMeshMaterials()
     {
         if (EditorApplication.isPlayingOrWillChangePlaymode)

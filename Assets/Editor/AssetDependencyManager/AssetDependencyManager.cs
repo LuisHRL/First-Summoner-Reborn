@@ -1519,6 +1519,21 @@ public sealed class AssetDependencyManager : EditorWindow
     private void MigrateReferences(bool apply)
     {
         if (!analyzed || !Validate()) return;
+        if (apply)
+        {
+            // Writing scene YAML while Unity holds unsaved scene edits can silently overwrite user work.
+            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+            {
+                var loadedScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+                if (!loadedScene.isDirty) continue;
+                string warning = "Migration blocked: unsaved scene " + loadedScene.path +
+                    ". Save or discard scene edits manually, then rerun analysis.";
+                messages.Insert(0, warning);
+                Debug.LogWarning("[ADM] " + warning);
+                return;
+            }
+        }
+
         var sourceToTarget = inventory.Where(e => !string.IsNullOrEmpty(e.match))
             .GroupBy(e => e.match, StringComparer.OrdinalIgnoreCase)
             .Where(g => g.Count() == 1)
@@ -1541,6 +1556,8 @@ public sealed class AssetDependencyManager : EditorWindow
             if (oldGuid.Length == 32 && newGuid.Length == 32 && !oldGuid.Equals(newGuid, StringComparison.OrdinalIgnoreCase))
                 mapping[oldGuid] = newGuid;
         }
+        // Do not rewrite serialized references when Unity is not using text serialization.
+        // Binary files are individually skipped by TryReadText below.
         var owners = dependencies.Where(p => Inside(p, settings.targetFolder))
             .Concat(settings.scenes).Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p).ToArray();
         var changes = new List<string[]>();

@@ -157,6 +157,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Run full read-only diagnostic suite (TSV + Console)", GUILayout.Height(34))) RunDiagnosticSuite();
                 if (GUILayout.Button("Run all read-only preflight tests (TSV)", GUILayout.Height(30))) RunPreflightTests();
                 if (GUILayout.Button("Run isolated scene copy and integrity test (TSV)", GUILayout.Height(30))) TestIsolatedSceneCopies();
+                if (GUILayout.Button("Test Unity scene reserialization on temporary copies (TSV)", GUILayout.Height(30))) TestTemporarySceneResave();
                 break;
             case 5:
                 EditorGUILayout.HelpBox("Migration can modify serialized references. Run Analyze and review the dry-run before Apply.", MessageType.Warning);
@@ -190,6 +191,101 @@ public sealed class AssetDependencyManager : EditorWindow
     // This is a prerequisite integrity test, not a Unity import/reserialization simulation.
     // Orchestrates existing checks without applying any migration or deleting project assets.
     // Each stage has an independent result, so one failure does not hide later failures.
+    // Reopens and saves only temporary scene assets. Original scene files are hash-checked.
+    private void TestTemporarySceneResave()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            Debug.LogWarning("[AssetDependencyManager] BLOCKED - Exit Play mode before scene resave tests.");
+            return;
+        }
+        if (!UnityEditor.SceneManagement.EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        var configured = settings.scenes == null ? new string[0] : settings.scenes.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+        var rows = new List<string> { "Result\\tScene\\tCheck\\tDetails" };
+        var setup = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
+        var tempAssets = new List<string>();
+        bool cancelled = false;
+        try
+        {
+            for (int i = 0; i < configured.Length; i++)
+            {
+                string scenePath = configured[i];
+                if (EditorUtility.DisplayCancelableProgressBar("Temporary scene resave test", scenePath, (float)i / Math.Max(1, configured.Length)))
+                { cancelled = true; break; }
+                if (string.IsNullOrEmpty(scenePath) || AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath) == null)
+                {
+                    rows.Add("BLOCKED\\t" + SafeTsv(scenePath ?? "") + "\\tValidation\\tScene missing");
+                    continue;
+                }
+                string tempPath = "Assets/__ADM_Resave_" + Guid.NewGuid().ToString("N") + ".unity";
+                string before = "";
+                try
+                {
+                    before = Hash(scenePath);
+                    var originalDependencies = new HashSet<string>(AssetDatabase.GetDependencies(scenePath, true), StringComparer.OrdinalIgnoreCase);
+                    // CopyAsset creates a separate Unity asset. Only the copy is opened and saved.
+                    if (!AssetDatabase.CopyAsset(scenePath, tempPath)) throw new IOException("AssetDatabase.CopyAsset failed");
+                    tempAssets.Add(tempPath);
+                    var tempScene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(tempPath,
+                        UnityEditor.SceneManagement.OpenSceneMode.Single);
+                    if (!UnityEditor.SceneManagement.EditorSceneManager.SaveScene(tempScene))
+                        throw new IOException("Could not save temporary scene");
+                    AssetDatabase.ImportAsset(tempPath, ImportAssetOptions.ForceSynchronousImport);
+                    var copyDependencies = new HashSet<string>(AssetDatabase.GetDependencies(tempPath, true), StringComparer.OrdinalIgnoreCase);
+                    copyDependencies.Remove(tempPath);
+                    originalDependencies.Remove(scenePath);
+                    var lost = originalDependencies.Except(copyDependencies, StringComparer.OrdinalIgnoreCase).ToArray();
+                    var added = copyDependencies.Except(originalDependencies, StringComparer.OrdinalIgnoreCase).ToArray();
+                    bool unchanged = string.Equals(before, Hash(scenePath), StringComparison.OrdinalIgnoreCase);
+                    string status = !unchanged ? "FAIL" : lost.Length > 0 || added.Length > 0 ? "BLOCKED" : "PASS";
+                    rows.Add(status + "\\t" + SafeTsv(scenePath) + "\\tUnity temporary resave\\t" +
+                        SafeTsv($"originalUnchanged={unchanged};lostDependencies={lost.Length};addedDependencies={added.Length}"));
+                    foreach (var path in lost) rows.Add("BLOCKED\\t" + SafeTsv(scenePath) + "\\tLost dependency\\t" + SafeTsv(path));
+                    foreach (var path in added) rows.Add("BLOCKED\\t" + SafeTsv(scenePath) + "\\tAdded dependency\\t" + SafeTsv(path));
+                }
+                catch (Exception ex)
+                {
+                    rows.Add("FAIL\\t" + SafeTsv(scenePath) + "\\tUnity temporary resave\\t" + SafeTsv(ex.Message));
+                }
+                finally
+                {
+                    if (!string.IsNullOrEmpty(before))
+                    {
+                        try
+                        {
+                            if (!string.Equals(before, Hash(scenePath), StringComparison.OrdinalIgnoreCase))
+                                rows.Add("FAIL\\t" + SafeTsv(scenePath) + "\\tOriginal integrity\\tOriginal scene hash changed");
+                        }
+                        catch (Exception ex) { rows.Add("FAIL\\t" + SafeTsv(scenePath) + "\\tOriginal integrity\\t" + SafeTsv(ex.Message)); }
+                    }
+                }
+            }
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+            try { UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup); }
+            catch (Exception ex) { rows.Add("FAIL\\t\\tRestore scene setup\\t" + SafeTsv(ex.Message)); }
+            foreach (var temp in tempAssets)
+            {
+                try
+                {
+                    if (!AssetDatabase.DeleteAsset(temp))
+                        rows.Add("FAIL\\t" + SafeTsv(temp) + "\\tTemporary cleanup\\tCould not delete temporary asset");
+                }
+                catch (Exception ex) { rows.Add("FAIL\\t" + SafeTsv(temp) + "\\tTemporary cleanup\\t" + SafeTsv(ex.Message)); }
+            }
+        }
+        rows.Add((cancelled ? "BLOCKED" : "PASS") + "\\t\\tSUMMARY\\t" +
+            SafeTsv($"configuredScenes={configured.Length};cancelled={cancelled};temporaryCopiesCleaned={tempAssets.Count}"));
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        string output = Path.Combine(folder, "unity_temporary_resave_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Temporary Unity scene resave report: " + output);
+    }
+
     private void AuditUnresolvedGuids()
     {
         var known = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

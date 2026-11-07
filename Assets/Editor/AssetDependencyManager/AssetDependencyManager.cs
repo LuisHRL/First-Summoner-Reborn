@@ -721,9 +721,19 @@ public sealed class AssetDependencyManager : EditorWindow
         string[] affected = scenes.SelectMany(p => AssetDatabase.GetDependencies(p, true))
             .Where(p => Inside(p, source) && p.EndsWith(".fbx", StringComparison.OrdinalIgnoreCase))
             .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p).ToArray();
-        if (affected.Length == 0)
+        // A baseline remains useful even if the selected scenes no longer depend on
+        // source FBX files. Do not manufacture removal candidates or delete unrelated FBX.
+        if (remove && affected.Length == 0)
         {
-            EditorUtility.DisplayDialog("Nothing to test", "Configured scenes do not depend on source-folder FBX assets.", "OK");
+            string noCandidates = Path.Combine(reportDir, "fbx_isolation_no_candidates_" +
+                DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+            File.WriteAllLines(noCandidates, new[]
+            {
+                "Kind\tAsset\tStatus\tDetail",
+                "SUMMARY\t\tNOT_APPLICABLE\tNo source-folder FBX dependencies in configured scenes; no removal performed"
+            });
+            reportPath = noCandidates;
+            Debug.LogWarning("[ADM] No source FBX removal candidates. Report: " + noCandidates);
             return;
         }
         if (!EditorUtility.DisplayDialog("Standalone FBX isolation",
@@ -734,6 +744,8 @@ public sealed class AssetDependencyManager : EditorWindow
         string stamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
         string report = remove ? Path.Combine(reportDir, "fbx_isolation_removal_" + stamp + ".tsv") : baseline;
         var rows = new List<string> { "Kind\tAsset\tStatus\tDetail" };
+        rows.Add("SCOPE\t\t" + (affected.Length == 0 ? "NO_SOURCE_FBX_DEPENDENCIES" : "SOURCE_FBX_DEPENDENCIES") +
+            "\tcount=" + affected.Length + ";source=" + SafeTsv(source) + ";scenes=" + SafeTsv(string.Join(";", scenes)));
         try
         {
             Directory.CreateDirectory(sandbox);

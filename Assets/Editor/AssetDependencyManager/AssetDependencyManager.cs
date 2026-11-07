@@ -380,7 +380,7 @@ public sealed class AssetDependencyManager : EditorWindow
             .Where(p => p.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase) &&
                 InspectableExtensions.Contains(Path.GetExtension(p)))
             .OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToArray();
-        var rows = new List<string> { "Result\\tAssetPath\\tGUID\\tDetails" };
+        var rows = new List<string> { "Result\tAssetPath\tGUID\tDetails" };
         int unresolved = 0, unreadable = 0, scanned = 0;
         bool cancelled = false;
         try
@@ -394,7 +394,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (!TryReadText(owner, out content))
                 {
                     unreadable++;
-                    rows.Add("BLOCKED\\t" + SafeTsv(owner) + "\\t\\tCould not read as text (binary, too large, or inaccessible)");
+                    rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t\tCould not read as text (binary, too large, or inaccessible)");
                     continue;
                 }
                 scanned++;
@@ -403,14 +403,14 @@ public sealed class AssetDependencyManager : EditorWindow
                     string guid = match.Groups[1].Value;
                     if (guid == "00000000000000000000000000000000" || known.Contains(guid)) continue;
                     unresolved++;
-                    rows.Add("BLOCKED\\t" + SafeTsv(owner) + "\\t" + guid +
-                        "\\tUnresolved serialized GUID; inspect before migration (may be built-in or external)");
+                    rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t" + guid +
+                        "\tUnresolved serialized GUID; inspect before migration (may be built-in or external)");
                 }
             }
         }
         finally { EditorUtility.ClearProgressBar(); }
         rows.Add((cancelled || unreadable > 0 || unresolved > 0 ? "BLOCKED" : "PASS") +
-            "\\t\\t\\t" + SafeTsv($"scanned={scanned};unreadable={unreadable};unresolved={unresolved};cancelled={cancelled}"));
+            "\t\t\t" + SafeTsv($"scanned={scanned};unreadable={unreadable};unresolved={unresolved};cancelled={cancelled}"));
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);
         string output = Path.Combine(folder, "serialized_guid_audit_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");

@@ -1967,6 +1967,7 @@ public sealed class AssetDependencyManager : EditorWindow
             foreach (string path in candidates)
             {
                 touched.Add(path);
+                sceneSetupChanged = true;
                 var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path,
                     UnityEditor.SceneManagement.OpenSceneMode.Single);
                 int count = VisitSerializedScene(scene, path, mapping, true, blocked);
@@ -2037,8 +2038,8 @@ public sealed class AssetDependencyManager : EditorWindow
         return count;
     }
 
-    // Serialized migration is separate from YAML migration but shares its mapping and
-    // object resolution. Scene files are intentionally excluded until isolated editing is supported.
+    // Prefab/asset serialized migration shares mapping and object resolution with
+    // scene migration. Scenes are handled separately to preserve editor scene setup.
     private void ApplySerializedMigration()
     {
         if (!analyzed || !Validate()) return;
@@ -2200,7 +2201,8 @@ public sealed class AssetDependencyManager : EditorWindow
         } while (property.Next(true));
         if (apply && count > 0)
         {
-            serialized.ApplyModifiedPropertiesWithoutUndo();
+            if (!serialized.ApplyModifiedPropertiesWithoutUndo())
+                throw new InvalidOperationException("Unity did not apply serialized changes: " + owner + " / " + obj.name);
             EditorUtility.SetDirty(obj);
         }
         return count;

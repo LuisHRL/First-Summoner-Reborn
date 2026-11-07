@@ -1,0 +1,96 @@
+{
+	"m_AssetBundleInfos": [
+		{
+			"Key": 94,
+			"Value": {
+				"m_AssetBundleDependencies": [],
+				"m_AssetBundleHash": {
+					"m_Bytes__0": 204,
+					"m_Bytes__1": 232,
+					"m_Bytes__2": 151,
+					"m_Bytes__3": 171,
+					"m_Bytes__4": 158,
+					"m_Bytes__5": 67,
+					"m_Bytes__6": 8,
+					"m_Bytes__7": 213,
+					"m_Bytes__8": 105,
+					"m_Bytes__9": 165,
+					"m_Bytes_10": 109,
+					"m_Bytes_11": 233,
+					"m_Bytes_12": 190,
+					"m_Bytes_13": 167,
+					"m_Bytes_14": 130,
+					"m_Bytes_15": 223
+				}
+			}
+		},
+		{
+			"Key": 140,
+			"Value": {
+				"m_AssetBundleDependencies": [],
+				"m_AssetBundleHash": {
+					"m_Bytes__0": 248,
+					"m_Bytes__1": 89,
+					"m_Bytes__2": 67,
+					"m_Bytes__3": 104,
+					"m_Bytes__4": 36,
+					"m_Bytes__5": 76,
+					"m_Bytes__6": 88,
+					"m_Bytes__7": 95,
+					"m_Bytes__8": 17,
+					"m_Bytes__9": 238,
+					"m_Bytes_10": 211,
+					"m_Bytes_11": 250,
+					"m_Bytes_12": 138,
+					"m_Bytes_13": 210,
+					"m_Bytes_14": 130,
+					"m_Bytes_15": 66
+				}
+			}
+		},
+		{
+			"Key": 170,
+			"Value": {
+				"m_AssetBundleDependencies": [],
+				"m_AssetBundleHash": {
+					"m_Bytes__0": 225,
+					"m_Bytes__1": 39,
+					"m_Bytes__2": 145,
+					"m_Bytes__3": 36,
+					"m_Bytes__4": 44,
+					"m_Bytes__5": 24,
+					"m_Bytes__6": 59,
+					"m_Bytes__7": 225,
+					"m_Bytes__8": 96,
+					"m_Bytes__9": 23,
+					"m_Bytes_10": 8,
+					"m_Bytes_11": 252,
+					"m_Bytes_12": 227,
+					"m_Bytes_13": 7,
+					"m_Bytes_14": 65,
+					"m_Bytes_15": 30
+				}
+			}
+		}
+	],
+	"m_AssetBundleNames": [
+		{
+			"Key": 94,
+			"Value": "resource_external/07_sound/login"
+		},
+		{
+			"Key": 140,
+			"Value": "resource_asset/04_ui/ui_font"
+		},
+		{
+			"Key": 170,
+			"Value": "tmp_string_table"
+		}
+	],
+	"m_AssetBundlesWithVariant": [],
+	"m_CorrespondingSourceObject": { "m_Collection": "cab-e4ba7dbec84ca82e006b0387f14d1c10", "m_PathID": 0 },
+	"m_HideFlags": 0,
+	"m_Name": "AssetBundleManifest",
+	"m_PrefabAsset": { "m_Collection": "cab-e4ba7dbec84ca82e006b0387f14d1c10", "m_PathID": 0 },
+	"m_PrefabInstance": { "m_Collection": "cab-e4ba7dbec84ca82e006b0387f14d1c10", "m_PathID": 0 }
+}

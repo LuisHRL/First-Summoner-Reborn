@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nlog>
+  <targets>
+    <target name="UnityConsole" type="UnityConsole" layout="&lt;color=olive&gt;[${level}] &lt;/color&gt; ${message}${newline}${exception}" />
+    <target name="Mongo" type="Mongo" includeDefaults="False" connectionString="mongodb://10.10.10.13" collectionName="battle_server" databaseName="z_capped" address="" />
+    <target name="File" type="File" layout="[${level}][${logger}] ${message}" fileName="nlog.txt" />
+    <target name="GameConsole" type="GameConsole" fontSize="20" logLevelsFilter="Everything" iconEnable="False" layout="&lt;color=olive&gt;[${level}]  &lt;/color&gt; ${message}&lt;color=red&gt;${exception}&lt;/color&gt;" />
+  </targets>
+  <rules>
+    <logger name="Raid" target="UnityConsole" namespace="*" enabled="False" />
+    <logger name="Infinity" target="UnityConsole" namespace="*" enabled="False" />
+    <logger name="Sound" target="UnityConsole" namespace="*" levels="Info" enabled="False" />
+    <logger name="Global" namespace="*" target="UnityConsole" />
+    <logger name="Network" target="UnityConsole" namespace="*" />
+    <logger name="BattleServer" target="Mongo" namespace="*" levels="" />
+    <logger name="BattleServer" target="UnityConsole" namespace="*" />
+    <logger name="*" target="UnityConsole" namespace="*" enabled="False" />
+    <logger name="HeroView" target="UnityConsole" namespace="*" enabled="False" />
+    <logger name="Replay" target="File" levels="Assert, Fatal, Error, Info, Debug" namespace="*" enabled="False" />
+    <logger name="Global" target="GameConsole" levels="Assert, Fatal, Error" namespace="*" />
+    <logger name="*" target="File" namespace="*" levels="" />
+  </rules>
+</nlog>

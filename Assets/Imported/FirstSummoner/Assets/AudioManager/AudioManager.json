@@ -1,0 +1,16 @@
+{
+	"m_AmbisonicDecoderPlugin": "",
+	"m_Default_Speaker_Mode": 2,
+	"m_DisableAudio": false,
+	"m_Doppler_Factor": 1,
+	"m_DSPBufferSize": 1024,
+	"m_HideFlags": 0,
+	"m_RealVoiceCount": 32,
+	"m_RequestedDSPBufferSize": 0,
+	"m_Rolloff_Scale": 1,
+	"m_SampleRate": 0,
+	"m_SpatializerPlugin": "",
+	"m_VirtualizeEffects": true,
+	"m_VirtualVoiceCount": 512,
+	"m_Volume": 1
+}

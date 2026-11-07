@@ -1,0 +1,7204 @@
+fileFormatVersion: 2
+guid: 5af9a8f5f8d5f5742b9947842f4f77e5
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: img_awake_bg_04
+      rect:
+        serializedVersion: 2
+        x: 1543
+        y: 380
+        width: 117
+        height: 117
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8e7dcb00f1bf824487b4b8d6955452a
+      internalID: -167045183057642491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_03
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 1816
+        width: 21
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6483df8f12c76e3409b5d49ac2e12a49
+      internalID: 1977287405445804068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lock_glow
+      rect:
+        serializedVersion: 2
+        x: 1874
+        y: 465
+        width: 90
+        height: 115.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6538fd814889dc54799b88742360b64c
+      internalID: -1150415243231852289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_story_03
+      rect:
+        serializedVersion: 2
+        x: 1315
+        y: 575
+        width: 21
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc785305b8bd8244dac9909137ec23a6
+      internalID: 9116570030389264646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_00
+      rect:
+        serializedVersion: 2
+        x: 1282.0762
+        y: 0.076120496
+        width: 134.84775
+        height: 161.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21ad9867cc2204948bddb7e2c3aedcf3
+      internalID: -5338469740200511101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_FX_square_03
+      rect:
+        serializedVersion: 2
+        x: 1041
+        y: 332
+        width: 135
+        height: 158
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a507406d6b4501478491879ada90ef8
+      internalID: 2968433542738683926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_gold
+      rect:
+        serializedVersion: 2
+        x: 561.0761
+        y: 971.02673
+        width: 93.84776
+        height: 95.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49d24d197ee23dc4c98f89f4ec2b6dde
+      internalID: 1552284946250243391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_wh
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 744
+        width: 3
+        height: 3
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e1f3f5f0ffce614bb0713a394f74202
+      internalID: 6615641576588166401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_star_bg
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 738
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a4644fb1e0a2d14696c29e86023392e
+      internalID: -6742764091652872099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_star
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 1661
+        width: 33
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 862cbf1228250b24888cc0701e51296d
+      internalID: -864756941610753387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_replay
+      rect:
+        serializedVersion: 2
+        x: 1036.0267
+        y: 1028.0267
+        width: 81.9465
+        height: 81.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 18e318a59ad76974d92d533083026782
+      internalID: 4129154196788430231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_price_arrow
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 711
+        width: 31
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91b343c15008c874d97d696f75e827c2
+      internalID: 5073783855809705067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_sale_01
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 1075
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e67e23ff5676c2499b74e11da35df07
+      internalID: 9066553687247122813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_02
+      rect:
+        serializedVersion: 2
+        x: 643.02673
+        y: 1536
+        width: 64.9465
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4d3ea9b2f895584bbde90ff879934ce
+      internalID: -3903412671426735006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_12
+      rect:
+        serializedVersion: 2
+        x: 1571
+        y: 997
+        width: 90
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 372d182121f24cd4495c5f0d613ec518
+      internalID: 219159204495737332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_recommended
+      rect:
+        serializedVersion: 2
+        x: 232.07613
+        y: 1202.0267
+        width: 98.89713
+        height: 92.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 778c1e54cb975bb4caee2de5b332e3a2
+      internalID: -2918063394023530081
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_02
+      rect:
+        serializedVersion: 2
+        x: 1421.0762
+        y: 0.076120496
+        width: 134.84775
+        height: 161.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63597ef9ebb1d584b833ae9302c6fbb2
+      internalID: -7885548250451152386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_arrow_equal
+      rect:
+        serializedVersion: 2
+        x: 501
+        y: 1791
+        width: 24
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b730313366f8d3a4ca4275d892d3fc00
+      internalID: -8687757591793534872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_back
+      rect:
+        serializedVersion: 2
+        x: 1271.0762
+        y: 1180.0267
+        width: 50.847755
+        height: 45.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8f1ac6ef8b32eed4d8695f04eb4d529c
+      internalID: -965169538180240701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_intimacy
+      rect:
+        serializedVersion: 2
+        x: 978.0761
+        y: 1205.0762
+        width: 71.84776
+        height: 84.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49c27c533d4c8d642b247688fb4cc883
+      internalID: -2516409938345286311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_equip
+      rect:
+        serializedVersion: 2
+        x: 804.0761
+        y: 1206.0762
+        width: 83.84776
+        height: 76.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c705e6e6b572f84ebfcbbf2ecac5245
+      internalID: -2505885928700244255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_diamond
+      rect:
+        serializedVersion: 2
+        x: 1379.0267
+        y: 914.0761
+        width: 93.9465
+        height: 93.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 846d2f3c3cdda9343858ecfbd35fd7b7
+      internalID: 181282724890637139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_save
+      rect:
+        serializedVersion: 2
+        x: 1445.0267
+        y: 1091.0762
+        width: 58.897125
+        height: 54.897125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42cb57c15c44f2148a257cf352663f54
+      internalID: 4849109393494190417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_shop_tag_red
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 0
+        width: 123
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 561e0b3b374c4e746bcd296ab2d797f2
+      internalID: -3872251646480358255
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_key_2_glow
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 452
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 78a84a08420935841b88d591618a6b16
+      internalID: 6673392582696684316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lock_open
+      rect:
+        serializedVersion: 2
+        x: 1934
+        y: 124
+        width: 103
+        height: 98
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d24d72b032b6654ba805f047d170225
+      internalID: 7566774094622987868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_atk
+      rect:
+        serializedVersion: 2
+        x: 1140.043
+        y: 1198.0267
+        width: 58.93034
+        height: 58.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4ef0c0ce9cde4841aa48adc5a71d47f
+      internalID: -1646907838019906175
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_card2
+      rect:
+        serializedVersion: 2
+        x: 168.07613
+        y: 1571.0762
+        width: 79.84776
+        height: 86.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f59aa77a3073e3418435cf6f0c8e0fc
+      internalID: 4474627926037835885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_tooltip_tail
+      rect:
+        serializedVersion: 2
+        x: 765
+        y: 1633
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6c99648898733b42921c81ea58828c7
+      internalID: 9114325082104770578
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_arrow_2
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 1505
+        width: 68
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be95c58e8a49e57468ea91a05c33640d
+      internalID: -6812299882374041689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: circle_03
+      rect:
+        serializedVersion: 2
+        x: 1415.0762
+        y: 512.0761
+        width: 123.84776
+        height: 127.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae565bffa31cff949a3765157b814957
+      internalID: 4203373371649448983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Icon_exchange_item_01
+      rect:
+        serializedVersion: 2
+        x: 667.0761
+        y: 1029.0762
+        width: 85.84776
+        height: 99.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f5c881d11677334882041766a614f11
+      internalID: -288221867859660233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_notice
+      rect:
+        serializedVersion: 2
+        x: 563
+        y: 1536
+        width: 76
+        height: 74.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9785dcb6da6373044b39a137465fe675
+      internalID: 8039841599696634372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_shop_03_activated_lock
+      rect:
+        serializedVersion: 2
+        x: 1889.0762
+        y: 363.02676
+        width: 113.84776
+        height: 97.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 354743a7bbc808f48b416a916da84712
+      internalID: 4842851811124350618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_plus
+      rect:
+        serializedVersion: 2
+        x: 1319.0267
+        y: 373.02676
+        width: 39.973248
+        height: 79.921936
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2700c93209eadb848bfdd3861a30978e
+      internalID: 8926353547201437773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_tooltip_title
+      rect:
+        serializedVersion: 2
+        x: 674
+        y: 725
+        width: 36
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f17b5d82ba3d5de49822e9b8dc5e90fa
+      internalID: -5208920898855481739
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lvup_02
+      rect:
+        serializedVersion: 2
+        x: 1434.0267
+        y: 1204.0762
+        width: 45.946495
+        height: 50.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a0fc24833db2ab49b742eb720d2870f
+      internalID: -5841836633883717650
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_close_for_window
+      rect:
+        serializedVersion: 2
+        x: 1148
+        y: 1385
+        width: 39
+        height: 40
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67564e7e270b4be41be358e5c8312705
+      internalID: 7699310419088295178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_info_card
+      rect:
+        serializedVersion: 2
+        x: 831.0761
+        y: 1581.0762
+        width: 31.847757
+        height: 31.847757
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94cd1ff83d87e684ca44748bf626128b
+      internalID: 9138682619143832238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_potal
+      rect:
+        serializedVersion: 2
+        x: 529.05133
+        y: 1173.043
+        width: 87.90578
+        height: 87.90578
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f44b87ead6059554599d65c95b6421d1
+      internalID: -689751710066727708
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_main_grunge_small
+      rect:
+        serializedVersion: 2
+        x: 1122
+        y: 1098
+        width: 182
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1a0353aa1ca3ee4387956f5d08bea4d
+      internalID: -6862902955182905123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_small_01
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 1251
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 348b75c5639e6e0439350950163ba7cf
+      internalID: -2174025620477463722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_checkbox_check
+      rect:
+        serializedVersion: 2
+        x: 1549
+        y: 1145.0267
+        width: 32
+        height: 26.946499
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd4f0ea8c8604e141b7d12c67196b062
+      internalID: -918523516117386182
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_txt_bg
+      rect:
+        serializedVersion: 2
+        x: 1180.0267
+        y: 488.0761
+        width: 230.96034
+        height: 82.86415
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7df43f2091a306409f09ca9183a7247
+      internalID: -4215924134085082717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mask_Sprite_grade_frame_00
+      rect:
+        serializedVersion: 2
+        x: 1180.0762
+        y: 328.0761
+        width: 134.84775
+        height: 155.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cd081a80083b0842837bcc0be152e66
+      internalID: 2568348116708562099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_noti_sale_balloon
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 1353
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4827cc533c0b45042acc1c53392f4e81
+      internalID: 1577472380457349792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_window_bg_shadow
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 395
+        width: 400
+        height: 162
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7055292240c1684dbe8c4bc2b6b24b6
+      internalID: 850329487693613324
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_frame_episode_item
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 281
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d015f0f7b84621245a76570df46ae948
+      internalID: -7885105773442487674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_filled
+      rect:
+        serializedVersion: 2
+        x: 589
+        y: 1723
+        width: 22
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c5c58472121502047bb60566cff06a13
+      internalID: -4601805301232736978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: upgrade_highlight_red
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 1449
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 092890b951ead754ca09d07ee84586d8
+      internalID: -2412605238781285402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_loging_05
+      rect:
+        serializedVersion: 2
+        x: 1822.0762
+        y: 908.02673
+        width: 122.880974
+        height: 89.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 70c1bdb027563d249b381c5e6e967a32
+      internalID: -9067166809038334942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: line_02
+      rect:
+        serializedVersion: 2
+        x: 1016
+        y: 1368
+        width: 128
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e18de51e19702340bd65ee13ccb7dc5
+      internalID: 8090786765996916179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_dot
+      rect:
+        serializedVersion: 2
+        x: 643.0761
+        y: 1735.0762
+        width: 19.84776
+        height: 19.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b730dd63db03a54b9eda2733a499ec3
+      internalID: -7685248866624381444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_lotto
+      rect:
+        serializedVersion: 2
+        x: 854.0761
+        y: 937.0761
+        width: 93.84776
+        height: 93.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91b3980938d9b30488481d470ff6f146
+      internalID: -5940895900101570922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_main_grunge
+      rect:
+        serializedVersion: 2
+        x: 1315
+        y: 644
+        width: 512
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2aa5a78249d84e1458dc21510ccb7086
+      internalID: 4765150990924505850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lv_change
+      rect:
+        serializedVersion: 2
+        x: 553.02673
+        y: 1665.0762
+        width: 45.946495
+        height: 46.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 361c3e169baeee743884a8fcc2aaa0ba
+      internalID: 4289733140776935732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_checkbox_cross
+      rect:
+        serializedVersion: 2
+        x: 955.0429
+        y: 1530.0267
+        width: 27.930342
+        height: 27.946499
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64cc23d966da03a4fa92aac7e2127438
+      internalID: 1345719970123937353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_wihte_bluredbg
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 1530
+        width: 32
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7639f6e17e0586241afd15bcabfc0de7
+      internalID: -8412482612820488563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_costume
+      rect:
+        serializedVersion: 2
+        x: 100.04291
+        y: 1400.0762
+        width: 95.880974
+        height: 86.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 487c6859187b78041af115372ca19fe4
+      internalID: 5301521854354905451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_arrow_text
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 320
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ffd07cd5daee25408d766104dc8ff46
+      internalID: -8386233611570644408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_common
+      rect:
+        serializedVersion: 2
+        x: 667.0429
+        y: 1133.0267
+        width: 87.93034
+        height: 87.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98b3ca56a5d68af48a75a20f9e6025d4
+      internalID: 2252240057821813956
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_main_grunge_tiny_bright_adjusted
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 1785
+        width: 57
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d09b224385331854aa11b525301c5dbb
+      internalID: -7280104112602798319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_arrow_down_02
+      rect:
+        serializedVersion: 2
+        x: 1508.0762
+        y: 1091
+        width: 45.847755
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15a814c80f55591468a82cf7fe14be87
+      internalID: -1029379296482600452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_edge
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 1439
+        width: 49
+        height: 52
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2ef31838976ee148bb3eee34edd0490
+      internalID: -515808197516043688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_start_btn_bg
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 327
+        width: 279
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9a478fd82ff098f4c940974b4f1a314e
+      internalID: -2632310307156499684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_mail_icon_gm
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 1002
+        width: 77
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33b3192de167aea43bcaca67b8327d77
+      internalID: 5849766474082531050
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_build
+      rect:
+        serializedVersion: 2
+        x: 172.07613
+        y: 1742.0762
+        width: 82.84776
+        height: 55.847763
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a904b437fddaa8b4d834b70897c72d59
+      internalID: 1375886234873449413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_mana
+      rect:
+        serializedVersion: 2
+        x: 1308
+        y: 1098
+        width: 64.94363
+        height: 77.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b5c21078dbd074142bcbbb54fbbe0614
+      internalID: 7078123920453852532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_victory_medal
+      rect:
+        serializedVersion: 2
+        x: 1157.0762
+        y: 839.0761
+        width: 113.84776
+        height: 114.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e170aeeb5b68844b91b3bd3c629736b
+      internalID: -6544244637877953371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_tab
+      rect:
+        serializedVersion: 2
+        x: 1610
+        y: 1077
+        width: 36
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 62d78cfef12983a43baf6eee90e57eae
+      internalID: -231665663154913782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lvup_shop
+      rect:
+        serializedVersion: 2
+        x: 463.02676
+        y: 1270.0762
+        width: 45.946495
+        height: 50.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 54a3fcd7acf4bd441acad2cb3f0bf785
+      internalID: 2409042522849568350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_mission
+      rect:
+        serializedVersion: 2
+        x: 948
+        y: 1371
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb3e0533d1c1cbb4cbda6a50c57f85c3
+      internalID: 699976161627015260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_question_mark
+      rect:
+        serializedVersion: 2
+        x: 1296.0541
+        y: 1328
+        width: 29.91912
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a108a11ebe77b2c40bc48e99a5357baf
+      internalID: -7587737426615694249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_replace
+      rect:
+        serializedVersion: 2
+        x: 330.02676
+        y: 1099.0267
+        width: 58.921932
+        height: 53.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30f0c5916a07fdd4ca3ed8c1fd68fe0b
+      internalID: -7355872526243999288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_checkbox_point
+      rect:
+        serializedVersion: 2
+        x: 1400
+        y: 1259
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c48bdba79d20a94fb0253045ab08109
+      internalID: 5404991396181973536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_bg
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 253
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77210ece25ac11b4f98c4c4c3611af23
+      internalID: 8086562992939928633
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_story_01
+      rect:
+        serializedVersion: 2
+        x: 1357
+        y: 1268
+        width: 33
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06552946468e9404f8f807603ec84f76
+      internalID: 1295010873116566044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg
+      rect:
+        serializedVersion: 2
+        x: 1875
+        y: 696
+        width: 36
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5c635b65269f9384e98720c957e5fcad
+      internalID: -4626749299561100097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_element_param_sub
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 1434
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b5ec70e6230d2b45810f46fa3a3e9d5
+      internalID: 7873340469874931816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_white
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 1491
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db251cfb62931b7438aca7c0822eb6b4
+      internalID: 6756006555019171386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_white_02
+      rect:
+        serializedVersion: 2
+        x: 887
+        y: 725
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 307613415365da44f95655c5695474be
+      internalID: -581114251472011098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_02
+      rect:
+        serializedVersion: 2
+        x: 1787
+        y: 1048
+        width: 33
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b98ddd805af125c4382b8c1dec061be3
+      internalID: -3297503824235062540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_04
+      rect:
+        serializedVersion: 2
+        x: 642.02673
+        y: 433.0761
+        width: 134.89713
+        height: 161.88097
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7df9bb7a59d11445ae0ec5496f9604d
+      internalID: -2926818344863318063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_green
+      rect:
+        serializedVersion: 2
+        x: 1051
+        y: 1462
+        width: 29
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06460e6d3ab931a4b9b655d96aba021f
+      internalID: -6473847748812955629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc
+      rect:
+        serializedVersion: 2
+        x: 283
+        y: 1462
+        width: 88
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21e37c0a342c23341a8dc6d95dc05da1
+      internalID: 1715780867246625817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_magnifier
+      rect:
+        serializedVersion: 2
+        x: 1787.0267
+        y: 1002
+        width: 43.897125
+        height: 41.973248
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8109de48d048154caa3b65845a035f3
+      internalID: -1215468019604256248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_black_gradient_light
+      rect:
+        serializedVersion: 2
+        x: 140
+        y: 1824
+        width: 4
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c834706683f6bba428c62a020c2976d8
+      internalID: -5097795294866574725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_arrow
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1345
+        width: 65
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8b2a38738208c404e8f03a5e6eba1ec1
+      internalID: -3424773900934685027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_06
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 1442
+        width: 90
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89653e77bfd472f4e844b170de844dcd
+      internalID: -3224792553663528807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_05
+      rect:
+        serializedVersion: 2
+        x: 865.02673
+        y: 0.076120496
+        width: 134.89713
+        height: 161.88097
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 935f4e5b1da140e4fa86012b021573c3
+      internalID: -8304251767904514933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_tooltip
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 1791
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7c20abf3a4aa354c92e508ff8b52d7a
+      internalID: 4303402247318399039
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_chat_01
+      rect:
+        serializedVersion: 2
+        x: 393
+        y: 1099
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 68f8e0d350739ca4595228611f4e7fdd
+      internalID: -1636909057739911992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_infinity_move
+      rect:
+        serializedVersion: 2
+        x: 710.06213
+        y: 1305.0762
+        width: 73.86177
+        height: 89.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3b2cfe0cb0c31874ea32ce3ec2afbe65
+      internalID: -2675360261221339074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_tab_special
+      rect:
+        serializedVersion: 2
+        x: 229.07613
+        y: 1299.0762
+        width: 94.84776
+        height: 94.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7a7c600b2ee39b48aca6fe120e6fa7c
+      internalID: -3139660259252850822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_light_04
+      rect:
+        serializedVersion: 2
+        x: 1543.0762
+        y: 549
+        width: 41.923878
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b00e366b6fe763346b35a9d18d8d3cfb
+      internalID: -4693533648771763767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_loging_01
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 711
+        width: 128
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d33b0d86e5a7a0f49b4e1ae18559122b
+      internalID: -3192946551355519866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_red
+      rect:
+        serializedVersion: 2
+        x: 1725
+        y: 125
+        width: 29
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4f6180ca24f1ba468d3bac82c3b2168
+      internalID: -1080779149610749205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_bg
+      rect:
+        serializedVersion: 2
+        x: 480.0761
+        y: 0.07612038
+        width: 193.84775
+        height: 192.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c8ed52be051e074a89b78f13a6e0f31
+      internalID: -9093634063083584005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_frame_gold
+      rect:
+        serializedVersion: 2
+        x: 1206
+        y: 1305
+        width: 38
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 778b27b825afc9046adb796788a7c7bf
+      internalID: -4138960211149243607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_dead
+      rect:
+        serializedVersion: 2
+        x: 1600.0762
+        y: 678
+        width: 103.84776
+        height: 125
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12b0c5332ab84ae4f9215e09327349e8
+      internalID: -4528443850650039005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_chr_card_frame
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 1398
+        width: 50
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6833ea02a3ca75c48b1c16e4db424afe
+      internalID: 3729271577384639437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_full
+      rect:
+        serializedVersion: 2
+        x: 847.0761
+        y: 1035.0267
+        width: 98.84776
+        height: 80.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 714539d4a00ea7e4a96f75a78b7de49e
+      internalID: 4614488664383308186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_01
+      rect:
+        serializedVersion: 2
+        x: 1143.0762
+        y: 0.076120496
+        width: 134.84775
+        height: 161.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92e75bdb2b588344bba71c9509461e45
+      internalID: -2038276065189937764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_crack
+      rect:
+        serializedVersion: 2
+        x: 0.07612038
+        y: 1694.0762
+        width: 82.84776
+        height: 82.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7eb0cfdc417f7e14cbf45a3fb614c572
+      internalID: -3674797454604548382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_equip
+      rect:
+        serializedVersion: 2
+        x: 1481.0762
+        y: 678.02673
+        width: 114.84776
+        height: 120.909355
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b83887ef0698e6142a2125590387ed56
+      internalID: -3863792961781330991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_item_dia
+      rect:
+        serializedVersion: 2
+        x: 102.02675
+        y: 1227
+        width: 99.97325
+        height: 92.94363
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a11d49a7850f2b3449b5cc2c6cf93a6c
+      internalID: -712493123617565983
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_small_01
+      rect:
+        serializedVersion: 2
+        x: 1929.0762
+        y: 585
+        width: 93.89713
+        height: 106.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b44ec5b7c7cb2134aa62ca9082c49a6f
+      internalID: 6567982014568526441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_01
+      rect:
+        serializedVersion: 2
+        x: 1650
+        y: 1083
+        width: 33
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0929a2f164170a49b5e64cb530cddd0
+      internalID: -8176058124595463247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BluredCircle
+      rect:
+        serializedVersion: 2
+        x: 1051.0267
+        y: 579
+        width: 127.97325
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c9c12b33d8bd084cb0d0ced1ce95e21
+      internalID: -3083633140101274933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_arrow
+      rect:
+        serializedVersion: 2
+        x: 523
+        y: 1615
+        width: 98
+        height: 46
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58707f51e5ae5fc4db82c646f73da861
+      internalID: 1388519509483997429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_small_Enemy
+      rect:
+        serializedVersion: 2
+        x: 0.076120496
+        y: 1019
+        width: 93.84776
+        height: 106.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f0bb1965883e674a90662071adf423f
+      internalID: -7815297555113814319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: slot_frame_renewal_01_normal_04_effect_mask_element
+      rect:
+        serializedVersion: 2
+        x: 1889
+        y: 251
+        width: 108
+        height: 108
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b55a3d24ee78584aa32a9c91b0aeb05
+      internalID: -2490345381537496445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_Items_box_bg
+      rect:
+        serializedVersion: 2
+        x: 320.02676
+        y: 1839.0762
+        width: 40.946495
+        height: 54.923878
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 19d12359a3ff0ad4ea161b795cb2608d
+      internalID: -6237335130579507929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_exp
+      rect:
+        serializedVersion: 2
+        x: 651.0761
+        y: 1454
+        width: 80.89713
+        height: 77.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 718c4fc70428361479b8c7477150d479
+      internalID: 116009447204571835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_item_more
+      rect:
+        serializedVersion: 2
+        x: 374.02676
+        y: 1785.0267
+        width: 86.9465
+        height: 26.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 442e85eca8dba174a852e2b2c6985bd5
+      internalID: 8813784925152748017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_option
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 1120
+        width: 83
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44725a1c67e94ad4da3f77e58bfb095c
+      internalID: -2726682503693082008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_item_plus
+      rect:
+        serializedVersion: 2
+        x: 502.02676
+        y: 1737.0267
+        width: 36.946495
+        height: 36.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b26a6db478a1e24a85daf178a5d36c6
+      internalID: 686002760101452000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: line
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 1687
+        width: 64
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e98837465028c748ae4f9b02744b2f8
+      internalID: -7338353495131428553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lvdown
+      rect:
+        serializedVersion: 2
+        x: 1499.0267
+        y: 1150.0762
+        width: 45.946495
+        height: 50.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 909da27dfe948eb4d99b06da8853486a
+      internalID: -1416432049595075771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_cooltime_rate
+      rect:
+        serializedVersion: 2
+        x: 1148.0762
+        y: 1325.0762
+        width: 44.847755
+        height: 55.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edb3794fc4a6cf841a52dbe29fef2653
+      internalID: 7650755664041278466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_goldextraction
+      rect:
+        serializedVersion: 2
+        x: 0.042907953
+        y: 1209
+        width: 97.92081
+        height: 94.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fffc792545ba1534c939c6f15d0230bd
+      internalID: 3305640753621464675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lvup
+      rect:
+        serializedVersion: 2
+        x: 1001.02673
+        y: 1462.0762
+        width: 45.946495
+        height: 50.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aace096d8d7de694e9daff06cee9e90d
+      internalID: 6837303917558165786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_mail_02
+      rect:
+        serializedVersion: 2
+        x: 1130.0267
+        y: 1132.0267
+        width: 75.9465
+        height: 61.93034
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aff4137bc6079cb46b52b11694e291a8
+      internalID: -1067548600521726154
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bk_bg_02
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1130
+        width: 128
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1f857d6ae810e14286fde6650398ba8
+      internalID: -1051092629232786776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_message_bg_01
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 791
+        width: 512
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bde82696d41eb0d4c96d6b535ff9e211
+      internalID: 7879320371839106942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_fx_01
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 1760
+        width: 195
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 456774b0c67169544aeacee054d4df25
+      internalID: 9169317315567762385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_small_02
+      rect:
+        serializedVersion: 2
+        x: 1933.0762
+        y: 696
+        width: 93.84776
+        height: 106.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 099bc8e1abfe507498be6edf024d535e
+      internalID: 3126889399191275250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_chr_card_frame_grade
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 1517
+        width: 60
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20c91126ed99a354284e67711858b6dc
+      internalID: 6029297329665093564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_close_for_window_02
+      rect:
+        serializedVersion: 2
+        x: 1248
+        y: 1305
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47861bde873266844b8d153a56d7b332
+      internalID: 27013764332661882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_grade_bg_01
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 1517
+        width: 128
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50997c631093e3f4e8c0c3a1f138b3ff
+      internalID: 8148164072369308277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_09
+      rect:
+        serializedVersion: 2
+        x: 1045
+        y: 937
+        width: 90
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2834f4cca0af954ab6acbe55938a4f8
+      internalID: -6478876832634432079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_remdel
+      rect:
+        serializedVersion: 2
+        x: 1139.0267
+        y: 958.0761
+        width: 80.89713
+        height: 81.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 191619b2388035c4cbf1e80f0cf854cd
+      internalID: 3835612416662261908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_04
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 1802
+        width: 57
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d034ca5be037a5b4fbb30cdd223cc79e
+      internalID: -6896223144380910122
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_story
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 1449
+        width: 63
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64097361a2ec09e40959c155a275e4b9
+      internalID: -3111702609487725302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_story_02
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 1288
+        width: 33
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a1d7ac428ae74d438e135132051c015
+      internalID: 4204958632575748551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_14
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 1554
+        width: 90
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a500fa1ed188b3d4eb0ddb7a1ba4b19a
+      internalID: -1997384291015206366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_story_04
+      rect:
+        serializedVersion: 2
+        x: 1203
+        y: 1198
+        width: 57
+        height: 49
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6586700dcb6b2624dad1d6d18132b954
+      internalID: -2152102052675198632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_tab_bg_normal
+      rect:
+        serializedVersion: 2
+        x: 1319.0267
+        y: 248
+        width: 137.93034
+        height: 120.948685
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5434ad1789c0148458366f7991bcea33
+      internalID: 6728270197404198922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_window_handle
+      rect:
+        serializedVersion: 2
+        x: 1082
+        y: 1404
+        width: 44
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c22c876fab3361449b08823b52634d8f
+      internalID: 506599398407680636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_pictogram
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 197
+        width: 53
+        height: 45
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6abac4270a69f3342a42530e7990c552
+      internalID: -5883750244027021002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 494
+        width: 210
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 592abc21eb621284ea02139379fc4502
+      internalID: -8851462387354330034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_card
+      rect:
+        serializedVersion: 2
+        x: 952.0761
+        y: 1028.0762
+        width: 79.84776
+        height: 86.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9344c13a57f2204ba90a180ad2e16ac
+      internalID: -3173779944853316037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_chr_card_frame_blackbg
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 195
+        width: 12
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cfb02b508786924b9140ade14be809e
+      internalID: -6012539318196317573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_11
+      rect:
+        serializedVersion: 2
+        x: 375
+        y: 1462
+        width: 90
+        height: 75.92859
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32d0a6a110df55e419a92c0d5ad59baf
+      internalID: 3545249696255650788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_lensflare_01
+      rect:
+        serializedVersion: 2
+        x: 1593
+        y: 259
+        width: 256
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59519bdf107e95c4abf9e759cac2dc14
+      internalID: 5292056464680687564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_square_glow
+      rect:
+        serializedVersion: 2
+        x: 1708
+        y: 796
+        width: 110
+        height: 110
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d65965feb7441144a3f2459d95bb732
+      internalID: -3956203425746818658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_small_00
+      rect:
+        serializedVersion: 2
+        x: 1949.0762
+        y: 807
+        width: 93.84776
+        height: 106.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b81a1530fa6b4d4cb079bce58890c47
+      internalID: 6854672594993391595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lock_tier
+      rect:
+        serializedVersion: 2
+        x: 871
+        y: 1451
+        width: 46
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d4afb84013f09048918fbf714e7cd78
+      internalID: 7653752832435795029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_wihte_bluredbg_2
+      rect:
+        serializedVersion: 2
+        x: 1394
+        y: 1301
+        width: 32
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93803b818a7377649bdc6af2a8e2cee6
+      internalID: 3526480271687189897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_mask_01
+      rect:
+        serializedVersion: 2
+        x: 0.29289323
+        y: 815
+        width: 255.7071
+        height: 200
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7120ef41f5bfabd40b01248d4907b829
+      internalID: 5104848217153044702
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_exp_bar
+      rect:
+        serializedVersion: 2
+        x: 1445.0762
+        y: 1150.0762
+        width: 49.847755
+        height: 49.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 295c32b679a56694fb2989a8a917ab3f
+      internalID: -7102926309602945362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_04
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 1225
+        width: 89.95709
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00bff3561c1d0fb459d76d8da877af8c
+      internalID: 7902334715465742348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_section_opacity100
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 220
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 543501eb63917874cba91b7c0e604663
+      internalID: -8281720114617130378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_filled_round
+      rect:
+        serializedVersion: 2
+        x: 1968
+        y: 465
+        width: 22
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e82d096cf4e8db24b848a85e6a6a3726
+      internalID: 4662469940995845161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_item_check_shadow
+      rect:
+        serializedVersion: 2
+        x: 1461
+        y: 248
+        width: 128
+        height: 127.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c800f072c6b8ee74c89d0955fe25647d
+      internalID: -7960266923158842381
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_tab_other
+      rect:
+        serializedVersion: 2
+        x: 0.07612038
+        y: 1406.0762
+        width: 94.84776
+        height: 94.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bb121809259db443868a3a6553b9dd2
+      internalID: -1123650849850647143
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_story_03
+      rect:
+        serializedVersion: 2
+        x: 917
+        y: 579.0761
+        width: 130
+        height: 127.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c554ef93be5cdda458fb8591ceaefe43
+      internalID: -2048513560773435048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_anvil
+      rect:
+        serializedVersion: 2
+        x: 950.02673
+        y: 1119.0762
+        width: 74.9465
+        height: 81.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4928cdb73d312a49a9a150491152b20
+      internalID: 7198713883433574981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_05
+      rect:
+        serializedVersion: 2
+        x: 252.02675
+        y: 1571
+        width: 85.89713
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 482ef2718aa9edd47abf6683ded04662
+      internalID: 5541462345178606353
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_item
+      rect:
+        serializedVersion: 2
+        x: 1591
+        y: 501
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a48116b46c467ee4c97cd921673f3211
+      internalID: -1499854695299630720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon_02
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 1299
+        width: 131
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9357f24473803b14ab3ce9b15383b946
+      internalID: 2965306248289383380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_mana_fx
+      rect:
+        serializedVersion: 2
+        x: 132.06802
+        y: 1123
+        width: 95.85586
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 55ce51efa561b6142a6db447ea234247
+      internalID: 6752447158196348178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_gradient_blue
+      rect:
+        serializedVersion: 2
+        x: 1415
+        y: 380
+        width: 124
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ed34328a0e8033f44a8eeae0b5b698e5
+      internalID: -7445395614531840959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_contents
+      rect:
+        serializedVersion: 2
+        x: 404.0761
+        y: 253
+        width: 198.92387
+        height: 194.92387
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e057c8fff32bec647a1e1312a005f916
+      internalID: 6225236830273397338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_remodel
+      rect:
+        serializedVersion: 2
+        x: 1224.0762
+        y: 1018
+        width: 76.86568
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f2ec30c4eac90845b80eebffe7047cb
+      internalID: -2977530402478415643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_notice_02
+      rect:
+        serializedVersion: 2
+        x: 227.02675
+        y: 253
+        width: 129.97325
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 049063c865c95734db7826b8c1629fcd
+      internalID: -779884628166741608
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Img_arrow_raid
+      rect:
+        serializedVersion: 2
+        x: 1491.0267
+        y: 803.0761
+        width: 87.9465
+        height: 118.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 276c104cafea4084d9242a16bc2b0f22
+      internalID: -4290877942254692086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_FX_square_01
+      rect:
+        serializedVersion: 2
+        x: 1168
+        y: 166
+        width: 135
+        height: 158
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b23244ae48866f3449816c2b8e246a0e
+      internalID: -1321481160845967593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_slot
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 223
+        height: 391
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9b3f44490838fc40977b71aa57b1c05
+      internalID: 5050943046856952431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_question_mark_02
+      rect:
+        serializedVersion: 2
+        x: 1275
+        y: 914
+        width: 100
+        height: 99.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c01708ce9491d8940a501d3e9175be50
+      internalID: 2138892265341972506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_filled_bg
+      rect:
+        serializedVersion: 2
+        x: 61
+        y: 1876
+        width: 34
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 264f222e0ef793843ac9680282dcf717
+      internalID: 3922710824232188479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_disassemble
+      rect:
+        serializedVersion: 2
+        x: 334.0761
+        y: 997
+        width: 93.84776
+        height: 97.94027
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0afe09a3e50a6f448bbd98b4ab04819
+      internalID: 1169352204311089376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_card
+      rect:
+        serializedVersion: 2
+        x: 872.02673
+        y: 1371
+        width: 71.9465
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9227d87f8d3d5674a9365d02c5b63681
+      internalID: -1687847338797385252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_notice_small
+      rect:
+        serializedVersion: 2
+        x: 374
+        y: 1816
+        width: 42
+        height: 37.923878
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e72aaed900f422d4cb09245d80fd6a7e
+      internalID: -6937867395924923553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_infinity
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 1274.0267
+        width: 90
+        height: 48.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 802c7bb055f526e468655cf1552cd4a6
+      internalID: -3964406953633723205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon_tail_02
+      rect:
+        serializedVersion: 2
+        x: 1758
+        y: 125
+        width: 21
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 104a658b2d1e0bc4594716ef75695c93
+      internalID: 2477952606430021838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon_03
+      rect:
+        serializedVersion: 2
+        x: 1477
+        y: 926
+        width: 131
+        height: 67
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 950168aa39cc2fe4dbdac645dd5efdb4
+      internalID: -6306264344327404425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_select_glow
+      rect:
+        serializedVersion: 2
+        x: 678
+        y: 0
+        width: 183
+        height: 191
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0ca0d6a91920a74d825471ad57906f8
+      internalID: -8330796301174647111
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_frame
+      rect:
+        serializedVersion: 2
+        x: 1315
+        y: 1230
+        width: 38
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c4abfd0b0431bd4dbadc5958c810ad9
+      internalID: -1095157771487151674
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_item_check
+      rect:
+        serializedVersion: 2
+        x: 620
+        y: 606.0761
+        width: 128
+        height: 114.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa376e66f7bc45441bb9c41e28c0c0da
+      internalID: 1420551546724716038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_coin
+      rect:
+        serializedVersion: 2
+        x: 529.02673
+        y: 1265
+        width: 82.9465
+        height: 92.94363
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92fe24b209331304bae7be2d25d3c3ee
+      internalID: 7861568067252903292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_light_01_white
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 1581
+        width: 49
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69115c860f3e1624781009d24a3ea56f
+      internalID: 7648852955218904882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_light_03
+      rect:
+        serializedVersion: 2
+        x: 987
+        y: 1530
+        width: 8
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 480e8782272853f47b101343d5fb7028
+      internalID: -4016199798961161341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_ribbon_yellow_shop
+      rect:
+        serializedVersion: 2
+        x: 1237
+        y: 705.02673
+        width: 125.97325
+        height: 123.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d845a761d64ff74fa9704e10a8d8d5d
+      internalID: -8784137366932543318
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_crack
+      rect:
+        serializedVersion: 2
+        x: 87.02675
+        y: 1745
+        width: 73.89713
+        height: 74.95709
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abc008e6046428e4c9e81ea63fff48e3
+      internalID: -5196410839678872752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_grade_bg_03
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 1778
+        width: 128
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 962445aae956a20468243a6f42074452
+      internalID: 7322849747453183833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_package_tag
+      rect:
+        serializedVersion: 2
+        x: 752
+        y: 647.0429
+        width: 157
+        height: 73.95709
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2ce9d6f382db284684fb0bb50af3889
+      internalID: 8703953557511547514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_ring_tutorial
+      rect:
+        serializedVersion: 2
+        x: 258.0761
+        y: 561.0761
+        width: 225.84775
+        height: 225.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec4f720b871f0c64baa8527ea25a9e59
+      internalID: -9083827069078724723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_FX_square_02
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 711
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: adb04eda874068c479efcc32c7582e14
+      internalID: -7234140344839346892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_skin
+      rect:
+        serializedVersion: 2
+        x: 232.02675
+        y: 1098
+        width: 93.9465
+        height: 99.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 877814d5abaebfa44a4546e8d10f1f3d
+      internalID: 3840897320889367145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_glow
+      rect:
+        serializedVersion: 2
+        x: 1477
+        y: 997
+        width: 90
+        height: 90
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00c96399c52713449bd869a3b1eb0602
+      internalID: -2268072112289419583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_btn_ring_bg
+      rect:
+        serializedVersion: 2
+        x: 1748.0267
+        y: 910.02673
+        width: 47.946495
+        height: 47.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6a317a18261d9b34188314550aeaf2aa
+      internalID: 7025155722032017911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_item_minus
+      rect:
+        serializedVersion: 2
+        x: 714.02673
+        y: 725.02673
+        width: 36.946495
+        height: 36.946495
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e1f139d893a21b4b87ddc309df3c8d9
+      internalID: 4841348185310582631
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon_blackbg
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 302
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34367d824e1fd0b4a9d68489e9b9ad8e
+      internalID: 336500569395675436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_tab_cash
+      rect:
+        serializedVersion: 2
+        x: 952.02673
+        y: 937.02673
+        width: 88.9465
+        height: 86.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6ac6d53fbdfd4a4bb68db5442c7174a
+      internalID: 2952404860962205477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_quest_flag_gold
+      rect:
+        serializedVersion: 2
+        x: 1824
+        y: 124
+        width: 106
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c2c96e762b635d458236c0278345ae1
+      internalID: -3865367435599195656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_btn_plus_bg
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 1686
+        width: 50
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff36e71777b9dbe4a8b32b0f940c461d
+      internalID: -7186226374362177291
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_exchange_gold
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 1206
+        width: 80
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 943fbe2d048cdc345b5c8c5682aa60b6
+      internalID: -5322891558009612268
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_txt_bg_fx
+      rect:
+        serializedVersion: 2
+        x: 607
+        y: 197
+        width: 252.92387
+        height: 126
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1faa384350e3cdd42aebc809de21b96d
+      internalID: -3271802451278993453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_03
+      rect:
+        serializedVersion: 2
+        x: 1004.0429
+        y: 0.026751041
+        width: 134.88097
+        height: 161.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 196fd69f7fb137b4aaa1406fc862d064
+      internalID: -7229669818592551363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_arrow_up
+      rect:
+        serializedVersion: 2
+        x: 1340
+        y: 575
+        width: 24
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d5ce10956ff9354e945591c17d174c5
+      internalID: 5598705432058067679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_lv
+      rect:
+        serializedVersion: 2
+        x: 867
+        y: 1557
+        width: 16
+        height: 11
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41c1806ca1c94344d8e741878a482c9c
+      internalID: -3787951587964271104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_main_grunge_tiny_white
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 1132
+        width: 57
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34aa18015110efe499219344cc0e95b0
+      internalID: 4355724456469586220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_title_frame
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 1324
+        width: 125
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac6dacce31e3a274c8db8778c2226b36
+      internalID: 1508699234149804927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_checkbox_bg
+      rect:
+        serializedVersion: 2
+        x: 1333
+        y: 1319
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3d58f84431662544855958b045490f9
+      internalID: -786884165028438802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_recipe
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 1019
+        width: 100
+        height: 99.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65c98a62e8661b141b1b0acd88e426ba
+      internalID: -691455751682346173
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_price_strike_out
+      rect:
+        serializedVersion: 2
+        x: 1131
+        y: 494
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50f25d94eae65104f99a503847350224
+      internalID: -5645130199179018483
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_wh_vanish
+      rect:
+        serializedVersion: 2
+        x: 778
+        y: 738
+        width: 85
+        height: 2
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7236a8f4743f36940ae66830ee384281
+      internalID: -4520957259801231749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_link
+      rect:
+        serializedVersion: 2
+        x: 335.0761
+        y: 1173.0267
+        width: 93.89713
+        height: 93.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6db258b8a137e244da0688b3bd5f084b
+      internalID: 1089298305362596686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_loging_03
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9110076dc1539634ebb35abd150f49f2
+      internalID: 809153642005165740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_tab_chests
+      rect:
+        serializedVersion: 2
+        x: 561.0761
+        y: 1071.0267
+        width: 101.89713
+        height: 85.93034
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56d5fe670bf967544a271ba98ac93fa9
+      internalID: 7476469993484735099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_shield_empty
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 1132
+        width: 72
+        height: 72
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25a2aec76210cce46a3b1f7d1457ef7d
+      internalID: -5456739337965340386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_noti_green
+      rect:
+        serializedVersion: 2
+        x: 502
+        y: 1686
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdef417450163cc4c8f836ed7ff8cd8a
+      internalID: 3816104623165497913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_filled_line
+      rect:
+        serializedVersion: 2
+        x: 114
+        y: 1824
+        width: 22
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f08265cd950187c478f3fb528f28aa09
+      internalID: -1812814378117263145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bk_bg
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 1019
+        width: 128
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab836b3b1f9f47d478d4a1407022a2d8
+      internalID: -4320386650510476043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_close_for_window_03
+      rect:
+        serializedVersion: 2
+        x: 1357.0267
+        y: 1224.0762
+        width: 38.946495
+        height: 39.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e96f8f3e1a85b8e43831441ea8c83971
+      internalID: 4565302467173880432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_costume
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 810
+        width: 120
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76bc4ec60ea3ed948b0a2db3782e26ae
+      internalID: -3780527345256131361
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_section_04
+      rect:
+        serializedVersion: 2
+        x: 1368
+        y: 575
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0439717076f758f458520418408e6774
+      internalID: -4036855986101807651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_00_enemy
+      rect:
+        serializedVersion: 2
+        x: 1029.0762
+        y: 166.07613
+        width: 134.84775
+        height: 161.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9335e7e0e3ec9fb4aaaadccce40692f9
+      internalID: -5918510620244737489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_13
+      rect:
+        serializedVersion: 2
+        x: 616
+        y: 1265
+        width: 90
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5a9c1a5179e7d044c9785359302a3288
+      internalID: 4083900993240682275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_portion
+      rect:
+        serializedVersion: 2
+        x: 252.05133
+        y: 1655.0762
+        width: 64.90578
+        height: 75.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8980bc3ef8b38c24094e7310915420e7
+      internalID: 1054503791275916363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_information
+      rect:
+        serializedVersion: 2
+        x: 871
+        y: 1509
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 28391fd8500c09742bbcb8a175091426
+      internalID: 1224522443212133115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_item_tier
+      rect:
+        serializedVersion: 2
+        x: 1543
+        y: 501
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd1349aae5b6fa04d91846d106d64237
+      internalID: -3266046602257258217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: upgrade_highlight_01
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1505
+        width: 92
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3223957590c50f24f8ed169faca2498a
+      internalID: 5844964417897038963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_sale_02
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1308
+        width: 96
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9775f820cd8f81e48b558cb3d6056761
+      internalID: -6043052939437400025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chr_selected
+      rect:
+        serializedVersion: 2
+        x: 537
+        y: 197
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44b6372dda989ae449650fd94c7d433c
+      internalID: -364548391581603305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_grade_bg_02
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1937
+        width: 128
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9155cc30c6db52d4fa5dc230db8265ad
+      internalID: -2946434264008344728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_troop_copy_fx
+      rect:
+        serializedVersion: 2
+        x: 781.0761
+        y: 483.0761
+        width: 131.84775
+        height: 159.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca4ac8ae457082a41ba199862045836a
+      internalID: 3867328245053813375
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_10
+      rect:
+        serializedVersion: 2
+        x: 436.0761
+        y: 1602
+        width: 82.89713
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd19c7f224c1ee14a9d5e07d8264ee7a
+      internalID: -8057840345167178156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_small_03
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 1785
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76369e06ee8cf594fba510022b898a76
+      internalID: -2634129320014860901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_small_03
+      rect:
+        serializedVersion: 2
+        x: 1831.0267
+        y: 585
+        width: 93.9465
+        height: 106.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0ed440a24443c945b3b85a4171c4089
+      internalID: 4811525113392681264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_section_03
+      rect:
+        serializedVersion: 2
+        x: 1555
+        y: 1176
+        width: 15
+        height: 12
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae8696dafb7d92d479e900d3a0b8db95
+      internalID: 5612497613041787174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_small_02
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 1846
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9543514927c55084ca1a3e9f6c80dad1
+      internalID: 8354326000121519240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_light_02
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 0
+        width: 249
+        height: 249
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71826965f75c46e4faa5c81ac91bb8bd
+      internalID: 2893701453672174744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_event
+      rect:
+        serializedVersion: 2
+        x: 975.0761
+        y: 1294.0267
+        width: 60.872566
+        height: 69.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5072316c4ed378048b438cc109930f04
+      internalID: 796934802857896100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_request_00
+      rect:
+        serializedVersion: 2
+        x: 328.0761
+        y: 1370
+        width: 89.92388
+        height: 87.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 578af0fad04194a4894c386d113b57b8
+      internalID: -6085078811986512166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_window_default_02_3
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 865
+        width: 412.94867
+        height: 34
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edb4a21ddbbd8ee4792302447ae90cbd
+      internalID: -8517630795315564677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_window_default_03_cropped
+      rect:
+        serializedVersion: 2
+        x: 667
+        y: 1735
+        width: 128
+        height: 1.6202532
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 82e53d79d4627494ca53c3706d1dcd5b
+      internalID: -5926431353055254233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_speechballoon_big
+      rect:
+        serializedVersion: 2
+        x: 563.02673
+        y: 1454.0267
+        width: 83.9465
+        height: 77.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2f91565e41f1aa49bfebd8ff215b4a8
+      internalID: -4787612178460738855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_noti_small
+      rect:
+        serializedVersion: 2
+        x: 671
+        y: 1701
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49d9b291093bae241b0d5b6ce2b05012
+      internalID: -5769203403369964549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_exp_bg
+      rect:
+        serializedVersion: 2
+        x: 1558.0762
+        y: 1091.0762
+        width: 47.847755
+        height: 47.847755
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51b9f0d353f63c44ba069b19fa5835b4
+      internalID: -1952198404463667101
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_redo
+      rect:
+        serializedVersion: 2
+        x: 1016.02673
+        y: 1404.0513
+        width: 61.946495
+        height: 53.921932
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fec96a55abf703458935731ab61a4b8
+      internalID: -8344576780151282371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_exp_frame
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 452
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9943bbf005e553a44b3b18246a8d8e1a
+      internalID: -8952771000642019501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_disconnect
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 971
+        width: 100
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f36d575efb9b4bf4680c873203a4fcc6
+      internalID: -801375191647629303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_08
+      rect:
+        serializedVersion: 2
+        x: 463
+        y: 1362
+        width: 90
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e806e197b18e2b44f83b1e2fdae6398d
+      internalID: -1435948909905537227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_key_2_light
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 791
+        width: 193
+        height: 202
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 66ea66a31b762cd41895ef2b175c7fc9
+      internalID: 851444500770468459
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_small_04
+      rect:
+        serializedVersion: 2
+        x: 1583.0267
+        y: 807
+        width: 93.89713
+        height: 106.95709
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7d0699435cdf6064d9d2b658808851cb
+      internalID: 8863489640933346156
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_rank
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1781
+        width: 66
+        height: 91
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cad41c98120510c4791fceab1d0eb193
+      internalID: -3468916828249217360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_bg_02
+      rect:
+        serializedVersion: 2
+        x: 615
+        y: 1723
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6365294e6faedd4e8f8d7f1c77e6608
+      internalID: 4949172447918487086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_loading_circle
+      rect:
+        serializedVersion: 2
+        x: 1822.0762
+        y: 796.0761
+        width: 106.84776
+        height: 107.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06e965bf361398e46b81dfa8ca5f50bf
+      internalID: 3403420209183062301
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_main_grunge_small_bright_adjusted
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 738
+        width: 182
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e13155e35da47c4b9a3a87f560da5db
+      internalID: -6287576522580482169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_window_default_02_4
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 903
+        width: 359
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a04826add99c9a04ab896eb50da28ec5
+      internalID: -349338986508324771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_conversation_bg
+      rect:
+        serializedVersion: 2
+        x: 1746
+        y: 1002
+        width: 37
+        height: 51
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f417eede2169cf04aaffded9c64e49f2
+      internalID: 8938636959206378018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_noti
+      rect:
+        serializedVersion: 2
+        x: 1264
+        y: 1230
+        width: 47
+        height: 47
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86369554ce81ba94c8bac8ad42133f8b
+      internalID: -5103337047649618529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_tooltip_white
+      rect:
+        serializedVersion: 2
+        x: 553.02673
+        y: 1716
+        width: 31.946499
+        height: 30.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41e3c23fdc0533941b08a6839ce3a84d
+      internalID: 6879931309500529480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_grade_bg_04
+      rect:
+        serializedVersion: 2
+        x: 755
+        y: 725
+        width: 128
+        height: 9
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1587428ac596b9e45b707a989385f26f
+      internalID: 2774866704357985365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_star_grey
+      rect:
+        serializedVersion: 2
+        x: 458
+        y: 1738
+        width: 33
+        height: 36
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 272f446ec7134394e8c6d999eaf99d34
+      internalID: 4918925027037288134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_tower_middle
+      rect:
+        serializedVersion: 2
+        x: 712.0761
+        y: 1536
+        width: 61.847763
+        height: 68.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dd2a9bc32f65a7b499cebc782c53e807
+      internalID: 7691677538638946213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_quest_npc_roulette
+      rect:
+        serializedVersion: 2
+        x: 0.026750565
+        y: 1602.0267
+        width: 78.9465
+        height: 87.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 207a54e94eb488a4c8ff81a09147bd06
+      internalID: -8052577942485397694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_item_select
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 678
+        width: 110
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0fd02b17404384148bbb19308a3161cc
+      internalID: -5071439944480007794
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_loging_04
+      rect:
+        serializedVersion: 2
+        x: 1708.0762
+        y: 678.02673
+        width: 112.84776
+        height: 113.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 94a742676fe49c14a9582a794a348ab2
+      internalID: 8609704264289084545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_black_gradient
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 1319
+        width: 4
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60efaad67bab98545bd2c53fa385a6c9
+      internalID: 6066391357619436192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: upgrade_highlight_yellow
+      rect:
+        serializedVersion: 2
+        x: 1377
+        y: 1098
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f510b825749cd234bbe8c8b1af791230
+      internalID: 6595034873548062987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_section
+      rect:
+        serializedVersion: 2
+        x: 831
+        y: 1617
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe5b473f28473fc4b9e30fcb255125fc
+      internalID: 2924159485083673799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_hero_02
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 1290
+        width: 77
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b63cad2391f20047af6e01cbcec84b8
+      internalID: -15849410407350655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon_tail
+      rect:
+        serializedVersion: 2
+        x: 404
+        y: 520
+        width: 21
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a62d321e712999b418f837cfb011aa4a
+      internalID: -370392604572000745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_cash
+      rect:
+        serializedVersion: 2
+        x: 87.04771
+        y: 1662
+        width: 80.925545
+        height: 78.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1a06c2ccf4821c4a9c94a1b80272994
+      internalID: -1955964056294143768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_trash_can
+      rect:
+        serializedVersion: 2
+        x: 1148
+        y: 1261
+        width: 54
+        height: 59.923878
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b9bd1af5f44720b4aa123eac248891ad
+      internalID: 8683742920772906129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_07
+      rect:
+        serializedVersion: 2
+        x: 469
+        y: 1522
+        width: 90
+        height: 75.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 717003c241fbbc441a53e75158c89fe7
+      internalID: 7000812670984323295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_default_btn_bg_hero
+      rect:
+        serializedVersion: 2
+        x: 890.02673
+        y: 166.07613
+        width: 134.89713
+        height: 161.88097
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6dfdbf2124412545a75d28620e5ed31
+      internalID: 4429126703226404593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_section_02
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 433
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 224199620080e6a44972992627779287
+      internalID: 5121989514028029265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_mail_03
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 575
+        width: 128
+        height: 125.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d27c8b7fbc060542af4a2e6f7d95f75
+      internalID: 1538763263047090267
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bg_window_default_02_cropped
+      rect:
+        serializedVersion: 2
+        x: 643
+        y: 1729
+        width: 256
+        height: 1.6253968
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e712b5075aa6a34eaaeca2ad7f9d469
+      internalID: 7352732883033685281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_arrow_down
+      rect:
+        serializedVersion: 2
+        x: 1442
+        y: 1259
+        width: 24
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1f3789a8a83ae6478e2c9b876bdfe6c
+      internalID: -9127973261812030883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_FX_Circle_01
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 561
+        width: 254
+        height: 250
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a1dbb7830d0c094ea8ec636f77884e4
+      internalID: -477413969253322419
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_03
+      rect:
+        serializedVersion: 2
+        x: 1665.0267
+        y: 918
+        width: 78.9465
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8c307796505a104daf74b83578ecbc9
+      internalID: -268394524583239015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_lock
+      rect:
+        serializedVersion: 2
+        x: 1949
+        y: 918
+        width: 40
+        height: 105
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75d1e6d19bf24a741a8cceb4eeba2884
+      internalID: -7614662209602743585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Img_arrow_raid_light
+      rect:
+        serializedVersion: 2
+        x: 1774.0762
+        y: 454
+        width: 95.84776
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8216e21ca0711b04cb38c76947266ddc
+      internalID: -5133473695992613063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_loging_02
+      rect:
+        serializedVersion: 2
+        x: 1377
+        y: 1166
+        width: 53
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe1a810cd07fcba4fa8e3e47e4b2389c
+      internalID: -2029581442947356680
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_quest_flag
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 446
+        width: 106
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81504851adeaaf641a181d617cd6afa7
+      internalID: 5922000235473882760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_start_btn_bg_glow
+      rect:
+        serializedVersion: 2
+        x: 457
+        y: 865
+        width: 278.97324
+        height: 102
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b86edf648c68d948a09fea793b15bd0
+      internalID: -576618839139346829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_map_shield_01
+      rect:
+        serializedVersion: 2
+        x: 1197
+        y: 1363
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6504bcf2b741a5a4a9d7561cb62e2965
+      internalID: -3768462706076851452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_main_grunge_tiny
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1876
+        width: 57
+        height: 57
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa1f28eb3d3bd2748a47c4799fa4ad7b
+      internalID: -7080739207711419444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: upgrade_highlight
+      rect:
+        serializedVersion: 2
+        x: 433
+        y: 1173
+        width: 92
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 909c12d8f07bd34449f9eb5dc9c8c316
+      internalID: 7432326224772283632
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_info
+      rect:
+        serializedVersion: 2
+        x: 781
+        y: 433
+        width: 40
+        height: 39
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: be13cc909ae971b4cbf148d8983716ea
+      internalID: -3315573968085272438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_wh_round
+      rect:
+        serializedVersion: 2
+        x: 1782
+        y: 322
+        width: 103
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbe95a5055f9bc24c942d6e85b6a52e9
+      internalID: -4768453570539656127
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: btn_login_bg
+      rect:
+        serializedVersion: 2
+        x: 740
+        y: 937
+        width: 110
+        height: 88
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e509eb7e5ecf20944a35f67616150247
+      internalID: -42458237242353981
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_check
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 1824
+        width: 40
+        height: 30
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4710f794ad98cc343ac6a2fbfcb82ee4
+      internalID: 7253788616277863212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: loading_main
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 332
+        width: 147
+        height: 147
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 145da289741a8254d949ed318e1ed19c
+      internalID: 3973421232395541413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: fx_light_01
+      rect:
+        serializedVersion: 2
+        x: 712
+        y: 1609
+        width: 49
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f0eebd857df6eea418b842be58cb49d6
+      internalID: -8207515085089769576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_tower
+      rect:
+        serializedVersion: 2
+        x: 382.0761
+        y: 1686
+        width: 61.847763
+        height: 69.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3aad2997e30059445984a69b05c9e4d4
+      internalID: 1411739585387447501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_soul_stone
+      rect:
+        serializedVersion: 2
+        x: 321.02676
+        y: 1655
+        width: 56.897133
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34d211075bee52f4b8e42bbfb34e7895
+      internalID: 2975605791241543595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_black_gradient_256
+      rect:
+        serializedVersion: 2
+        x: 1549
+        y: 1176
+        width: 2
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ca328bcb1bab024587e318004188542
+      internalID: 3131465046171640347
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_gold
+      rect:
+        serializedVersion: 2
+        x: 788.0761
+        y: 1366
+        width: 79.89713
+        height: 78.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dbcc78884628ad349a776754fa7038c7
+      internalID: 2892271287669531348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_ribbon
+      rect:
+        serializedVersion: 2
+        x: 1307
+        y: 166
+        width: 259
+        height: 78
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4140f8d306843aa47b044d4e2d2826c9
+      internalID: 7172191069361498293
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_item_check_2
+      rect:
+        serializedVersion: 2
+        x: 1692
+        y: 0.026751041
+        width: 128
+        height: 120.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52534d9e5b7f5224ab30c1d1b0e85a3a
+      internalID: 2115340454439276107
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_refesh
+      rect:
+        serializedVersion: 2
+        x: 625.02673
+        y: 1616.0267
+        width: 66.96034
+        height: 66.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07f2d9e52e20eae46ab0d97e3e299ad3
+      internalID: -659766657076207564
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_bag
+      rect:
+        serializedVersion: 2
+        x: 804.0761
+        y: 1287.0513
+        width: 85.84776
+        height: 74.921936
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fbb822d7181ad794c8c0668c9da34620
+      internalID: 5386886006037257603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_equip
+      rect:
+        serializedVersion: 2
+        x: 1305
+        y: 1018.02673
+        width: 76
+        height: 75.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 574600d5e0b6e4b409ba888425e54994
+      internalID: -1818089769928617302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_tab_gold
+      rect:
+        serializedVersion: 2
+        x: 757.0761
+        y: 1029.0267
+        width: 85.84776
+        height: 93.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 084576f261b248a4f88210fdac5b4b04
+      internalID: -8146086770209908848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: upgrade_circle
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 606
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1eadd5d61ea5325489f44414e3cadb44
+      internalID: -2758592737736356292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_card
+      rect:
+        serializedVersion: 2
+        x: 1593
+        y: 132
+        width: 128
+        height: 123
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d2f2a95f22b7aa409051e11dfb1ba79
+      internalID: 8283329957513731177
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_Instance_Items_bg
+      rect:
+        serializedVersion: 2
+        x: 1363.0267
+        y: 373.0761
+        width: 40.946495
+        height: 54.923878
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9641f5475d5b7a74f9a96dd0fd147c7b
+      internalID: -7409125549929512806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_menu_friends
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 1662
+        width: 75
+        height: 76
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c86cd1ef1bba6b448ae263d8542e8f2a
+      internalID: -1991682546883453207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_key_2
+      rect:
+        serializedVersion: 2
+        x: 1664.0513
+        y: 322
+        width: 113.87257
+        height: 120
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2aa014e228f025d42be16d15ad772ad3
+      internalID: 312192396325989201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_title_num_01
+      rect:
+        serializedVersion: 2
+        x: 1825.0513
+        y: 696
+        width: 45.921936
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 020836aeba7b5e54daa4d5f90ac8ebf0
+      internalID: 6337133324423686060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_build
+      rect:
+        serializedVersion: 2
+        x: 1054
+        y: 1208.0363
+        width: 82
+        height: 61.936966
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 346935d8204b46844a8ca16783889cbe
+      internalID: -658742112255296425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 9e7661bbbd31ed843b04e968bb9411da
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BluredCircle: -3083633140101274933
+      Icon_exchange_item_01: -288221867859660233
+      Img_arrow_raid: -4290877942254692086
+      Img_arrow_raid_light: -5133473695992613063
+      UI_FX_Circle_01: -477413969253322419
+      UI_FX_square_01: -1321481160845967593
+      UI_FX_square_02: -7234140344839346892
+      UI_FX_square_03: 2968433542738683926
+      btn_login_bg: -42458237242353981
+      chr_selected: -364548391581603305
+      circle_03: 4203373371649448983
+      fx_lensflare_01: 5292056464680687564
+      fx_light_01: -8207515085089769576
+      fx_light_01_white: 7648852955218904882
+      fx_light_02: 2893701453672174744
+      fx_light_03: -4016199798961161341
+      fx_light_04: -4693533648771763767
+      icon_arrow_down: -9127973261812030883
+      icon_arrow_down_02: -1029379296482600452
+      icon_arrow_equal: -8687757591793534872
+      icon_arrow_up: 5598705432058067679
+      icon_atk: -1646907838019906175
+      icon_back: -965169538180240701
+      icon_bag: 5386886006037257603
+      icon_btn_disassemble: 1169352204311089376
+      icon_btn_equip: -2505885928700244255
+      icon_btn_full: 4614488664383308186
+      icon_btn_link: 1089298305362596686
+      icon_btn_recommended: -2918063394023530081
+      icon_btn_refesh: -659766657076207564
+      icon_btn_replay: 4129154196788430231
+      icon_build: -658742112255296425
+      icon_card: 8283329957513731177
+      icon_cash: -1955964056294143768
+      icon_checkbox_bg: -786884165028438802
+      icon_checkbox_check: -918523516117386182
+      icon_checkbox_cross: 1345719970123937353
+      icon_checkbox_point: 5404991396181973536
+      icon_cooltime_rate: 7650755664041278466
+      icon_crack: -5196410839678872752
+      icon_dead: -4528443850650039005
+      icon_disconnect: -801375191647629303
+      icon_equip: -3863792961781330991
+      icon_exchange_gold: -5322891558009612268
+      icon_exp: 116009447204571835
+      icon_gold: 2892271287669531348
+      icon_hero_02: -15849410407350655
+      icon_info: -3315573968085272438
+      icon_info_card: 9138682619143832238
+      icon_information: 1224522443212133115
+      icon_item_dia: -712493123617565983
+      icon_item_minus: 4841348185310582631
+      icon_item_more: 8813784925152748017
+      icon_item_plus: 686002760101452000
+      icon_item_select: -5071439944480007794
+      icon_item_tier: -3266046602257258217
+      icon_key_2: 312192396325989201
+      icon_key_2_glow: 6673392582696684316
+      icon_key_2_light: 851444500770468459
+      icon_lock: -7614662209602743585
+      icon_lock_glow: -1150415243231852289
+      icon_lock_open: 7566774094622987868
+      icon_lock_tier: 7653752832435795029
+      icon_loging_01: -3192946551355519866
+      icon_loging_02: -2029581442947356680
+      icon_loging_03: 809153642005165740
+      icon_loging_04: 8609704264289084545
+      icon_loging_05: -9067166809038334942
+      icon_lv_change: 4289733140776935732
+      icon_lvdown: -1416432049595075771
+      icon_lvup: 6837303917558165786
+      icon_lvup_02: -5841836633883717650
+      icon_lvup_shop: 2409042522849568350
+      icon_magnifier: -1215468019604256248
+      icon_mail_02: -1067548600521726154
+      icon_mail_03: 1538763263047090267
+      icon_mana: 7078123920453852532
+      icon_mana_fx: 6752447158196348178
+      icon_menu_bg: -9093634063083584005
+      icon_menu_card: -1687847338797385252
+      icon_menu_costume: -3780527345256131361
+      icon_menu_equip: -1818089769928617302
+      icon_menu_event: 796934802857896100
+      icon_menu_friends: -1991682546883453207
+      icon_menu_option: -2726682503693082008
+      icon_menu_rank: -3468916828249217360
+      icon_menu_story: -3111702609487725302
+      icon_menu_story_03: -2048513560773435048
+      icon_mission: 699976161627015260
+      icon_notice: 8039841599696634372
+      icon_notice_02: -779884628166741608
+      icon_notice_small: -6937867395924923553
+      icon_plus: 8926353547201437773
+      icon_price_arrow: 5073783855809705067
+      icon_price_strike_out: -5645130199179018483
+      icon_quest_common: 2252240057821813956
+      icon_quest_contents: 6225236830273397338
+      icon_quest_costume: 5301521854354905451
+      icon_quest_infinity_move: -2675360261221339074
+      icon_quest_intimacy: -2516409938345286311
+      icon_quest_npc: 1715780867246625817
+      icon_quest_npc_anvil: 7198713883433574981
+      icon_quest_npc_build: 1375886234873449413
+      icon_quest_npc_card: -3173779944853316037
+      icon_quest_npc_card2: 4474627926037835885
+      icon_quest_npc_coin: 7861568067252903292
+      icon_quest_npc_crack: -3674797454604548382
+      icon_quest_npc_diamond: 181282724890637139
+      icon_quest_npc_gold: 1552284946250243391
+      icon_quest_npc_goldextraction: 3305640753621464675
+      icon_quest_npc_lotto: -5940895900101570922
+      icon_quest_npc_portion: 1054503791275916363
+      icon_quest_npc_potal: -689751710066727708
+      icon_quest_npc_remdel: 3835612416662261908
+      icon_quest_npc_roulette: -8052577942485397694
+      icon_quest_pictogram: -5883750244027021002
+      icon_quest_request_00: -6085078811986512166
+      icon_quest_request_01: -8176058124595463247
+      icon_quest_request_02: -3297503824235062540
+      icon_quest_request_03: 1977287405445804068
+      icon_quest_request_04: -6896223144380910122
+      icon_quest_request_glow: -2268072112289419583
+      icon_quest_request_small_01: -2174025620477463722
+      icon_quest_request_small_02: 8354326000121519240
+      icon_quest_request_small_03: -2634129320014860901
+      icon_quest_skin: 3840897320889367145
+      icon_quest_story_01: 1295010873116566044
+      icon_quest_story_02: 4204958632575748551
+      icon_quest_story_03: 9116570030389264646
+      icon_quest_story_04: -2152102052675198632
+      icon_question_mark: -7587737426615694249
+      icon_question_mark_02: 2138892265341972506
+      icon_recipe: -691455751682346173
+      icon_remodel: -2977530402478415643
+      icon_replace: -7355872526243999288
+      icon_sale_01: 9066553687247122813
+      icon_sale_02: -6043052939437400025
+      icon_save: 4849109393494190417
+      icon_shield_empty: -5456739337965340386
+      icon_shop_03_activated_lock: 4842851811124350618
+      icon_soul_stone: 2975605791241543595
+      icon_speechballoon_big: -4787612178460738855
+      icon_square_glow: -3956203425746818658
+      icon_star: -864756941610753387
+      icon_star_bg: -6742764091652872099
+      icon_star_grey: 4918925027037288134
+      icon_tab_cash: 2952404860962205477
+      icon_tab_chests: 7476469993484735099
+      icon_tab_gold: -8146086770209908848
+      icon_tab_other: -1123650849850647143
+      icon_tab_special: -3139660259252850822
+      icon_title_num_01: 6337133324423686060
+      icon_title_num_02: -3903412671426735006
+      icon_title_num_03: -268394524583239015
+      icon_title_num_04: 7902334715465742348
+      icon_title_num_05: 5541462345178606353
+      icon_title_num_06: -3224792553663528807
+      icon_title_num_07: 7000812670984323295
+      icon_title_num_08: -1435948909905537227
+      icon_title_num_09: -6478876832634432079
+      icon_title_num_10: -8057840345167178156
+      icon_title_num_11: 3545249696255650788
+      icon_title_num_12: 219159204495737332
+      icon_title_num_13: 4083900993240682275
+      icon_title_num_14: -1997384291015206366
+      icon_title_num_infinity: -3964406953633723205
+      icon_title_ribbon: 7172191069361498293
+      icon_tower: 1411739585387447501
+      icon_tower_middle: 7691677538638946213
+      icon_trash_can: 8683742920772906129
+      icon_victory_medal: -6544244637877953371
+      icon_window_handle: 506599398407680636
+      img_Instance_Items_bg: -7409125549929512806
+      img_Items_box_bg: -6237335130579507929
+      img_arrow: -3424773900934685027
+      img_arrow_2: -6812299882374041689
+      img_arrow_text: -8386233611570644408
+      img_awake_bg_04: -167045183057642491
+      img_bar_bg: 8086562992939928633
+      img_bar_bg_02: 4949172447918487086
+      img_bar_filled: -4601805301232736978
+      img_bar_filled_bg: 3922710824232188479
+      img_bar_filled_line: -1812814378117263145
+      img_bar_filled_round: 4662469940995845161
+      img_bar_frame: -1095157771487151674
+      img_bar_frame_gold: -4138960211149243607
+      img_bar_main_grunge: 4765150990924505850
+      img_bar_main_grunge_small: -6862902955182905123
+      img_bar_main_grunge_small_bright_adjusted: -6287576522580482169
+      img_bar_main_grunge_tiny: -7080739207711419444
+      img_bar_main_grunge_tiny_bright_adjusted: -7280104112602798319
+      img_bar_main_grunge_tiny_white: 4355724456469586220
+      img_bar_white: 6756006555019171386
+      img_bar_white_02: -581114251472011098
+      img_bg_arrow: 1388519509483997429
+      img_bg_chat_01: -1636909057739911992
+      img_bg_item: -1499854695299630720
+      img_bg_mask_01: 5104848217153044702
+      img_bg_section: 2924159485083673799
+      img_bg_section_02: 5121989514028029265
+      img_bg_section_03: 5612497613041787174
+      img_bg_section_04: -4036855986101807651
+      img_bg_section_opacity100: -8281720114617130378
+      img_bg_slot: 5050943046856952431
+      img_bg_window_default_02_3: -8517630795315564677
+      img_bg_window_default_02_4: -349338986508324771
+      img_bg_window_default_02_cropped: 7352732883033685281
+      img_bg_window_default_03_cropped: -5926431353055254233
+      img_bk_bg: -4320386650510476043
+      img_bk_bg_02: -1051092629232786776
+      img_black_gradient: 6066391357619436192
+      img_black_gradient_256: 3131465046171640347
+      img_black_gradient_light: -5097795294866574725
+      img_btn_plus_bg: -7186226374362177291
+      img_btn_ring_bg: 7025155722032017911
+      img_check: 7253788616277863212
+      img_chr_card_frame: 3729271577384639437
+      img_chr_card_frame_blackbg: -6012539318196317573
+      img_chr_card_frame_grade: 6029297329665093564
+      img_close_for_window: 7699310419088295178
+      img_close_for_window_02: 27013764332661882
+      img_close_for_window_03: 4565302467173880432
+      img_conversation_bg: 8938636959206378018
+      img_default_btn_bg: -4626749299561100097
+      img_default_btn_bg_00: -5338469740200511101
+      img_default_btn_bg_00_enemy: -5918510620244737489
+      img_default_btn_bg_01: -2038276065189937764
+      img_default_btn_bg_02: -7885548250451152386
+      img_default_btn_bg_03: -7229669818592551363
+      img_default_btn_bg_04: -2926818344863318063
+      img_default_btn_bg_05: -8304251767904514933
+      img_default_btn_bg_edge: -515808197516043688
+      img_default_btn_bg_fx_01: 9169317315567762385
+      img_default_btn_bg_green: -6473847748812955629
+      img_default_btn_bg_hero: 4429126703226404593
+      img_default_btn_bg_lv: -3787951587964271104
+      img_default_btn_bg_red: -1080779149610749205
+      img_default_btn_bg_small_00: 6854672594993391595
+      img_default_btn_bg_small_01: 6567982014568526441
+      img_default_btn_bg_small_02: 3126889399191275250
+      img_default_btn_bg_small_03: 4811525113392681264
+      img_default_btn_bg_small_04: 8863489640933346156
+      img_default_btn_bg_small_Enemy: -7815297555113814319
+      img_default_btn_bg_tab: -231665663154913782
+      img_dot: -7685248866624381444
+      img_element_param_sub: 7873340469874931816
+      img_exp_bar: -7102926309602945362
+      img_exp_bg: -1952198404463667101
+      img_exp_frame: -8952771000642019501
+      img_frame_episode_item: -7885105773442487674
+      img_grade_bg_01: 8148164072369308277
+      img_grade_bg_02: -2946434264008344728
+      img_grade_bg_03: 7322849747453183833
+      img_grade_bg_04: 2774866704357985365
+      img_gradient_blue: -7445395614531840959
+      img_item_check: 1420551546724716038
+      img_item_check_2: 2115340454439276107
+      img_item_check_shadow: -7960266923158842381
+      img_loading_circle: 3403420209183062301
+      img_map_shield_01: -3768462706076851452
+      img_message_bg_01: 7879320371839106942
+      img_noti: -5103337047649618529
+      img_noti_green: 3816104623165497913
+      img_noti_sale_balloon: 1577472380457349792
+      img_noti_small: -5769203403369964549
+      img_package_tag: 8703953557511547514
+      img_quest_flag: 5922000235473882760
+      img_quest_flag_gold: -3865367435599195656
+      img_redo: -8344576780151282371
+      img_ribbon_yellow_shop: -8784137366932543318
+      img_ring_tutorial: -9083827069078724723
+      img_select_glow: -8330796301174647111
+      img_shop_tag_red: -3872251646480358255
+      img_speechballoon: -8851462387354330034
+      img_speechballoon_02: 2965306248289383380
+      img_speechballoon_03: -6306264344327404425
+      img_speechballoon_blackbg: 336500569395675436
+      img_speechballoon_tail: -370392604572000745
+      img_speechballoon_tail_02: 2477952606430021838
+      img_start_btn_bg: -2632310307156499684
+      img_start_btn_bg_glow: -576618839139346829
+      img_tab_bg_normal: 6728270197404198922
+      img_title_frame: 1508699234149804927
+      img_tooltip: 4303402247318399039
+      img_tooltip_tail: 9114325082104770578
+      img_tooltip_title: -5208920898855481739
+      img_tooltip_white: 6879931309500529480
+      img_troop_copy_fx: 3867328245053813375
+      img_txt_bg: -4215924134085082717
+      img_txt_bg_fx: -3271802451278993453
+      img_wh: 6615641576588166401
+      img_wh_round: -4768453570539656127
+      img_wh_vanish: -4520957259801231749
+      img_wihte_bluredbg: -8412482612820488563
+      img_wihte_bluredbg_2: 3526480271687189897
+      img_window_bg_shadow: 850329487693613324
+      line: -7338353495131428553
+      line_02: 8090786765996916179
+      loading_main: 3973421232395541413
+      mask_Sprite_grade_frame_00: 2568348116708562099
+      slot_frame_renewal_01_normal_04_effect_mask_element: -2490345381537496445
+      ui_mail_icon_gm: 5849766474082531050
+      upgrade_circle: -2758592737736356292
+      upgrade_highlight: 7432326224772283632
+      upgrade_highlight_01: 5844964417897038963
+      upgrade_highlight_red: -2412605238781285402
+      upgrade_highlight_yellow: 6595034873548062987
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

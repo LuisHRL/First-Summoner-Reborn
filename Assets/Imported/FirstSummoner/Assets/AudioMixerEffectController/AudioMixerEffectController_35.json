@@ -1,0 +1,61 @@
+{
+	"m_Bypass": false,
+	"m_CorrespondingSourceObject": { "m_Collection": "Generated Audio Mixer Effects", "m_PathID": 0 },
+	"m_EffectID": {
+		"m_Data_0_": 2562195928,
+		"m_Data_1_": 1274029121,
+		"m_Data_2_": 1086546048,
+		"m_Data_3_": 2868862987
+	},
+	"m_EffectName": "Compressor",
+	"m_EnableWetMix": false,
+	"m_HideFlags": 3,
+	"m_MixLevel": {
+		"m_Data_0_": 0,
+		"m_Data_1_": 0,
+		"m_Data_2_": 0,
+		"m_Data_3_": 0
+	},
+	"m_Name": "",
+	"m_Parameters": [
+		{
+			"m_GUID": {
+				"m_Data_0_": 2901216092,
+				"m_Data_1_": 1249527195,
+				"m_Data_2_": 3520394935,
+				"m_Data_3_": 4279676694
+			},
+			"m_ParameterName": "Param_0"
+		},
+		{
+			"m_GUID": {
+				"m_Data_0_": 1442359328,
+				"m_Data_1_": 1276617779,
+				"m_Data_2_": 3172067738,
+				"m_Data_3_": 3381564140
+			},
+			"m_ParameterName": "Param_1"
+		},
+		{
+			"m_GUID": {
+				"m_Data_0_": 1606755948,
+				"m_Data_1_": 1134914693,
+				"m_Data_2_": 659962001,
+				"m_Data_3_": 2665872813
+			},
+			"m_ParameterName": "Param_2"
+		},
+		{
+			"m_GUID": {
+				"m_Data_0_": 4163142895,
+				"m_Data_1_": 1289995135,
+				"m_Data_2_": 2696870064,
+				"m_Data_3_": 1199643364
+			},
+			"m_ParameterName": "Param_3"
+		}
+	],
+	"m_PrefabAsset": { "m_Collection": "Generated Audio Mixer Effects", "m_PathID": 0 },
+	"m_PrefabInstance": { "m_Collection": "Generated Audio Mixer Effects", "m_PathID": 0 },
+	"m_SendTarget": { "m_Collection": "Generated Audio Mixer Effects", "m_PathID": 0 }
+}

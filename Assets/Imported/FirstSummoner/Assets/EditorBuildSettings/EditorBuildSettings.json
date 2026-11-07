@@ -1,0 +1,36 @@
+{
+	"m_ConfigObjects": {},
+	"m_HideFlags": 0,
+	"m_Scenes": [
+		{
+			"m_Enabled": true,
+			"m_Guid": {
+				"m_Data_0_": 0,
+				"m_Data_1_": 0,
+				"m_Data_2_": 0,
+				"m_Data_3_": 0
+			},
+			"m_Path": "Assets/Scenes/Build/UICI.unity"
+		},
+		{
+			"m_Enabled": true,
+			"m_Guid": {
+				"m_Data_0_": 0,
+				"m_Data_1_": 0,
+				"m_Data_2_": 0,
+				"m_Data_3_": 0
+			},
+			"m_Path": "Assets/Scenes/Build/Loading_Fade.unity"
+		},
+		{
+			"m_Enabled": true,
+			"m_Guid": {
+				"m_Data_0_": 0,
+				"m_Data_1_": 0,
+				"m_Data_2_": 0,
+				"m_Data_3_": 0
+			},
+			"m_Path": "Assets/Scenes/Build/UIPatch_02.unity"
+		}
+	]
+}

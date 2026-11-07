@@ -1,0 +1,38 @@
+{
+	"m_AudioMixer": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -825902501934156277 },
+	"m_BypassEffects": false,
+	"m_Children": [
+		{ "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 5179918305160317320 },
+		{ "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 637405703690058441 },
+		{ "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -8969467745316131198 }
+	],
+	"m_CorrespondingSourceObject": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_Effects": [
+		{ "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 18 }
+	],
+	"m_GroupID": {
+		"m_Data_0_": 2908088503,
+		"m_Data_1_": 1153321044,
+		"m_Data_2_": 3519409298,
+		"m_Data_3_": 1963076883
+	},
+	"m_HideFlags": 0,
+	"m_Mute": false,
+	"m_Name": "Master",
+	"m_Pitch": {
+		"m_Data_0_": 3243690599,
+		"m_Data_1_": 1091176454,
+		"m_Data_2_": 1361933994,
+		"m_Data_3_": 2925821015
+	},
+	"m_PrefabAsset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_PrefabInstance": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_Solo": false,
+	"m_UserColorIndex": 0,
+	"m_Volume": {
+		"m_Data_0_": 2997509935,
+		"m_Data_1_": 1223384443,
+		"m_Data_2_": 802335158,
+		"m_Data_3_": 1224241824
+	}
+}

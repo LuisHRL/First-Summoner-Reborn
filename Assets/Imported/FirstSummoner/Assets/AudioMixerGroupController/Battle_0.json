@@ -1,0 +1,35 @@
+{
+	"m_AudioMixer": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -825902501934156277 },
+	"m_BypassEffects": false,
+	"m_Children": [],
+	"m_CorrespondingSourceObject": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_Effects": [
+		{ "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 14 },
+		{ "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 15 }
+	],
+	"m_GroupID": {
+		"m_Data_0_": 814790746,
+		"m_Data_1_": 1218806379,
+		"m_Data_2_": 1616574903,
+		"m_Data_3_": 4205794044
+	},
+	"m_HideFlags": 0,
+	"m_Mute": false,
+	"m_Name": "Battle",
+	"m_Pitch": {
+		"m_Data_0_": 2792565071,
+		"m_Data_1_": 1174056275,
+		"m_Data_2_": 2579437961,
+		"m_Data_3_": 704128321
+	},
+	"m_PrefabAsset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_PrefabInstance": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_Solo": false,
+	"m_UserColorIndex": 0,
+	"m_Volume": {
+		"m_Data_0_": 1064221032,
+		"m_Data_1_": 1293092090,
+		"m_Data_2_": 2504493215,
+		"m_Data_3_": 75150391
+	}
+}

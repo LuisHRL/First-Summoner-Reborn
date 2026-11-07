@@ -1,0 +1,17 @@
+{
+	"Terms_ID_AllAccept" : 
+	{
+		"BLACK" : "#424242",
+		"WHITE" : "#ffffff"
+	},
+	"Terms_ID_Play" : 
+	{
+		"BLACK" : "#b1b1b1",
+		"WHITE" : "#dddddd"
+	},
+	"Terms_ID_TitleBar" : 
+	{
+		"BLACK" : "#f6f6f9",
+		"WHITE" : "#000000"
+	}
+}

@@ -1,0 +1,2144 @@
+fileFormatVersion: 2
+guid: 6c550a645f69aea44a2ba621d42a3424
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: 4
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: img_bar_hp_bg_gold_02
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 1265
+        width: 136
+        height: 73
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c8c105d563191649aa3ed1dd9f6b579
+      internalID: 3709958105502060026
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_stuff_01
+      rect:
+        serializedVersion: 2
+        x: 974.0761
+        y: 660
+        width: 122.92388
+        height: 140
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b1e0013f2590ec479d3288d2f291262
+      internalID: 5054592796078237532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_gold_04
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 936
+        width: 210
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2bd3c2841f72ac4eaaf625928622e7e
+      internalID: 3961057480860284297
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_04_PerpectPixel
+      rect:
+        serializedVersion: 2
+        x: 1162.0267
+        y: 1021
+        width: 126.97325
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85af331e5e033794a9bf1e17956a657b
+      internalID: -7816936318793747715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_02
+      rect:
+        serializedVersion: 2
+        x: 599
+        y: 1564
+        width: 21
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 851793a96d56c99449fe07d64d476484
+      internalID: -2455519181464318620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_map_gage_02
+      rect:
+        serializedVersion: 2
+        x: 1338
+        y: 617
+        width: 27
+        height: 326
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3cc967228984e10449a9cfb553afcb84
+      internalID: 5856702340524923084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_map_shield_02
+      rect:
+        serializedVersion: 2
+        x: 985
+        y: 1215
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da4ea27bbde8d294f90b0186bab1be4b
+      internalID: -6766673941461604337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_rewind
+      rect:
+        serializedVersion: 2
+        x: 1453.0762
+        y: 617.02673
+        width: 97.89713
+        height: 79.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e433e46a7ce27b34eab2816fd09208a1
+      internalID: 8466914328854581529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_mission_02
+      rect:
+        serializedVersion: 2
+        x: 1281.0762
+        y: 147.05637
+        width: 117.89713
+        height: 135.86751
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a8e94173bf2d6442b9d2deaa60f0727
+      internalID: -8763806279764931134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_result_bg_red
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 1291
+        width: 256
+        height: 251
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7052bd218036db489ba76e388a88be9
+      internalID: 119714204357309112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_03
+      rect:
+        serializedVersion: 2
+        x: 1343
+        y: 423
+        width: 32
+        height: 55
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c8f70270d00a714b93874396613bbce
+      internalID: -5736523281832905320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_map_gage
+      rect:
+        serializedVersion: 2
+        x: 1050
+        y: 804
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 844c37c801ecae34d828a6c7c6bcd475
+      internalID: -4353999943721879614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: infinity_icon_success_03
+      rect:
+        serializedVersion: 2
+        x: 339.02676
+        y: 1291.0762
+        width: 311.89713
+        height: 268.84778
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47775f363b107124c835d7c45704856a
+      internalID: -1129672873050513534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pvp_skill_bg
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 478
+        width: 411
+        height: 411
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f6a16f4147f3b94eb07e092df703f1d
+      internalID: -8458214104937911639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_hp
+      rect:
+        serializedVersion: 2
+        x: 1552.0267
+        y: 701
+        width: 54.973248
+        height: 53.973248
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49d5f5d51ef7a3249b67cef1a0ec2edb
+      internalID: 2593888300955105811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_x2
+      rect:
+        serializedVersion: 2
+        x: 1566.0267
+        y: 333.02676
+        width: 85.9465
+        height: 97.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99f220a3ad5839444b9c72cdb1ee78b6
+      internalID: 8521113818410112314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_pause
+      rect:
+        serializedVersion: 2
+        x: 1067.0267
+        y: 1539.0267
+        width: 69.9465
+        height: 79.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20ac0f69e73e0a64c970f5c8e20898e7
+      internalID: -6924205704573231172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pvp_skill_small_bg
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 931
+        width: 190
+        height: 189
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11d11da06ab527643aad9ac06cdc9878
+      internalID: 1293022187050529552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_message_bg_02
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1942
+        width: 512
+        height: 70
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2510442060c70734c83c9f5a0112e8d8
+      internalID: 5543682570528176230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_count_01
+      rect:
+        serializedVersion: 2
+        x: 1665.0267
+        y: 236.07613
+        width: 56.921932
+        height: 104.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ef10ce7f6277964f985fb0051604c9b
+      internalID: -1080122821152950282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pvp_cooltime_gage
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 1131
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5094a8c7496945f44ac90bf7f04e2383
+      internalID: -3592857203992102042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_small_atk_up
+      rect:
+        serializedVersion: 2
+        x: 865.02673
+        y: 1546.0267
+        width: 103.9465
+        height: 91.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c8bc7cdc960e03845a74c94a3a5f2143
+      internalID: -1236622523848328769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_small_mana_cost
+      rect:
+        serializedVersion: 2
+        x: 1474.0267
+        y: 324.0761
+        width: 87.9465
+        height: 104.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f1658ffceaf2494baf2e8703d047857
+      internalID: 8243940330511256091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_end
+      rect:
+        serializedVersion: 2
+        x: 1191.0267
+        y: 770.02673
+        width: 81.9465
+        height: 80.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88b6434550e82724db3b7ec1fd6d5aee
+      internalID: -7221887501233584687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_hit_green
+      rect:
+        serializedVersion: 2
+        x: 1435
+        y: 0
+        width: 326
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e14e9bcd3df51574ca9c0e4195a2049c
+      internalID: 7218321875340007216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_battle_02
+      rect:
+        serializedVersion: 2
+        x: 830.01294
+        y: 660
+        width: 139.97418
+        height: 138.92387
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 803ac387f88516e449462b98124fbe83
+      internalID: 1920348265007230032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pvp_cooltime
+      rect:
+        serializedVersion: 2
+        x: 1474.0762
+        y: 433.0761
+        width: 75.84776
+        height: 85.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22d27c5a067ae464fada8fd48e80544b
+      internalID: -6607319278153868571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_result_bg_blue
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 1564
+        width: 256
+        height: 251
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98ac5b6084c9133459ae36be21d7e19a
+      internalID: -3686648677015909742
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_battle_for_finish
+      rect:
+        serializedVersion: 2
+        x: 1114
+        y: 520
+        width: 124
+        height: 128
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eca274fb9a984fc4faa2f26abcb22346
+      internalID: -3408934454773616373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: infinity_icon_success_02
+      rect:
+        serializedVersion: 2
+        x: 0.012912512
+        y: 893.01294
+        width: 395.97418
+        height: 377.96033
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ae3d6c9b218f8bc47be2c3a9c53e5f56
+      internalID: -5740891896481827840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_gold_06
+      rect:
+        serializedVersion: 2
+        x: 1560
+        y: 68
+        width: 154
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ba963b2debcf4b428c9588323f68af7
+      internalID: 738146278397980987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_02
+      rect:
+        serializedVersion: 2
+        x: 1546
+        y: 203
+        width: 329
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 919f818ce29916d4c935535f59083351
+      internalID: -4999224344340553833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_04
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 803
+        width: 95
+        height: 78
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76cdcf3342b84734b9917e7f959763d1
+      internalID: 7611124022976908579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_count_02
+      rect:
+        serializedVersion: 2
+        x: 985.0553
+        y: 1021.0762
+        width: 82.868576
+        height: 105.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44ff5367984110e49b6ab74316a28b5b
+      internalID: 8491624184026342033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_mask_battle
+      rect:
+        serializedVersion: 2
+        x: 1566
+        y: 236
+        width: 95
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36630411c6d01fa4fac90094c1035638
+      internalID: 3918928930272485725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_gold_03
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 1476
+        width: 111
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65ecfbcd13a956d49af585cc5375a75b
+      internalID: 7043578564265706586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_x1
+      rect:
+        serializedVersion: 2
+        x: 1253.0267
+        y: 423.02676
+        width: 85.9465
+        height: 97.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ceac3ef505caf74bb09e15dd0458e0e
+      internalID: 559493058333249699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_x4
+      rect:
+        serializedVersion: 2
+        x: 1072.0267
+        y: 1021.02673
+        width: 85.9465
+        height: 97.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 65168474a9819054bb40b3b8618f45bb
+      internalID: -4381834127730734675
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_05
+      rect:
+        serializedVersion: 2
+        x: 1293
+        y: 972
+        width: 90
+        height: 49.973248
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e49743cffe059db4eb8c0682c02929b6
+      internalID: -7637905007411366961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_01
+      rect:
+        serializedVersion: 2
+        x: 1242
+        y: 584
+        width: 329
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4413a4758cf4a4d4cbbee2f675ee293b
+      internalID: -6940632387554308844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_shop_02
+      rect:
+        serializedVersion: 2
+        x: 1118.0762
+        y: 376
+        width: 130.91096
+        height: 137.93898
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cf2c8f3f501b0d4387d3c867bedf5c8
+      internalID: 927365137474069759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_pvp_bg
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 601
+        height: 474
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6aae24873a92904b8fb48feba4b8efd
+      internalID: 1720641304724421028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_stuff_02
+      rect:
+        serializedVersion: 2
+        x: 830
+        y: 516
+        width: 140
+        height: 140
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 978c888b68c5d3f4b9b9e7d1f28dbeaa
+      internalID: -7357840610853229405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg
+      rect:
+        serializedVersion: 2
+        x: 1072
+        y: 1123
+        width: 82
+        height: 53
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37a7334ec977de34595366faee7db2c7
+      internalID: 978065694109188597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon_exclamation_mark
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 1546
+        width: 206
+        height: 183
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4c8ef3ac504b384cab4964241a4a9cd
+      internalID: 7184709454934447221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_gold_05
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 1375
+        width: 129
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35ac21c479f0fad428e192e6596cd219
+      internalID: 4724545300338400504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_frame_PerpectPixel
+      rect:
+        serializedVersion: 2
+        x: 1474
+        y: 523
+        width: 18
+        height: 18
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 488270b9a4aaf6e4c938c81f869d9e6b
+      internalID: -4129966154393754386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_raid_hp_bg_01
+      rect:
+        serializedVersion: 2
+        x: 1449
+        y: 728
+        width: 99
+        height: 68
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc20f3feeda317247824d12ffd9cf818
+      internalID: -3770178561428452827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_mission_01
+      rect:
+        serializedVersion: 2
+        x: 974.06464
+        y: 520.0761
+        width: 135.87073
+        height: 135.84775
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f806085dfd50154f84889f07f2c4e72
+      internalID: -6646579263450176617
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pvp_cooltime_fx
+      rect:
+        serializedVersion: 2
+        x: 1242.0762
+        y: 617.0761
+        width: 91.84776
+        height: 96.92388
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc81f3711202b2b4793162d68a9d6317
+      internalID: 928195220596727501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_hit
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 308
+        width: 326
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a63652a89f7a5554983a2332ef8c3eb1
+      internalID: 770126196046442744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_battle_01
+      rect:
+        serializedVersion: 2
+        x: 1303.0267
+        y: 287.02676
+        width: 112.89713
+        height: 131.9345
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99e03a9ef7756544e822b0b2f1363677
+      internalID: -6408929944036256644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_count_03
+      rect:
+        serializedVersion: 2
+        x: 1369.0267
+        y: 617.0761
+        width: 79.89713
+        height: 106.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f6076e8b2c43c0419055df71f5bd462
+      internalID: 1445121665369549740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_joypad_bg
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1614
+        width: 270
+        height: 270
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb10e2abb6e84134ab05ddcc6a1f1013
+      internalID: 2510389646874022033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_01
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 821
+        width: 90
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1999f92f95f0f1549aef64f6d39b2053
+      internalID: -2076201238395656718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_result_bg
+      rect:
+        serializedVersion: 2
+        x: 605
+        y: 0
+        width: 364
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a707e4585742f284f9106448ead5dc8a
+      internalID: -7705101736409000066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_shop_03
+      rect:
+        serializedVersion: 2
+        x: 1435.0267
+        y: 68
+        width: 120.9465
+        height: 130.9418
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da9c1e53875282c458940ca25e31adcd
+      internalID: -3897845600168070074
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_map_arrow_02
+      rect:
+        serializedVersion: 2
+        x: 415
+        y: 478
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 331726c7d6da84d488e611821682ee7b
+      internalID: 2956838812311267025
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_joypad_button
+      rect:
+        serializedVersion: 2
+        x: 1114
+        y: 652
+        width: 114
+        height: 114
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 75da6b5b4c51996429e5833de0d6ba17
+      internalID: -3258515018823443307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: infinity_icon_success_01
+      rect:
+        serializedVersion: 2
+        x: 0.076122284
+        y: 1275.0267
+        width: 334.84778
+        height: 334.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd14f50c0344b0841b98591670f1e3e8
+      internalID: -7362992017530899613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_hero_01
+      rect:
+        serializedVersion: 2
+        x: 1127
+        y: 154
+        width: 140
+        height: 140
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 12e00f6fea6c07b48b8ac9975ed1e828
+      internalID: 7134081904194726513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_small_mana_cost_fx
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 154
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e058dd66ca1a2af4b9db9307c20cb16b
+      internalID: 437447830525668858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_chests
+      rect:
+        serializedVersion: 2
+        x: 973.0761
+        y: 1476.0267
+        width: 89.84776
+        height: 79.921936
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31abb49a1d6efe540a41fabc93e1720c
+      internalID: 7685246774335894421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_bg_gold_01
+      rect:
+        serializedVersion: 2
+        x: 1726
+        y: 236
+        width: 51
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef84c4b02161638468c521d0a752db44
+      internalID: -785974265463269249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_raid_hp_bg_03
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 1560.0762
+        width: 32
+        height: 51.910965
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d287405b6ffcbcb4781e8686849d31db
+      internalID: 2112938326563516641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_card_01
+      rect:
+        serializedVersion: 2
+        x: 953.0761
+        y: 804.02673
+        width: 92.89713
+        height: 127.8239
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15b6996cfaf05dc448eeaed65f72f6ff
+      internalID: 8595464818032169404
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_azrael
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 931
+        width: 355
+        height: 356
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4ca3193a5edcf0049a9476a36c285dba
+      internalID: 8978195333905913962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_small_atk_up_fx
+      rect:
+        serializedVersion: 2
+        x: 1127
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: facd0bd915e504f4fafba9896fa3f8e9
+      internalID: -8135361999665777240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_mana_maxmanapackage
+      rect:
+        serializedVersion: 2
+        x: 1369
+        y: 728
+        width: 76
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e84027e34cd3b134489542f1572ecbc5
+      internalID: 447096428780245698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_play
+      rect:
+        serializedVersion: 2
+        x: 985.0429
+        y: 1131.0267
+        width: 70.880974
+        height: 79.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b9f5e7d764ee3046a273da975d82d0b
+      internalID: 7171802097320228059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_pvp_versus_bg
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 1819
+        width: 478
+        height: 119
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02875afb8688af746b99d8a8f9c3de0a
+      internalID: -7828494088943057265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_battle_for_revival
+      rect:
+        serializedVersion: 2
+        x: 1281
+        y: 0
+        width: 149.97325
+        height: 142.97325
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc371e0f120a4e141aad6649faef5ed6
+      internalID: -6167574037103669146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_shop_01
+      rect:
+        serializedVersion: 2
+        x: 883.02673
+        y: 1124.0513
+        width: 97.921936
+        height: 136.87256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcd54cf47d9963a439438b5f5b941cbb
+      internalID: -4128840043046918530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_common_hit
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 1942
+        width: 329
+        height: 100
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fa1354690cab49429d793ba4211fb1f
+      internalID: 4974888560809709165
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_mask
+      rect:
+        serializedVersion: 2
+        x: 1242
+        y: 525
+        width: 52
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1da8ee62b8e237443b086069d6b6b47c
+      internalID: 609382211224447731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_map_shield_01
+      rect:
+        serializedVersion: 2
+        x: 1555
+        y: 617
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34708d05a7ef2a642ad4479c0189d50a
+      internalID: -3768462706076851452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_00
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 988
+        width: 329
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41f3d3fa2f0e19b4ab3d395fa53f20dd
+      internalID: 5575158409260161799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_combat_alert_red
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 324
+        width: 50
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5c8616f06e3af84fa77ed2c34d1a5ea
+      internalID: 3802691725909972640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp_03
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 947
+        width: 245
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 823562d4e914627499cdca32c3225e74
+      internalID: 2812792424677733951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_map_arrow_01
+      rect:
+        serializedVersion: 2
+        x: 1718
+        y: 68
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9a5a7c779045eb42b80d0ee8d1b635b
+      internalID: -6360245975030361210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_bar_hp
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 1342
+        width: 329
+        height: 29
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3623f864beaf805448aeff6a88966b63
+      internalID: 5742921045757770699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_small_cool_time_fx
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 0
+        width: 150
+        height: 150
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8698e14869b239947b3016d9073bb427
+      internalID: -6892084555359772415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_small_cool_time
+      rect:
+        serializedVersion: 2
+        x: 1048.0762
+        y: 1375.0762
+        width: 76.84776
+        height: 96.84776
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fb2f31c735e2164896dbc64ec037508
+      internalID: -7779554043911484493
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: icon_btn_x8
+      rect:
+        serializedVersion: 2
+        x: 1101.0267
+        y: 770.02673
+        width: 85.9465
+        height: 97.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8934f5efbbce49649b5112478090183a
+      internalID: 1426773327027928688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_card_03
+      rect:
+        serializedVersion: 2
+        x: 1420.0762
+        y: 203.02675
+        width: 121.86082
+        height: 116.9465
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cccc2f72777d0254387dc3dd570cdf64
+      internalID: 6475704298826482066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: img_speechballoon_exclamation_mark_02
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 1733.0267
+        width: 206
+        height: 170.89713
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 790bd954ba7e8a24d9ab226d606591c0
+      internalID: 6435787048801494299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tip_card_02
+      rect:
+        serializedVersion: 2
+        x: 974
+        y: 376
+        width: 140
+        height: 140
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06d43c4b9594acd44aa35cd6e2698ce8
+      internalID: 3641134409838544066
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4942dd7fcfadd76478b4588bd1e5cdba
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Pvp_cooltime: -6607319278153868571
+      Pvp_cooltime_fx: 928195220596727501
+      Pvp_cooltime_gage: -3592857203992102042
+      icon_battle_for_finish: -3408934454773616373
+      icon_battle_for_revival: -6167574037103669146
+      icon_btn_end: -7221887501233584687
+      icon_btn_pause: -6924205704573231172
+      icon_btn_play: 7171802097320228059
+      icon_btn_rewind: 8466914328854581529
+      icon_btn_x1: 559493058333249699
+      icon_btn_x2: 8521113818410112314
+      icon_btn_x4: -4381834127730734675
+      icon_btn_x8: 1426773327027928688
+      icon_chests: 7685246774335894421
+      icon_hp: 2593888300955105811
+      icon_small_atk_up: -1236622523848328769
+      icon_small_atk_up_fx: -8135361999665777240
+      icon_small_cool_time: -7779554043911484493
+      icon_small_cool_time_fx: -6892084555359772415
+      icon_small_mana_cost: 8243940330511256091
+      icon_small_mana_cost_fx: 437447830525668858
+      img_azrael: 8978195333905913962
+      img_bar_common_hit: 4974888560809709165
+      img_bar_frame_PerpectPixel: -4129966154393754386
+      img_bar_hp: 5742921045757770699
+      img_bar_hp_00: 5575158409260161799
+      img_bar_hp_01: -6940632387554308844
+      img_bar_hp_02: -4999224344340553833
+      img_bar_hp_03: 2812792424677733951
+      img_bar_hp_bg: 978065694109188597
+      img_bar_hp_bg_01: -2076201238395656718
+      img_bar_hp_bg_02: -2455519181464318620
+      img_bar_hp_bg_03: -5736523281832905320
+      img_bar_hp_bg_04: 7611124022976908579
+      img_bar_hp_bg_04_PerpectPixel: -7816936318793747715
+      img_bar_hp_bg_05: -7637905007411366961
+      img_bar_hp_bg_gold_01: -785974265463269249
+      img_bar_hp_bg_gold_02: 3709958105502060026
+      img_bar_hp_bg_gold_03: 7043578564265706586
+      img_bar_hp_bg_gold_04: 3961057480860284297
+      img_bar_hp_bg_gold_05: 4724545300338400504
+      img_bar_hp_bg_gold_06: 738146278397980987
+      img_bar_hp_hit: 770126196046442744
+      img_bar_hp_hit_green: 7218321875340007216
+      img_bar_hp_mask: 609382211224447731
+      img_bar_raid_hp_bg_01: -3770178561428452827
+      img_bar_raid_hp_bg_03: 2112938326563516641
+      img_combat_alert_red: 3802691725909972640
+      img_count_01: -1080122821152950282
+      img_count_02: 8491624184026342033
+      img_count_03: 1445121665369549740
+      img_joypad_bg: 2510389646874022033
+      img_joypad_button: -3258515018823443307
+      img_mana_maxmanapackage: 447096428780245698
+      img_map_arrow_01: -6360245975030361210
+      img_map_arrow_02: 2956838812311267025
+      img_map_gage: -4353999943721879614
+      img_map_gage_02: 5856702340524923084
+      img_map_shield_01: -3768462706076851452
+      img_map_shield_02: -6766673941461604337
+      img_mask_battle: 3918928930272485725
+      img_message_bg_02: 5543682570528176230
+      img_pvp_bg: 1720641304724421028
+      img_pvp_versus_bg: -7828494088943057265
+      img_result_bg: -7705101736409000066
+      img_result_bg_blue: -3686648677015909742
+      img_result_bg_red: 119714204357309112
+      img_speechballoon_exclamation_mark: 7184709454934447221
+      img_speechballoon_exclamation_mark_02: 6435787048801494299
+      infinity_icon_success_01: -7362992017530899613
+      infinity_icon_success_02: -5740891896481827840
+      infinity_icon_success_03: -1129672873050513534
+      pvp_skill_bg: -8458214104937911639
+      pvp_skill_small_bg: 1293022187050529552
+      tip_battle_01: -6408929944036256644
+      tip_battle_02: 1920348265007230032
+      tip_card_01: 8595464818032169404
+      tip_card_02: 3641134409838544066
+      tip_card_03: 6475704298826482066
+      tip_hero_01: 7134081904194726513
+      tip_mission_01: -6646579263450176617
+      tip_mission_02: -8763806279764931134
+      tip_shop_01: -4128840043046918530
+      tip_shop_02: 927365137474069759
+      tip_shop_03: -3897845600168070074
+      tip_stuff_01: 5054592796078237532
+      tip_stuff_02: -7357840610853229405
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

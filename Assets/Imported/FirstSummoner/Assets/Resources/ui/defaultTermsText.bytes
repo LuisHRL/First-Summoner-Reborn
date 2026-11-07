@@ -1,0 +1,129 @@
+{
+  "Terms_ID_Use": {
+    "ko": "[필수] 서비스 이용약관",
+    "en": "[Required] Terms of Service",
+    "zh_CN": "[必选] 服务条款",
+    "zh_TW": "[必讀] 服務使用條款",
+    "ja": "[必須] サービス利用規約"
+  },
+  "Terms_ID_Use_Kr": {
+    "ko": "광고성 정보 수신동의가 포함되어 있습니다.",
+    "en": "including consent to receive marketing information",
+    "zh_CN": "包括同意接收广告信息。",
+    "zh_TW": "包含了是否同意接收廣告性資訊。",
+    "ja": "広告情報の受信同意が含まれています。"
+  },
+  "Terms_ID_Privacy": {
+    "ko": "[필수] 개인정보 수집 및 이용",
+    "en": "[Required] Collection and use of personal information",
+    "zh_CN": "[必选] 收集与使用个人信息",
+    "zh_TW": "[必讀] 同意個人資訊收集及利用",
+    "ja": "[必須] 個人情報保護方針"
+  },
+  "Terms_ID_NightNoti": {
+    "ko": "[선택] 야간 광고성 정보 수신 (저녁9시~아침8시)",
+    "en": "[Optional] Receipt of marketing information at night (21:00 ~ 08:00)",
+    "zh_CN": "[可选] 接收夜间广告信息（晚上9点~上午8点）",
+    "zh_TW": "[選讀] 接收夜間廣告性資訊（晚上9點～上午8點）",
+    "ja": "[選択] 夜間の広告情報の受信 (夜9時～朝8時)"
+  },
+  "Terms_ID_FullText": {
+    "ko": "전문보기",
+    "en": "See full text",
+    "zh_CN": "查看全文",
+    "zh_TW": "觀看全文",
+    "ja": "全文表示"
+  },
+  "Terms_ID_Accept": {
+    "ko": "동의하기",
+    "en": "Accept",
+    "zh_CN": "同意",
+    "zh_TW": "同意",
+    "ja": "同意する"
+  },
+  "Terms_ID_AllAccept": {
+    "ko": "전체 동의하고 시작하기",
+    "en": "Accept all and play",
+    "zh_CN": "全部同意并开始",
+    "zh_TW": "全部同意並開始",
+    "ja": "すべてに同意して始める"
+  },
+  "Terms_ID_Play": {
+    "ko": "시작하기",
+    "en": "Play",
+    "zh_CN": "开始",
+    "zh_TW": "開始",
+    "ja": "始める"
+  },
+  "Terms_ID_Noti": {
+    "ko": "{0} 광고성 정보 수신 및 푸시 알림에 대하여 동의하셨습니다.",
+    "en": "As of {0}, you have accepted to receive marketing information and push notifications.",
+    "zh_CN": "您已同意接收{0}广告信息与推送通知。",
+    "zh_TW": "{0}您已同意接收廣告性質的資訊以及推播訊息。",
+    "ja": "{0} 広告情報の受信、およびプッシュ通知に同意しました。"
+  },
+  "Terms_ID_NotiCancel": {
+    "ko": "{0} 광고성 정보 수신 및 푸시 알림에 대하여 거부하셨습니다.",
+    "en": "As of {0}, you have declined to receive marketing information and push notifications.",
+    "zh_CN": "您已拒绝接收{0}广告信息与推送通知。",
+    "zh_TW": "{0}您拒絕接收廣告性質的資訊以及推播訊息。",
+    "ja": "{0} 広告情報の受信、およびプッシュ通知を拒否しました。"
+  },
+  "Terms_ID_Privacy_GDPR": {
+    "ko": "[필수] 개인정보 보호 정책",
+    "en": "[Required] Privacy Policy",
+    "zh_CN": "[必选] 隐私政策",
+    "zh_TW": "[必讀] 個資保護政策",
+    "ja": "[必須] 個人情報保護ポリシー"
+  },
+  "Terms_ID_Trans_GDPR": {
+    "ko": "[필수] 개인정보 EU역외 이전",
+    "en": "[Required] Transfer of personal data outside the EU",
+    "zh_CN": "[必选] 欧盟个人数据跨境转移",
+    "zh_TW": "[必讀] EU域外轉讓個人資訊",
+    "ja": "[必須] 個人情報EU域外移転"
+  },
+  "Terms_ID_Noti_GDPR": {
+    "ko": "[선택] 마케팅 정보 수신",
+    "en": "[Optional] Receipt of marketing information",
+    "zh_CN": "[可选] 接收营销信息",
+    "zh_TW": "[選讀] 接收行銷資訊",
+    "ja": "[選択] マーケティング情報の受信"
+  },
+  "Terms_ID_TitleBar": {
+    "en": "LINE GAMES ",
+    "ja": "LINE GAMES ",
+    "ko": "라인게임즈 ",
+    "zh_CN": "LINE GAMES ",
+    "zh_TW": "LINE 遊戲 "
+  },
+  "Terms_ID_Check_Err": {
+    "ko": "모든 필수 항목에 동의하셔야 합니다.",
+    "en": "You must agree to all required items.",
+    "zh_CN": "您必须同意全部必选项。",
+    "zh_TW": "您必須同意所有必填項目。",
+    "ja": "すべての必須事項に同意する必要があります。"
+  },
+  "Terms_ID_AllConfirm_MsgTitle": {
+    "ko": "아래 메세지 수신을 동의 하셨습니다.",
+    "en": "You agreed to receive the message below.",
+    "zh_CN": "您已同意接收以下消息。",
+    "zh_TW": "您已同意接收以下消息。",
+    "ja": "下記のメッセージ受信に同意しました。"
+  },
+  "Terms_ID_AllConfirm_MsgNoti": {
+    "ko": "광고성 정보 수신",
+    "en": "Advertising Information Acceptance",
+    "zh_CN": "接收广告信息",
+    "zh_TW": "接收廣告性資訊",
+    "ja": "広告情報の受信"
+  },
+  "Terms_ID_AllConfirm_MsgNight": {
+    "ko": "야간알림 수신",
+    "en": "Nighttime Notification Acceptance",
+    "zh_CN": "接收夜间通知",
+    "zh_TW": "接收夜間推播",
+    "ja": "夜間通知の受信"
+  },
+  "Terms_ID_JpLegal": "法令に基づく表示"
+}

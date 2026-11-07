@@ -1,0 +1,104 @@
+{
+	"m_Layers": [
+		"Default",
+		"TransparentFX",
+		"Ignore Raycast",
+		"",
+		"Water",
+		"UI",
+		"",
+		"",
+		"Terrain",
+		"Wall",
+		"HeroAction",
+		"AttackRaycastWall",
+		"BGStencil",
+		"",
+		"",
+		"Hero",
+		"",
+		"",
+		"UI_Loading",
+		"",
+		"",
+		"",
+		"",
+		"",
+		"InGame_Cinematic",
+		"OutGame",
+		"OutGame_Infinity",
+		"OutGame_Troop",
+		"",
+		"",
+		"",
+		"Particle"
+	],
+	"m_SortingLayers": [
+		{
+			"m_Locked": false,
+			"m_Name": "Default",
+			"m_UniqueID": 0
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "Contents",
+			"m_UniqueID": 2373059417
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "Navigation",
+			"m_UniqueID": 708182739
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "Popup",
+			"m_UniqueID": 3796832353
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "HUD",
+			"m_UniqueID": 4261438899
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "Full_Screen_Effect",
+			"m_UniqueID": 422997665
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "ScreenLock",
+			"m_UniqueID": 461672303
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "Popup_System",
+			"m_UniqueID": 329067439
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "Tooltip",
+			"m_UniqueID": 1146460109
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "System_Message",
+			"m_UniqueID": 3772314379
+		},
+		{
+			"m_Locked": false,
+			"m_Name": "Popup_Web",
+			"m_UniqueID": 4093806407
+		}
+	],
+	"m_Tags": [
+		"UIRoot",
+		"_HierachyRoot",
+		"Unit",
+		"Projectile",
+		"StencilBGO",
+		"breath",
+		"WeaponParts",
+		"NetworkIndicator",
+		"ScreenLock"
+	]
+}

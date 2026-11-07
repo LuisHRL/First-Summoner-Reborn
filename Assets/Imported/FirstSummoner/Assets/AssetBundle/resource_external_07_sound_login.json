@@ -1,0 +1,122 @@
+{
+	"m_AssetBundleName": "resource_external/07_sound/login",
+	"m_Container": {
+		"assets/resource_asset/08_sound/bgm/s_bgm_login_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -2263894577987200561 },
+			"m_PreloadIndex": 91,
+			"m_PreloadSize": 20
+		},
+		"assets/resource_asset/08_sound/ui/s_production_mini_game_card_add_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -1613950418684898284 },
+			"m_PreloadIndex": 203,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_production_mini_game_card_open_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 6976185853977131098 },
+			"m_PreloadIndex": 180,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_production_mini_game_select_bad_result_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 8994658929173663113 },
+			"m_PreloadIndex": 47,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_production_mini_game_select_good_result_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -5182903779275897433 },
+			"m_PreloadIndex": 0,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_ui_button_decision_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 5975617569224797431 },
+			"m_PreloadIndex": 23,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_ui_button_select_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -8064238313481029386 },
+			"m_PreloadIndex": 114,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_ui_button_very_decision_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -8137170188224987873 },
+			"m_PreloadIndex": 136,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_ui_inform_popup_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -6518118931109651726 },
+			"m_PreloadIndex": 69,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_asset/08_sound/ui/s_ui_inform_system_message_00.prefab": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -3611083691702411296 },
+			"m_PreloadIndex": 158,
+			"m_PreloadSize": 22
+		},
+		"assets/resource_external/07_sound/bgm/s_bgm_login_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -8938844115457414487 },
+			"m_PreloadIndex": 202,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_production_mini_game_card_add_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 1327586361928150997 },
+			"m_PreloadIndex": 22,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_production_mini_game_card_open_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 5671242996237705454 },
+			"m_PreloadIndex": 112,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_production_mini_game_select_bad_result_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 3197171429149159558 },
+			"m_PreloadIndex": 111,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_production_mini_game_select_good_result_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -7036746109979500146 },
+			"m_PreloadIndex": 225,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_ui_button_decision_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -279927475865822530 },
+			"m_PreloadIndex": 227,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_ui_button_select_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 8886602579602841984 },
+			"m_PreloadIndex": 113,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_ui_button_very_decision_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 6390320341433507935 },
+			"m_PreloadIndex": 46,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_ui_inform_popup_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 8064527052440112015 },
+			"m_PreloadIndex": 45,
+			"m_PreloadSize": 1
+		},
+		"assets/resource_external/07_sound/ui/s_ui_inform_system_message_00.wav": {
+			"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": -5083013207002118927 },
+			"m_PreloadIndex": 226,
+			"m_PreloadSize": 1
+		}
+	},
+	"m_CorrespondingSourceObject": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_Dependencies": [],
+	"m_ExplicitDataLayout": 0,
+	"m_HideFlags": 0,
+	"m_IsStreamedSceneAssetBundle": false,
+	"m_MainAsset": {
+		"m_Asset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+		"m_PreloadIndex": 0,
+		"m_PreloadSize": 0
+	},
+	"m_Name": "resource_external/07_sound/login",
+	"m_PathFlags": 7,
+	"m_PrefabAsset": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_PrefabInstance": { "m_Collection": "cab-df88d2f7dc7eb8573a9ebe6fc2a8dcf0", "m_PathID": 0 },
+	"m_PreloadTable": [],
+	"m_RuntimeCompatibility": 1,
+	"m_SceneHashes": {}
+}

@@ -1,0 +1,7 @@
+{
+	"m_Fixed_Timestep": 0.1,
+	"m_HideFlags": 0,
+	"m_Maximum_Allowed_Timestep": 0.333333,
+	"m_Maximum_Particle_Timestep": 0.1,
+	"m_TimeScale": 1
+}

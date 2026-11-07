@@ -1,0 +1,157 @@
+{
+	"m_Areas": [
+		{
+			"m_Cost": 1,
+			"m_Name": "Walkable"
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": "Not Walkable"
+		},
+		{
+			"m_Cost": 2,
+			"m_Name": "Jump"
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": "Air"
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": "Boss_Road"
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": "Walkable_Boss"
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		},
+		{
+			"m_Cost": 1,
+			"m_Name": ""
+		}
+	],
+	"m_HideFlags": 0,
+	"m_LastAgentTypeID": -887442657,
+	"m_SettingNames": [
+		"Humanoid"
+	],
+	"m_Settings": [
+		{
+			"m_AccuratePlacement": 0,
+			"m_AgentClimb": 0.75,
+			"m_AgentHeight": 2,
+			"m_AgentRadius": 0.5,
+			"m_AgentSlope": 45,
+			"m_AgentTypeID": 0,
+			"m_CellSize": 0.16666667,
+			"m_Debug": {
+				"m_Flags": 0
+			},
+			"m_LedgeDropHeight": 0,
+			"m_ManualCellSize": 0,
+			"m_ManualTileSize": 0,
+			"m_MaxJumpAcrossDistance": 0,
+			"m_MinRegionArea": 2,
+			"m_TileSize": 256
+		}
+	]
+}

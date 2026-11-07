@@ -1,0 +1,172 @@
+{
+	"m_AssetBundleName": "resource_asset/04_ui/ui_font",
+	"m_Container": {
+		"assets/resource_asset/04_ui/font/chinese_simplified/sourcehansanssc-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 2727510775843701648 },
+			"m_PreloadIndex": 38,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/chinese_simplified/sourcehansanssc-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -7489461840521147227 },
+			"m_PreloadIndex": 38,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/chinese_simplified/sourcehansanssc-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 6172405001052057511 },
+			"m_PreloadIndex": 38,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/chinese_traditional/sourcehansanstc-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 2683282740405594190 },
+			"m_PreloadIndex": 45,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/chinese_traditional/sourcehansanstc-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 8677123911411187614 },
+			"m_PreloadIndex": 45,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/chinese_traditional/sourcehansanstc-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 4337995465836372116 },
+			"m_PreloadIndex": 45,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/japanese/sourcehansansj-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 4423861771259863964 },
+			"m_PreloadIndex": 22,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/japanese/sourcehansansj-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 6967724405214133324 },
+			"m_PreloadIndex": 22,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/japanese/sourcehansansj-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -1921437041286882560 },
+			"m_PreloadIndex": 22,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/korean/sourcehansansk-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 6094290826454071438 },
+			"m_PreloadIndex": 5,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/korean/sourcehansansk-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 8539933982714516641 },
+			"m_PreloadIndex": 5,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/korean/sourcehansansk-bold.otf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 7037609605357882874 },
+			"m_PreloadIndex": 5,
+			"m_PreloadSize": 7
+		},
+		"assets/resource_asset/04_ui/font/nanumgothicextraboldskeinglobe3global.ttf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 3860962949899614597 },
+			"m_PreloadIndex": 34,
+			"m_PreloadSize": 4
+		},
+		"assets/resource_asset/04_ui/font/nanumgothicextraboldskeinglobe3global.ttf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -5696446066238709416 },
+			"m_PreloadIndex": 34,
+			"m_PreloadSize": 4
+		},
+		"assets/resource_asset/04_ui/font/nanumgothicextraboldskeinglobe3global.ttf": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -8953563572312560440 },
+			"m_PreloadIndex": 34,
+			"m_PreloadSize": 4
+		},
+		"assets/resource_asset/04_ui/font/text_basic_j.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -1348671508694740792 },
+			"m_PreloadIndex": 29,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_j.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -7209839283220553329 },
+			"m_PreloadIndex": 29,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_j.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -8320570534947547244 },
+			"m_PreloadIndex": 29,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_k.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 2357009740536476228 },
+			"m_PreloadIndex": 0,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_k.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -6569626172639170343 },
+			"m_PreloadIndex": 0,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_k.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 8449307260889898094 },
+			"m_PreloadIndex": 0,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_latin_num.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -2278816669787847612 },
+			"m_PreloadIndex": 52,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_latin_num.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -7464032801005808954 },
+			"m_PreloadIndex": 52,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_latin_num.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 5446629660809618199 },
+			"m_PreloadIndex": 52,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_sc.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 58650787486064825 },
+			"m_PreloadIndex": 17,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_sc.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -7340059520676811018 },
+			"m_PreloadIndex": 17,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_sc.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -6482594595721906356 },
+			"m_PreloadIndex": 17,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_tc.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -6355228216662445231 },
+			"m_PreloadIndex": 12,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_tc.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 169054670208495893 },
+			"m_PreloadIndex": 12,
+			"m_PreloadSize": 5
+		},
+		"assets/resource_asset/04_ui/font/text_basic_tc.asset": {
+			"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": -7722658232521647520 },
+			"m_PreloadIndex": 12,
+			"m_PreloadSize": 5
+		}
+	},
+	"m_CorrespondingSourceObject": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 0 },
+	"m_Dependencies": [],
+	"m_ExplicitDataLayout": 0,
+	"m_HideFlags": 0,
+	"m_IsStreamedSceneAssetBundle": false,
+	"m_MainAsset": {
+		"m_Asset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 0 },
+		"m_PreloadIndex": 0,
+		"m_PreloadSize": 0
+	},
+	"m_Name": "resource_asset/04_ui/ui_font",
+	"m_PathFlags": 7,
+	"m_PrefabAsset": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 0 },
+	"m_PrefabInstance": { "m_Collection": "cab-b91e93745614cddfc7fc6b7b210b0106", "m_PathID": 0 },
+	"m_PreloadTable": [],
+	"m_RuntimeCompatibility": 1,
+	"m_SceneHashes": {}
+}

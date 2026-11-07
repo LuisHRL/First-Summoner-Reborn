@@ -1,0 +1,21 @@
+{
+	"m_CollabEditorSettings": {
+		"m_InProgressEnabled": true
+	},
+	"m_DefaultBehaviorMode": 0,
+	"m_EnableTextureStreamingInPlayMode": true,
+	"m_EtcTextureBestCompressor": 4,
+	"m_EtcTextureCompressorBehavior": 1,
+	"m_EtcTextureFastCompressor": 1,
+	"m_EtcTextureNormalCompressor": 2,
+	"m_ExternalVersionControlSupport": "Visible Meta Files",
+	"m_HideFlags": 0,
+	"m_LineEndingsForNewScripts": 0,
+	"m_PrefabRegularEnvironment": { "m_Collection": "Generated Settings", "m_PathID": 0 },
+	"m_PrefabUIEnvironment": { "m_Collection": "Generated Settings", "m_PathID": 0 },
+	"m_ProjectGenerationIncludedExtensions": "txt;xml;fnt;cd;asmdef;rsp;asmref",
+	"m_ProjectGenerationRootNamespace": "",
+	"m_SerializationMode": 2,
+	"m_SpritePackerMode": 0,
+	"m_SpritePackerPaddingPower": 1
+}

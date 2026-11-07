@@ -1,0 +1,176 @@
+{
+	"m_AfterMethodExecutionOrders": [],
+	"m_AfterUnityMethodExecutionOrders": [
+		8,
+		9
+	],
+	"m_AssemblyNames": [
+		"Sirenix.Utilities.Editor",
+		"Plugins.UniRx",
+		"Assembly-CSharp-firstpass",
+		"Assembly-CSharp",
+		"Sirenix.Utilities",
+		"Unity.MemoryProfiler",
+		"Sirenix.Serialization",
+		"UnityEngine.CoreModule"
+	],
+	"m_BeforeMethodExecutionOrders": [
+		0,
+		1,
+		3,
+		4,
+		6,
+		7
+	],
+	"m_BeforeUnityMethodExecutionOrders": [
+		2,
+		5
+	],
+	"m_ClassInfos": [
+		{
+			"m_AssemblyNameIndex": 0,
+			"m_ClassName": "AssemblyUtilities",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 0,
+			"m_NamespaceIndex": 0,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 1,
+			"m_ClassName": "PlayerLoopHelper",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 1,
+			"m_NamespaceIndex": 1,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 2,
+			"m_ClassName": "SyncContextUtil",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 2,
+			"m_NamespaceIndex": 2,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 3,
+			"m_ClassName": "GameInitializer",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 3,
+			"m_NamespaceIndex": 3,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 4,
+			"m_ClassName": "UnityVersion",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 4,
+			"m_NamespaceIndex": 0,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 5,
+			"m_ClassName": "MetadataInjector",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 5,
+			"m_NamespaceIndex": 4,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 6,
+			"m_ClassName": "UnityVersion",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 6,
+			"m_NamespaceIndex": 5,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 6,
+			"m_ClassName": "UnitySerializationInitializer",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 7,
+			"m_NamespaceIndex": 6,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 3,
+			"m_ClassName": "UnityAsyncManager",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 8,
+			"m_NamespaceIndex": 7,
+			"m_NumOfMethods": 1
+		},
+		{
+			"m_AssemblyNameIndex": 7,
+			"m_ClassName": "ScriptableRuntimeReflectionSystemSettings",
+			"m_IsUnityClass": false,
+			"m_MethodIndex": 9,
+			"m_NamespaceIndex": 8,
+			"m_NumOfMethods": 1
+		}
+	],
+	"m_ClassMethodInfos": [
+		{
+			"m_ClassIndex": 0,
+			"m_MethodName": "DoNothing",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 1,
+			"m_MethodName": "Init",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 2,
+			"m_MethodName": "Install",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 3,
+			"m_MethodName": "Initialize",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 4,
+			"m_MethodName": "EnsureLoaded",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 5,
+			"m_MethodName": "PlayerInitMetadata",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 6,
+			"m_MethodName": "EnsureLoaded",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 7,
+			"m_MethodName": "InitializeRuntime",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 8,
+			"m_MethodName": "Initialize",
+			"m_OrderNumber": 0
+		},
+		{
+			"m_ClassIndex": 9,
+			"m_MethodName": "ScriptingDirtyReflectionSystemInstance",
+			"m_OrderNumber": 0
+		}
+	],
+	"m_FullClassNames": [],
+	"m_HideFlags": 0,
+	"m_NamespaceNames": [
+		"Sirenix.Utilities",
+		"UniRx.Async",
+		"UnityAsyncAwaitUtil",
+		"SG.Z",
+		"Unity.MemoryProfiler",
+		"Sirenix.Serialization.Utilities",
+		"Sirenix.Serialization",
+		"UnityAsync",
+		"UnityEngine.Experimental.Rendering"
+	]
+}

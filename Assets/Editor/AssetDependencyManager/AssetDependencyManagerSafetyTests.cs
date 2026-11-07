@@ -8,8 +8,7 @@ using UnityEngine;
 
 internal static class AssetDependencyManagerSafetyTests
 {
-    [MenuItem("Tools/Asset Dependency Manager/Run backup and rollback self-test")]
-    private static void Run()
+    internal static void Run()
     {
         string assetRelative = "Assets/__ADM_SafetyTest_" + Guid.NewGuid().ToString("N") + ".txt";
         string assetAbsolute = Path.GetFullPath(assetRelative);

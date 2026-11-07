@@ -146,14 +146,14 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Audit FBX subasset matches and local IDs (TSV)", GUILayout.Height(30))) AuditFbxSubassetMatches();
                 break;
             case 3:
-                EditorGUILayout.HelpBox("Diagnostic functions are being integrated here. No assets are modified by this tab.", MessageType.Info);
+                EditorGUILayout.HelpBox("Integrated read-only dependency diagnostics. No assets are modified by this tab.", MessageType.Info);
                 if (GUILayout.Button("Audit all project dependencies (TSV)")) AuditGlobalDependencies();
                 if (GUILayout.Button("Audit source-folder reachability and external references (TSV)", GUILayout.Height(30))) AuditSourceReachability();
                 if (GUILayout.Button("Audit scene and prefab mesh materials (TSV)", GUILayout.Height(30))) AuditMeshMaterials();
                 if (GUILayout.Button("Audit unresolved serialized GUIDs (TSV)", GUILayout.Height(30))) AuditUnresolvedGuids();
                 break;
             case 4:
-                EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Isolated migration simulations are not yet integrated.", MessageType.Info);
+                EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Temporary scene reserialization is available; isolated FBX removal simulation is not yet integrated.", MessageType.Info);
                 if (GUILayout.Button("Run full read-only diagnostic suite (TSV + Console)", GUILayout.Height(34))) RunDiagnosticSuite();
                 if (GUILayout.Button("Run all read-only preflight tests (TSV)", GUILayout.Height(30))) RunPreflightTests();
                 if (GUILayout.Button("Run isolated scene copy and integrity test (TSV)", GUILayout.Height(30))) TestIsolatedSceneCopies();
@@ -209,15 +209,15 @@ public sealed class AssetDependencyManager : EditorWindow
                 Directory.CreateDirectory(folder);
                 reportPath = Path.Combine(folder, "unity_temporary_resave_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
                 File.WriteAllLines(reportPath, new[] {
-                    "Result\\tScene\\tCheck\\tDetails",
-                    "BLOCKED\\t" + SafeTsv(loaded.path) + "\\tUnsaved scene\\tSave or discard scene changes manually before testing"
+                    "Result\tScene\tCheck\tDetails",
+                    "BLOCKED\t" + SafeTsv(loaded.path) + "\tUnsaved scene\tSave or discard scene changes manually before testing"
                 }, new UTF8Encoding(true));
                 Debug.LogWarning("[AssetDependencyManager] BLOCKED - Dirty scene detected; no original scene was saved. " + reportPath);
                 return;
             }
         }
         var configured = settings.scenes == null ? new string[0] : settings.scenes.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
-        var rows = new List<string> { "Result\\tScene\\tCheck\\tDetails" };
+        var rows = new List<string> { "Result\tScene\tCheck\tDetails" };
         var setup = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
         var tempAssets = new List<string>();
         bool cancelled = false;
@@ -230,7 +230,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 { cancelled = true; break; }
                 if (string.IsNullOrEmpty(scenePath) || AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath) == null)
                 {
-                    rows.Add("BLOCKED\\t" + SafeTsv(scenePath ?? "") + "\\tValidation\\tScene missing");
+                    rows.Add("BLOCKED\t" + SafeTsv(scenePath ?? "") + "\tValidation\tScene missing");
                     continue;
                 }
                 string tempPath = "Assets/__ADM_Resave_" + Guid.NewGuid().ToString("N") + ".unity";
@@ -254,14 +254,14 @@ public sealed class AssetDependencyManager : EditorWindow
                     var added = copyDependencies.Except(originalDependencies, StringComparer.OrdinalIgnoreCase).ToArray();
                     bool unchanged = string.Equals(before, Hash(scenePath), StringComparison.OrdinalIgnoreCase);
                     string status = !unchanged ? "FAIL" : lost.Length > 0 || added.Length > 0 ? "BLOCKED" : "PASS";
-                    rows.Add(status + "\\t" + SafeTsv(scenePath) + "\\tUnity temporary resave\\t" +
+                    rows.Add(status + "\t" + SafeTsv(scenePath) + "\tUnity temporary resave\t" +
                         SafeTsv($"originalUnchanged={unchanged};lostDependencies={lost.Length};addedDependencies={added.Length}"));
-                    foreach (var path in lost) rows.Add("BLOCKED\\t" + SafeTsv(scenePath) + "\\tLost dependency\\t" + SafeTsv(path));
-                    foreach (var path in added) rows.Add("BLOCKED\\t" + SafeTsv(scenePath) + "\\tAdded dependency\\t" + SafeTsv(path));
+                    foreach (var path in lost) rows.Add("BLOCKED\t" + SafeTsv(scenePath) + "\tLost dependency\t" + SafeTsv(path));
+                    foreach (var path in added) rows.Add("BLOCKED\t" + SafeTsv(scenePath) + "\tAdded dependency\t" + SafeTsv(path));
                 }
                 catch (Exception ex)
                 {
-                    rows.Add("FAIL\\t" + SafeTsv(scenePath) + "\\tUnity temporary resave\\t" + SafeTsv(ex.Message));
+                    rows.Add("FAIL\t" + SafeTsv(scenePath) + "\tUnity temporary resave\t" + SafeTsv(ex.Message));
                 }
                 finally
                 {
@@ -270,9 +270,9 @@ public sealed class AssetDependencyManager : EditorWindow
                         try
                         {
                             if (!string.Equals(before, Hash(scenePath), StringComparison.OrdinalIgnoreCase))
-                                rows.Add("FAIL\\t" + SafeTsv(scenePath) + "\\tOriginal integrity\\tOriginal scene hash changed");
+                                rows.Add("FAIL\t" + SafeTsv(scenePath) + "\tOriginal integrity\tOriginal scene hash changed");
                         }
-                        catch (Exception ex) { rows.Add("FAIL\\t" + SafeTsv(scenePath) + "\\tOriginal integrity\\t" + SafeTsv(ex.Message)); }
+                        catch (Exception ex) { rows.Add("FAIL\t" + SafeTsv(scenePath) + "\tOriginal integrity\t" + SafeTsv(ex.Message)); }
                     }
                 }
             }
@@ -281,18 +281,18 @@ public sealed class AssetDependencyManager : EditorWindow
         {
             EditorUtility.ClearProgressBar();
             try { UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup); }
-            catch (Exception ex) { rows.Add("FAIL\\t\\tRestore scene setup\\t" + SafeTsv(ex.Message)); }
+            catch (Exception ex) { rows.Add("FAIL\t\tRestore scene setup\t" + SafeTsv(ex.Message)); }
             foreach (var temp in tempAssets)
             {
                 try
                 {
                     if (!AssetDatabase.DeleteAsset(temp))
-                        rows.Add("FAIL\\t" + SafeTsv(temp) + "\\tTemporary cleanup\\tCould not delete temporary asset");
+                        rows.Add("FAIL\t" + SafeTsv(temp) + "\tTemporary cleanup\tCould not delete temporary asset");
                 }
-                catch (Exception ex) { rows.Add("FAIL\\t" + SafeTsv(temp) + "\\tTemporary cleanup\\t" + SafeTsv(ex.Message)); }
+                catch (Exception ex) { rows.Add("FAIL\t" + SafeTsv(temp) + "\tTemporary cleanup\t" + SafeTsv(ex.Message)); }
             }
         }
-        rows.Add((cancelled || configured.Length == 0 ? "BLOCKED" : "PASS") + "\\t\\tSUMMARY\\t" +
+        rows.Add((cancelled || configured.Length == 0 ? "BLOCKED" : "PASS") + "\t\tSUMMARY\t" +
             SafeTsv($"configuredScenes={configured.Length};cancelled={cancelled};temporaryCopiesCleaned={tempAssets.Count}"));
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);

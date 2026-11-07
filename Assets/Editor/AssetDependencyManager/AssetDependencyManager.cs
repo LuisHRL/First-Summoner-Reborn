@@ -1585,13 +1585,42 @@ public sealed class AssetDependencyManager : EditorWindow
                 Directory.CreateDirectory(Path.GetDirectoryName(dest));
                 File.Copy(FullPath(edit.Key), dest, false);
             }
+            bool editingStarted = false;
             try
             {
                 AssetDatabase.StartAssetEditing();
+                editingStarted = true;
                 foreach (var edit in edits)
                     File.WriteAllText(FullPath(edit.Key), edit.Value, new UTF8Encoding(false));
             }
-            finally { AssetDatabase.StopAssetEditing(); AssetDatabase.Refresh(); }
+            catch (Exception ex)
+            {
+                var rollbackErrors = new List<string>();
+                foreach (var edit in edits)
+                {
+                    try
+                    {
+                        string original = Path.Combine(backup, edit.Key.Replace('/', Path.DirectorySeparatorChar));
+                        File.Copy(original, FullPath(edit.Key), true);
+                    }
+                    catch (Exception restoreError)
+                    {
+                        rollbackErrors.Add(edit.Key + ": " + restoreError.Message);
+                    }
+                }
+                foreach (var row in changes)
+                    if (row[1] == "APPLIED") row[1] = rollbackErrors.Count == 0 ? "ROLLED_BACK" : "ROLLBACK_INCOMPLETE";
+                changes.Add(new[] { "", rollbackErrors.Count == 0 ? "FAIL" : "ROLLBACK_INCOMPLETE",
+                    "0", "Write failed: " + ex.Message + "; rollback errors: " + string.Join("; ", rollbackErrors.ToArray()) });
+                Debug.LogError("[ADM] Migration write failed; backup: " + backup + "; " + ex);
+                if (rollbackErrors.Count > 0)
+                    Debug.LogError("[ADM] Manual restoration required: " + string.Join("; ", rollbackErrors.ToArray()));
+            }
+            finally
+            {
+                if (editingStarted) AssetDatabase.StopAssetEditing();
+                AssetDatabase.Refresh();
+            }
             messages.Insert(0, "Backups: " + backup);
             analyzed = false; // force a fresh dependency graph after modifications
         }
@@ -1600,7 +1629,7 @@ public sealed class AssetDependencyManager : EditorWindow
             writer.WriteLine("Owner\tStatus\tReferenceCount\tDetail");
             foreach (var row in changes) writer.WriteLine(string.Join("\t", row.Select(SafeTsv).ToArray()));
         }
-        messages.Insert(0, (apply ? "Migration applied" : "Dry-run complete") + ": " + edits.Count + " files, " +
+        messages.Insert(0, (apply ? (changes.Any(x => x[1] == "FAIL" || x[1] == "ROLLBACK_INCOMPLETE" || x[1] == "ROLLED_BACK") ? "Migration failed / rollback attempted" : "Migration applied") : "Dry-run complete") + ": " + edits.Count + " files, " +
             changes.Where(x => x[1] == "SKIPPED_BINARY_OR_UNREADABLE").Count() + " skipped binary/unreadable files; " + mapping.Count + " safe GUID mappings. Report: " + report);
         Debug.Log("[ADM] " + messages[0]);
         EditorUtility.RevealInFinder(report);

@@ -169,6 +169,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 {
                     if (GUILayout.Button("Dry-run safe YAML replacements")) MigrateReferences(false);
                     if (GUILayout.Button("Apply safe YAML replacements (with backups)")) MigrateReferences(true);
+                    if (GUILayout.Button("Preview Unity serialized object reference migration (TSV)")) PreviewSerializedMigration();
                 }
                 break;
             case 6:
@@ -1763,24 +1764,84 @@ public sealed class AssetDependencyManager : EditorWindow
     // Only GUID-only mappings with matching imported local file IDs are eligible.
     // YAML is edited only in selected scenes and in target-folder dependencies of those scenes.
     // Binary serialized files are explicitly skipped; never edit binary bytes as text.
-    private void MigrateReferences(bool apply)
+    // Preview-only first transfer step. Uses Unity's actual object references, including
+    // binary serialized assets, and the same strict GUID mapping as YAML migration.
+    private void PreviewSerializedMigration()
     {
         if (!analyzed || !Validate()) return;
-        if (apply)
+        var mapping = BuildSafeGuidMapping();
+        var rows = new List<string> { "Status\tOwner\tObject\tProperty\tSource\tDestination" };
+        var owners = dependencies.Where(p => Inside(p, settings.targetFolder))
+            .Concat(settings.scenes ?? new List<string>())
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p).ToArray();
+        foreach (string owner in owners)
         {
-            // Writing scene YAML while Unity holds unsaved scene edits can silently overwrite user work.
-            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+            if (!InspectableExtensions.Contains(Path.GetExtension(owner))) continue;
+            if (owner.EndsWith(".unity", StringComparison.OrdinalIgnoreCase))
             {
-                var loadedScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
-                if (!loadedScene.isDirty) continue;
-                string warning = "Migration blocked: unsaved scene " + loadedScene.path +
-                    ". Save or discard scene edits manually, then rerun analysis.";
-                messages.Insert(0, warning);
-                Debug.LogWarning("[ADM] " + warning);
-                return;
+                rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t\t\t\tScene requires isolated loading; no scene modified");
+                continue;
+            }
+            try
+            {
+                if (owner.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+                {
+                    GameObject root = null;
+                    try
+                    {
+                        root = PrefabUtility.LoadPrefabContents(owner);
+                        foreach (Transform transform in root.GetComponentsInChildren<Transform>(true))
+                        {
+                            PreviewSerializedObject(transform.gameObject, owner, mapping, rows);
+                            foreach (Component component in transform.GetComponents<Component>())
+                                if (component != null) PreviewSerializedObject(component, owner, mapping, rows);
+                        }
+                    }
+                    finally { if (root != null) PrefabUtility.UnloadPrefabContents(root); }
+                }
+                else
+                    foreach (UnityEngine.Object obj in AssetDatabase.LoadAllAssetsAtPath(owner))
+                        if (obj != null && !(obj is AssetImporter))
+                            PreviewSerializedObject(obj, owner, mapping, rows);
+            }
+            catch (Exception ex)
+            {
+                rows.Add("BLOCKED\t" + SafeTsv(owner) + "\t\t\t\t" + SafeTsv(ex.Message));
             }
         }
+        string dir = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(dir);
+        reportPath = Path.Combine(dir, "serialized_migration_preview_" +
+            DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(reportPath, rows, new UTF8Encoding(false));
+        Debug.Log("[ADM] Read-only serialized migration preview: " + reportPath);
+        EditorUtility.RevealInFinder(reportPath);
+    }
 
+    private static void PreviewSerializedObject(UnityEngine.Object obj, string owner,
+        Dictionary<string, string> mapping, List<string> rows)
+    {
+        var serialized = new SerializedObject(obj);
+        var property = serialized.GetIterator();
+        if (!property.Next(true)) return;
+        do
+        {
+            if (property.propertyType != SerializedPropertyType.ObjectReference) continue;
+            var referenced = property.objectReferenceValue;
+            if (referenced == null) continue;
+            string sourcePath = AssetDatabase.GetAssetPath(referenced);
+            if (string.IsNullOrEmpty(sourcePath)) continue;
+            string destinationGuid;
+            if (!mapping.TryGetValue(AssetDatabase.AssetPathToGUID(sourcePath), out destinationGuid)) continue;
+            string destinationPath = AssetDatabase.GUIDToAssetPath(destinationGuid);
+            rows.Add(string.Join("\t", new[] { "CANDIDATE_REQUIRES_SUBASSET_CHECK", SafeTsv(owner),
+                SafeTsv(obj.name), SafeTsv(property.propertyPath), SafeTsv(sourcePath), SafeTsv(destinationPath) }));
+        } while (property.Next(true));
+    }
+
+    // Shared strict mapping for YAML and SerializedObject previews; no duplicate matching rules.
+    private Dictionary<string, string> BuildSafeGuidMapping()
+    {
         var sourceToTarget = inventory.Where(e => !string.IsNullOrEmpty(e.match))
             .GroupBy(e => e.match, StringComparer.OrdinalIgnoreCase)
             .Where(g => g.Count() == 1)
@@ -1803,6 +1864,28 @@ public sealed class AssetDependencyManager : EditorWindow
             if (oldGuid.Length == 32 && newGuid.Length == 32 && !oldGuid.Equals(newGuid, StringComparison.OrdinalIgnoreCase))
                 mapping[oldGuid] = newGuid;
         }
+        return mapping;
+    }
+
+    private void MigrateReferences(bool apply)
+    {
+        if (!analyzed || !Validate()) return;
+        if (apply)
+        {
+            // Writing scene YAML while Unity holds unsaved scene edits can silently overwrite user work.
+            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+            {
+                var loadedScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+                if (!loadedScene.isDirty) continue;
+                string warning = "Migration blocked: unsaved scene " + loadedScene.path +
+                    ". Save or discard scene edits manually, then rerun analysis.";
+                messages.Insert(0, warning);
+                Debug.LogWarning("[ADM] " + warning);
+                return;
+            }
+        }
+
+        var mapping = BuildSafeGuidMapping();
         // Do not rewrite serialized references when Unity is not using text serialization.
         // Binary files are individually skipped by TryReadText below.
         var owners = dependencies.Where(p => Inside(p, settings.targetFolder))

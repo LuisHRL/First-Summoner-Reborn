@@ -2262,8 +2262,15 @@ public sealed class AssetDependencyManager : EditorWindow
             reason = "Source local identifier unavailable";
             return false;
         }
-        var candidates = AssetDatabase.LoadAllAssetsAtPath(destinationPath)
-            .Where(o => o != null && o.GetType() == original.GetType() && o.name == original.name).ToArray();
+        // Include the main asset explicitly: LoadAllAssetsAtPath can omit it for some
+        // importer/script asset types. Deduplicate by Unity instance identity.
+        var allCandidates = new List<UnityEngine.Object>();
+        var mainAsset = AssetDatabase.LoadMainAssetAtPath(destinationPath);
+        if (mainAsset != null) allCandidates.Add(mainAsset);
+        allCandidates.AddRange(AssetDatabase.LoadAllAssetsAtPath(destinationPath)
+            .Where(o => o != null && !allCandidates.Any(existing => existing == o)));
+        var candidates = allCandidates
+            .Where(o => o.GetType() == original.GetType() && o.name == original.name).ToArray();
         if (candidates.Length != 1)
         {
             reason = "Missing or ambiguous destination subasset: " + candidates.Length;

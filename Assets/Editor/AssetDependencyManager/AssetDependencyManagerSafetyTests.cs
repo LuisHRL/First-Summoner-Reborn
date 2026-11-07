@@ -12,11 +12,16 @@ internal static class AssetDependencyManagerSafetyTests
     internal static void RunReferenceMatching()
     {
         string token = Guid.NewGuid().ToString("N");
-        string sourcePath = "Assets/__ADM_Source_" + token + ".asset";
-        string destinationPath = "Assets/__ADM_Destination_" + token + ".asset";
-        string mismatchPath = "Assets/__ADM_Mismatch_" + token + ".asset";
+        string fixtureRoot = "Assets/__ADM_ReferenceTest_" + token;
+        string sourcePath = fixtureRoot + "/Source/ReferenceFixture.asset";
+        string destinationPath = fixtureRoot + "/Destination/ReferenceFixture.asset";
+        string mismatchPath = fixtureRoot + "/Mismatch/DifferentName.asset";
         try
         {
+            AssetDatabase.CreateFolder("Assets", "__ADM_ReferenceTest_" + token);
+            AssetDatabase.CreateFolder(fixtureRoot, "Source");
+            AssetDatabase.CreateFolder(fixtureRoot, "Destination");
+            AssetDatabase.CreateFolder(fixtureRoot, "Mismatch");
             var source = ScriptableObject.CreateInstance<ADMReferenceFixture>();
             source.name = "ReferenceFixture";
             AssetDatabase.CreateAsset(source, sourcePath);
@@ -35,15 +40,6 @@ internal static class AssetDependencyManagerSafetyTests
             mismatch = AssetDatabase.LoadAssetAtPath<ADMReferenceFixture>(mismatchPath);
             if (source == null || destination == null || mismatch == null)
                 throw new InvalidOperationException("Temporary fixture assets could not be imported.");
-            // Unity may rename main assets on import to match their filenames.
-            source.name = "ReferenceFixture";
-            destination.name = "ReferenceFixture";
-            mismatch.name = "DifferentName";
-            EditorUtility.SetDirty(source);
-            EditorUtility.SetDirty(destination);
-            EditorUtility.SetDirty(mismatch);
-            AssetDatabase.SaveAssets();
-
             MethodInfo resolver = typeof(AssetDependencyManager).GetMethod(
                 "TryResolveSerializedDestination", BindingFlags.Static | BindingFlags.NonPublic);
             if (resolver == null) throw new InvalidOperationException("Reference resolver not found.");
@@ -75,9 +71,7 @@ internal static class AssetDependencyManagerSafetyTests
         }
         finally
         {
-            AssetDatabase.DeleteAsset(sourcePath);
-            AssetDatabase.DeleteAsset(destinationPath);
-            AssetDatabase.DeleteAsset(mismatchPath);
+            AssetDatabase.DeleteAsset(fixtureRoot);
         }
     }
 

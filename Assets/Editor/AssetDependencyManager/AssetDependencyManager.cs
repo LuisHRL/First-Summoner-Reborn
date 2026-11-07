@@ -150,6 +150,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Audit all project dependencies (TSV)")) AuditGlobalDependencies();
                 if (GUILayout.Button("Audit source-folder reachability and external references (TSV)", GUILayout.Height(30))) AuditSourceReachability();
                 if (GUILayout.Button("Audit scene and prefab mesh materials (TSV)", GUILayout.Height(30))) AuditMeshMaterials();
+                if (GUILayout.Button("Audit unresolved serialized GUIDs (TSV)", GUILayout.Height(30))) AuditUnresolvedGuids();
                 break;
             case 4:
                 EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Isolated migration simulations are not yet integrated.", MessageType.Info);
@@ -189,6 +190,57 @@ public sealed class AssetDependencyManager : EditorWindow
     // This is a prerequisite integrity test, not a Unity import/reserialization simulation.
     // Orchestrates existing checks without applying any migration or deleting project assets.
     // Each stage has an independent result, so one failure does not hide later failures.
+    private void AuditUnresolvedGuids()
+    {
+        var known = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var path in AssetDatabase.GetAllAssetPaths())
+        {
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            if (!string.IsNullOrEmpty(guid)) known.Add(guid);
+        }
+        var owners = AssetDatabase.GetAllAssetPaths()
+            .Where(p => p.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase) &&
+                InspectableExtensions.Contains(Path.GetExtension(p)))
+            .OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToArray();
+        var rows = new List<string> { "Result\\tAssetPath\\tGUID\\tDetails" };
+        int unresolved = 0, unreadable = 0, scanned = 0;
+        bool cancelled = false;
+        try
+        {
+            for (int i = 0; i < owners.Length; i++)
+            {
+                string owner = owners[i];
+                if (EditorUtility.DisplayCancelableProgressBar("Serialized GUID audit", owner, (float)i / Math.Max(1, owners.Length)))
+                { cancelled = true; break; }
+                string content;
+                if (!TryReadText(owner, out content))
+                {
+                    unreadable++;
+                    rows.Add("BLOCKED\\t" + SafeTsv(owner) + "\\t\\tCould not read as text (binary, too large, or inaccessible)");
+                    continue;
+                }
+                scanned++;
+                foreach (Match match in GuidReference.Matches(content))
+                {
+                    string guid = match.Groups[1].Value;
+                    if (guid == "00000000000000000000000000000000" || known.Contains(guid)) continue;
+                    unresolved++;
+                    rows.Add("BLOCKED\\t" + SafeTsv(owner) + "\\t" + guid +
+                        "\\tUnresolved serialized GUID; inspect before migration (may be built-in or external)");
+                }
+            }
+        }
+        finally { EditorUtility.ClearProgressBar(); }
+        rows.Add((cancelled || unreadable > 0 || unresolved > 0 ? "BLOCKED" : "PASS") +
+            "\\t\\t\\t" + SafeTsv($"scanned={scanned};unreadable={unreadable};unresolved={unresolved};cancelled={cancelled}"));
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        string output = Path.Combine(folder, "serialized_guid_audit_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Serialized GUID audit: " + output);
+    }
+
     private void RunDiagnosticSuite()
     {
         var rows = new List<string> { "Result\\tStage\\tReport\\tDetails" };
@@ -263,6 +315,7 @@ public sealed class AssetDependencyManager : EditorWindow
         stage("Source reachability", AuditSourceReachability, validSource);
         stage("FBX subasset mapping", AuditFbxSubassetMatches, separated);
         stage("Scene/prefab mesh materials", AuditMeshMaterials, !EditorApplication.isPlayingOrWillChangePlaymode);
+        stage("Serialized GUID integrity", AuditUnresolvedGuids, true);
         rows.Add("SUMMARY\\t\\t\\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportStatusesInspected=true;unityWorkerNotExecuted=true"));
         string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
         Directory.CreateDirectory(folder);

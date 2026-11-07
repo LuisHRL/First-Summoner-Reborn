@@ -153,6 +153,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 break;
             case 4:
                 EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Isolated migration simulations are not yet integrated.", MessageType.Info);
+                if (GUILayout.Button("Run full read-only diagnostic suite (TSV + Console)", GUILayout.Height(34))) RunDiagnosticSuite();
                 if (GUILayout.Button("Run all read-only preflight tests (TSV)", GUILayout.Height(30))) RunPreflightTests();
                 if (GUILayout.Button("Run isolated scene copy and integrity test (TSV)", GUILayout.Height(30))) TestIsolatedSceneCopies();
                 break;
@@ -186,6 +187,72 @@ public sealed class AssetDependencyManager : EditorWindow
     // Compare imported FBX subassets without changing prefab instances or serialized references.
     // Tests scene-file copying in a temporary OS folder, without loading or saving project scenes.
     // This is a prerequisite integrity test, not a Unity import/reserialization simulation.
+    // Orchestrates existing checks without applying any migration or deleting project assets.
+    // Each stage has an independent result, so one failure does not hide later failures.
+    private void RunDiagnosticSuite()
+    {
+        var rows = new List<string> { "Result\\tStage\\tReport\\tDetails" };
+        int passed = 0, failed = 0, blocked = 0;
+        Action<string, Action, bool> stage = (name, action, enabled) =>
+        {
+            if (!enabled)
+            {
+                blocked++;
+                rows.Add("BLOCKED\\t" + SafeTsv(name) + "\\t\\tPrerequisites unavailable");
+                Debug.LogWarning("[AssetDependencyManager] BLOCKED - " + name + " (prerequisites unavailable)");
+                return;
+            }
+            try
+            {
+                reportPath = "";
+                action();
+                if (string.IsNullOrEmpty(reportPath) || !File.Exists(reportPath))
+                {
+                    failed++;
+                    rows.Add("FAIL\\t" + SafeTsv(name) + "\\t\\tNo report was produced");
+                    Debug.LogError("[AssetDependencyManager] FAIL - " + name + " (no report)");
+                }
+                else
+                {
+                    passed++;
+                    rows.Add("PASS\\t" + SafeTsv(name) + "\\t" + SafeTsv(reportPath) +
+                        "\\tCompleted; inspect report for findings, BLOCKED and FAIL rows");
+                    Debug.Log("[AssetDependencyManager] PASS - " + name + " (report generated: " + reportPath + ")");
+                }
+            }
+            catch (Exception ex)
+            {
+                failed++;
+                rows.Add("FAIL\\t" + SafeTsv(name) + "\\t\\t" + SafeTsv(ex.ToString()));
+                Debug.LogError("[AssetDependencyManager] FAIL - " + name + ": " + ex);
+            }
+        };
+        bool validSource = AssetDatabase.IsValidFolder(Normalize(settings.sourceFolder)) &&
+            Normalize(settings.sourceFolder) != "Assets";
+        bool validTarget = AssetDatabase.IsValidFolder(Normalize(settings.targetFolder)) &&
+            Normalize(settings.targetFolder) != "Assets";
+        bool separated = validSource && validTarget &&
+            !Inside(Normalize(settings.sourceFolder), Normalize(settings.targetFolder)) &&
+            !Inside(Normalize(settings.targetFolder), Normalize(settings.sourceFolder));
+        Debug.Log("[AssetDependencyManager] Starting read-only diagnostic suite. No migration apply will be invoked.");
+        stage("Preflight", RunPreflightTests, true);
+        stage("Isolated scene copy integrity", TestIsolatedSceneCopies, true);
+        stage("Global dependencies", AuditGlobalDependencies, validSource);
+        stage("Source reachability", AuditSourceReachability, validSource);
+        stage("FBX subasset mapping", AuditFbxSubassetMatches, separated);
+        stage("Scene/prefab mesh materials", AuditMeshMaterials, !EditorApplication.isPlayingOrWillChangePlaymode);
+        rows.Add("SUMMARY\\t\\t\\t" + SafeTsv($"completed={passed};executionFailures={failed};blockedStages={blocked};reportFindingsNotAggregated=true;unityWorkerNotExecuted=true"));
+        string folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        string output = Path.Combine(folder, "diagnostic_suite_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        string summary = $"[AssetDependencyManager] Suite finished: {passed} reports generated, {failed} execution failures, {blocked} blocked stages. Report findings must be reviewed separately. {output}";
+        if (failed > 0) Debug.LogError(summary);
+        else if (blocked > 0) Debug.LogWarning(summary);
+        else Debug.Log(summary);
+    }
+
     private void TestIsolatedSceneCopies()
     {
         var rows = new List<string> { "Result\\tScene\\tCheck\\tDetails" };

@@ -152,7 +152,8 @@ public sealed class AssetDependencyManager : EditorWindow
                 if (GUILayout.Button("Audit scene and prefab mesh materials (TSV)", GUILayout.Height(30))) AuditMeshMaterials();
                 break;
             case 4:
-                EditorGUILayout.HelpBox("Automated isolated tests will be integrated before the legacy test tools are removed. No destructive test is available here yet.", MessageType.Warning);
+                EditorGUILayout.HelpBox("Read-only automated preflight. PASS means this check passed, not that migration is proven safe. Isolated migration simulations are not yet integrated.", MessageType.Info);
+                if (GUILayout.Button("Run all read-only preflight tests (TSV)", GUILayout.Height(30))) RunPreflightTests();
                 break;
             case 5:
                 EditorGUILayout.HelpBox("Migration can modify serialized references. Run Analyze and review the dry-run before Apply.", MessageType.Warning);
@@ -182,6 +183,80 @@ public sealed class AssetDependencyManager : EditorWindow
     // Conservative, read-only audit of any selected source folder; no HDRP/Demo paths baked in.
     // Read-only mesh/material audit across selected scenes and all project prefabs.
     // Compare imported FBX subassets without changing prefab instances or serialized references.
+    private void RunPreflightTests()
+    {
+        var rows = new List<string> { "Result\\tCheck\\tAsset\\tDetails" };
+        int pass = 0, fail = 0, blocked = 0;
+        Action<string, string, string, string> record = (result, check, asset, detail) =>
+        {
+            rows.Add(string.Join("\\t", new[] { result, SafeTsv(check), SafeTsv(asset), SafeTsv(detail) }));
+            if (result == "PASS") pass++;
+            else if (result == "FAIL") fail++;
+            else blocked++;
+        };
+        string source = Normalize(settings.sourceFolder);
+        string target = Normalize(settings.targetFolder);
+        bool validSource = !string.IsNullOrEmpty(source) && source != "Assets" && AssetDatabase.IsValidFolder(source);
+        bool validTarget = !string.IsNullOrEmpty(target) && target != "Assets" && AssetDatabase.IsValidFolder(target);
+        record(validSource ? "PASS" : "BLOCKED", "Source folder", source, "Must be a specific existing folder");
+        record(validTarget ? "PASS" : "BLOCKED", "Target folder", target, "Must be a specific existing folder");
+        bool separated = validSource && validTarget && !Inside(source, target) && !Inside(target, source);
+        record(separated ? "PASS" : "BLOCKED", "Folder separation", source + " -> " + target, "Overlapping folders are forbidden");
+        var scenes = settings.scenes == null ? new string[0] : settings.scenes.ToArray();
+        if (scenes.Length == 0) record("BLOCKED", "Configured scenes", "", "No scenes configured");
+        foreach (var scene in scenes)
+            record(!string.IsNullOrEmpty(scene) && AssetDatabase.LoadAssetAtPath<SceneAsset>(scene) != null ? "PASS" : "FAIL",
+                "Scene exists", scene, "AssetDatabase scene lookup");
+        if (!separated)
+            record("BLOCKED", "Source dependency and GUID integrity", "", "Requires valid separate folders");
+        else
+        {
+            var sourceAssets = AssetsIn(source).Where(x => !AssetDatabase.IsValidFolder(x)).ToArray();
+            var targetAssets = AssetsIn(target).Where(x => !AssetDatabase.IsValidFolder(x)).ToArray();
+            var targetSet = new HashSet<string>(targetAssets, StringComparer.OrdinalIgnoreCase);
+            var seenGuids = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var path in sourceAssets.Concat(targetAssets).Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                string guid = AssetDatabase.AssetPathToGUID(path);
+                if (string.IsNullOrEmpty(guid))
+                    record("FAIL", "Asset GUID", path, "AssetDatabase returned an empty GUID");
+                else if (seenGuids.TryGetValue(guid, out var other) && !string.Equals(path, other, StringComparison.OrdinalIgnoreCase))
+                    record("FAIL", "Duplicate GUID", path, "Also used by " + other);
+                else seenGuids[guid] = path;
+            }
+            foreach (var path in sourceAssets)
+            {
+                try
+                {
+                    foreach (var dependency in AssetDatabase.GetDependencies(path, false))
+                        if (string.IsNullOrEmpty(AssetDatabase.AssetPathToGUID(dependency)) &&
+                            dependency.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase))
+                            record("FAIL", "Unresolved dependency GUID", path, dependency);
+                }
+                catch (Exception ex) { record("FAIL", "Dependency read", path, ex.Message); }
+                string candidate = target + "/" + path.Substring(source.Length + 1);
+                if (!targetSet.Contains(candidate)) continue;
+                try
+                {
+                    bool identical = new FileInfo(FullPath(path)).Length == new FileInfo(FullPath(candidate)).Length &&
+                        Hash(path) == Hash(candidate);
+                    record(identical ? "PASS" : "BLOCKED", "Same-relative-path bytes", path,
+                        identical ? "Identical file bytes; serialized subasset IDs still need checking" : "Different bytes: no automatic relink");
+                }
+                catch (Exception ex) { record("FAIL", "File comparison", path, ex.Message); }
+            }
+            record("PASS", "Read-only execution", "", "No asset writes, imports, scene opens, or migration apply performed");
+        }
+        rows.Add(string.Join("\\t", new[] { fail > 0 ? "FAIL" : blocked > 0 ? "BLOCKED" : "PASS",
+            "SUMMARY", "", $"pass={pass};fail={fail};blocked={blocked};migrationSafetyNotProven=true" }));
+        var folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        var output = Path.Combine(folder, "preflight_tests_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Read-only preflight report: " + output);
+    }
+
     private void AuditFbxSubassetMatches()
     {
         string source = Normalize(settings.sourceFolder), target = Normalize(settings.targetFolder);

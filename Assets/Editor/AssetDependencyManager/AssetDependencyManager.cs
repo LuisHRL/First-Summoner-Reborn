@@ -1887,40 +1887,56 @@ public sealed class AssetDependencyManager : EditorWindow
         string stamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
         string backup = Path.Combine(folder, "serialized_backup_" + stamp);
         var report = new List<string> { "Status\tOwner\tDetail" };
+        var touched = new List<string>();
+        bool allBackupsReady = false;
+        bool completed = false;
         try
         {
-            // Fail before touching Unity objects if any backup cannot be created.
+            // Stage every backup before the first edit. Never continue after a failed backup.
             foreach (string owner in candidates)
             {
                 string destination = Path.Combine(backup, owner.Replace('/', Path.DirectorySeparatorChar));
                 Directory.CreateDirectory(Path.GetDirectoryName(destination));
                 File.Copy(FullPath(owner), destination, false);
             }
+            allBackupsReady = true;
             foreach (string owner in candidates)
             {
-                try
-                {
-                    int changed = VisitSerializedOwner(owner, mapping, true, blocked);
-                    report.Add("APPLIED\t" + SafeTsv(owner) + "\t" + changed);
-                }
-                catch (Exception ex)
-                {
-                    // Restore the failed owner's bytes; earlier successfully applied owners
-                    // remain backed up for explicit manual rollback.
-                    File.Copy(Path.Combine(backup, owner.Replace('/', Path.DirectorySeparatorChar)),
-                        FullPath(owner), true);
-                    report.Add("RESTORED_AFTER_ERROR\t" + SafeTsv(owner) + "\t" + SafeTsv(ex.Message));
-                }
+                // Track before editing so a partial write is also rolled back.
+                touched.Add(owner);
+                int changed = VisitSerializedOwner(owner, mapping, true, blocked);
+                report.Add("APPLIED\t" + SafeTsv(owner) + "\t" + changed);
             }
+            completed = true;
         }
         catch (Exception ex)
         {
-            report.Add("BACKUP_OR_WRITE_ERROR\t\t" + SafeTsv(ex.Message));
-            Debug.LogError("[ADM] Serialized migration error: " + ex);
+            report.Add("FAILED\t\t" + SafeTsv(ex.Message));
+            Debug.LogError("[ADM] Serialized migration failed; attempting transaction rollback: " + ex);
         }
         finally
         {
-            AssetDatabase.Refresh();
+            if (!completed && allBackupsReady)
+            {
+                // Restore every touched owner, including owners saved successfully earlier.
+                // Refresh afterwards to invalidate Unity's cached imported objects.
+                foreach (string owner in touched)
+                {
+                    try
+                    {
+                        string original = Path.Combine(backup, owner.Replace('/', Path.DirectorySeparatorChar));
+                        File.Copy(original, FullPath(owner), true);
+                        report.Add("ROLLED_BACK\t" + SafeTsv(owner) + "\tRestored from backup");
+                    }
+                    catch (Exception restoreError)
+                    {
+                        report.Add("ROLLBACK_INCOMPLETE\t" + SafeTsv(owner) + "\t" +
+                            SafeTsv(restoreError.Message));
+                        Debug.LogError("[ADM] Manual restoration required for " + owner + ": " + restoreError);
+                    }
+                }
+            }
+            AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
             analyzed = false;
         }
         foreach (string item in blocked) report.Add("BLOCKED\t\t" + SafeTsv(item));

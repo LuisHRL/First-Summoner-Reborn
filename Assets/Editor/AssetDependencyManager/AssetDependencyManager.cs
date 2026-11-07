@@ -148,6 +148,7 @@ public sealed class AssetDependencyManager : EditorWindow
                 EditorGUILayout.HelpBox("Diagnostic functions are being integrated here. No assets are modified by this tab.", MessageType.Info);
                 if (GUILayout.Button("Audit all project dependencies (TSV)")) AuditGlobalDependencies();
                 if (GUILayout.Button("Audit source-folder reachability and external references (TSV)", GUILayout.Height(30))) AuditSourceReachability();
+                if (GUILayout.Button("Audit scene and prefab mesh materials (TSV)", GUILayout.Height(30))) AuditMeshMaterials();
                 break;
             case 4:
                 EditorGUILayout.HelpBox("Automated isolated tests will be integrated before the legacy test tools are removed. No destructive test is available here yet.", MessageType.Warning);
@@ -178,6 +179,120 @@ public sealed class AssetDependencyManager : EditorWindow
     }
 
     // Conservative, read-only audit of any selected source folder; no HDRP/Demo paths baked in.
+    // Read-only mesh/material audit across selected scenes and all project prefabs.
+    private void AuditMeshMaterials()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            Debug.LogWarning("[AssetDependencyManager] Exit Play mode before auditing meshes.");
+            return;
+        }
+        if (!UnityEditor.SceneManagement.EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        var rows = new List<string> { "Status\\tAssetPath\\tObjectPath\\tMesh\\tMaterialSlots\\tSubmeshes\\tDetail" };
+        var paths = AssetDatabase.FindAssets("t:Scene t:Prefab", new[] { "Assets" })
+            .Select(AssetDatabase.GUIDToAssetPath)
+            .Where(p => p.EndsWith(".unity", StringComparison.OrdinalIgnoreCase) || p.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+            .Distinct(StringComparer.OrdinalIgnoreCase).OrderBy(p => p, StringComparer.OrdinalIgnoreCase).ToArray();
+        var setup = UnityEditor.SceneManagement.EditorSceneManager.GetSceneManagerSetup();
+        int inspected = 0, issues = 0, failures = 0;
+        bool cancelled = false;
+        try
+        {
+            for (int i = 0; i < paths.Length; i++)
+            {
+                var path = paths[i];
+                if (EditorUtility.DisplayCancelableProgressBar("Mesh/material audit", path, (float)i / Math.Max(1, paths.Length)))
+                { cancelled = true; break; }
+                if (path.EndsWith(".prefab", StringComparison.OrdinalIgnoreCase))
+                {
+                    GameObject root = null;
+                    try
+                    {
+                        root = PrefabUtility.LoadPrefabContents(path);
+                        InspectMeshRenderers(new[] { root }, path, rows, ref inspected, ref issues);
+                    }
+                    catch (Exception ex)
+                    {
+                        failures++;
+                        rows.Add(string.Join("\\t", new[] { "ERROR", SafeTsv(path), "", "", "", "", SafeTsv(ex.Message) }));
+                    }
+                    finally { if (root != null) PrefabUtility.UnloadPrefabContents(root); }
+                }
+                else
+                {
+                    UnityEngine.SceneManagement.Scene scene = default(UnityEngine.SceneManagement.Scene);
+                    try
+                    {
+                        scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(path, UnityEditor.SceneManagement.OpenSceneMode.Additive);
+                        InspectMeshRenderers(scene.GetRootGameObjects(), path, rows, ref inspected, ref issues);
+                    }
+                    catch (Exception ex)
+                    {
+                        failures++;
+                        rows.Add(string.Join("\\t", new[] { "ERROR", SafeTsv(path), "", "", "", "", SafeTsv(ex.Message) }));
+                    }
+                    finally
+                    {
+                        if (scene.IsValid() && scene.isLoaded)
+                            UnityEditor.SceneManagement.EditorSceneManager.CloseScene(scene, true);
+                    }
+                }
+            }
+        }
+        finally
+        {
+            EditorUtility.ClearProgressBar();
+            UnityEditor.SceneManagement.EditorSceneManager.RestoreSceneManagerSetup(setup);
+        }
+        rows.Add(string.Join("\\t", new[] { cancelled || failures > 0 ? "INCOMPLETE" : "SUMMARY", "", "", "", "", "",
+            $"inspected={inspected};issues={issues};failures={failures};cancelled={cancelled}" }));
+        var folder = Path.Combine(Directory.GetCurrentDirectory(), "AssetDependencyManagerReports");
+        Directory.CreateDirectory(folder);
+        var output = Path.Combine(folder, "mesh_material_audit_" + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".tsv");
+        File.WriteAllLines(output, rows, new UTF8Encoding(true));
+        reportPath = output;
+        Debug.Log("[AssetDependencyManager] Mesh/material audit: " + output);
+    }
+
+    private static void InspectMeshRenderers(IEnumerable<GameObject> roots, string assetPath, List<string> rows, ref int inspected, ref int issues)
+    {
+        foreach (var root in roots)
+        {
+            if (root == null) continue;
+            foreach (var renderer in root.GetComponentsInChildren<Renderer>(true))
+            {
+                Mesh mesh = null;
+                var skinned = renderer as SkinnedMeshRenderer;
+                if (skinned != null) mesh = skinned.sharedMesh;
+                else
+                {
+                    var meshRenderer = renderer as MeshRenderer;
+                    if (meshRenderer == null) continue;
+                    var filter = renderer.GetComponent<MeshFilter>();
+                    if (filter != null) mesh = filter.sharedMesh;
+                }
+                inspected++;
+                var hierarchy = new Stack<string>();
+                for (var t = renderer.transform; t != null; t = t.parent) hierarchy.Push(t.name);
+                string objectPath = SafeTsv(string.Join("/", hierarchy.ToArray()));
+                if (mesh == null)
+                {
+                    issues++;
+                    rows.Add(string.Join("\\t", new[] { "MISSING_MESH", SafeTsv(assetPath), objectPath, "", renderer.sharedMaterials.Length.ToString(), "0", "Renderer has no mesh" }));
+                    continue;
+                }
+                int slots = renderer.sharedMaterials.Length;
+                int submeshes = mesh.subMeshCount;
+                string status = slots > submeshes ? "EXTRA_MATERIAL_SLOTS" : slots < submeshes ? "FEWER_MATERIAL_SLOTS" :
+                    renderer.sharedMaterials.Any(m => m == null) ? "NULL_MATERIAL_SLOT" : "";
+                if (status.Length == 0) continue;
+                issues++;
+                rows.Add(string.Join("\\t", new[] { status, SafeTsv(assetPath), objectPath, SafeTsv(mesh.name),
+                    slots.ToString(), submeshes.ToString(), "Inspect material assignment" }));
+            }
+        }
+    }
+
     private void AuditSourceReachability()
     {
         string source = Normalize(settings.sourceFolder);

@@ -20,12 +20,21 @@ public sealed class ForestDayNightLighting : MonoBehaviour
     [Header("Day")]
     [Min(0f)] [SerializeField] private float dayDirectionalIntensity = 1f;
     [SerializeField] private Color dayDirectionalColor = Color.white;
-    [SerializeField] private Color dayAmbientColor = new Color(0.65f, 0.67f, 0.7f);
+    [Header("Day ambient gradient")]
+    [SerializeField] private Color daySkyColor = new Color(0.65f, 0.7f, 0.8f);
+    [SerializeField] private Color dayEquatorColor = new Color(0.55f, 0.6f, 0.65f);
+    [SerializeField] private Color dayGroundColor = new Color(0.38f, 0.4f, 0.42f);
 
     [Header("Night")]
     [Min(0f)] [SerializeField] private float nightDirectionalIntensity = 0.18f;
     [SerializeField] private Color nightDirectionalColor = new Color(0.67f, 0.76f, 1f);
-    [SerializeField] private Color nightAmbientColor = new Color(0.12f, 0.16f, 0.22f);
+    [Header("Night ambient gradient")]
+    [Tooltip("Ambient light arriving from above.")]
+    [SerializeField] private Color nightSkyColor = new Color(0.25f, 0.31f, 0.43f);
+    [Tooltip("Ambient light arriving from the horizon.")]
+    [SerializeField] private Color nightEquatorColor = new Color(0.17f, 0.21f, 0.29f);
+    [Tooltip("Ambient light from below. Raise this gently if the ground is too dark.")]
+    [SerializeField] private Color nightGroundColor = new Color(0.12f, 0.15f, 0.2f);
 
     [Header("Runtime controls")]
     [SerializeField] private bool applyOnEnable = true;
@@ -33,6 +42,9 @@ public sealed class ForestDayNightLighting : MonoBehaviour
     private bool saved;
     private AmbientMode previousAmbientMode;
     private Color previousAmbientColor;
+    private Color previousSkyColor;
+    private Color previousEquatorColor;
+    private Color previousGroundColor;
     private float previousIntensity;
     private Color previousLightColor;
     private bool previousLightEnabled;
@@ -49,6 +61,9 @@ public sealed class ForestDayNightLighting : MonoBehaviour
         if (!Application.isPlaying || !saved) return;
         RenderSettings.ambientMode = previousAmbientMode;
         RenderSettings.ambientLight = previousAmbientColor;
+        RenderSettings.ambientSkyColor = previousSkyColor;
+        RenderSettings.ambientEquatorColor = previousEquatorColor;
+        RenderSettings.ambientGroundColor = previousGroundColor;
         if (directionalLight != null)
         {
             directionalLight.intensity = previousIntensity;
@@ -64,6 +79,9 @@ public sealed class ForestDayNightLighting : MonoBehaviour
         if (saved) return;
         previousAmbientMode = RenderSettings.ambientMode;
         previousAmbientColor = RenderSettings.ambientLight;
+        previousSkyColor = RenderSettings.ambientSkyColor;
+        previousEquatorColor = RenderSettings.ambientEquatorColor;
+        previousGroundColor = RenderSettings.ambientGroundColor;
         if (directionalLight != null)
         {
             previousIntensity = directionalLight.intensity;
@@ -86,8 +104,10 @@ public sealed class ForestDayNightLighting : MonoBehaviour
         if (!saved) SaveOriginalState();
 
         bool night = time == LightingTime.Night;
-        RenderSettings.ambientMode = AmbientMode.Flat;
-        RenderSettings.ambientLight = night ? nightAmbientColor : dayAmbientColor;
+        RenderSettings.ambientMode = AmbientMode.Trilight;
+        RenderSettings.ambientSkyColor = night ? nightSkyColor : daySkyColor;
+        RenderSettings.ambientEquatorColor = night ? nightEquatorColor : dayEquatorColor;
+        RenderSettings.ambientGroundColor = night ? nightGroundColor : dayGroundColor;
 
         if (directionalLight != null)
         {

@@ -15,7 +15,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
     private string report = "Select a folder under Assets, then Preview.";
     private bool includeAlreadyLit;
     private bool alphaClipMode;
-    private string alphaNameTokens = "Branch,Leaf,Leaves,Bush,Foliage";
+    private string alphaNameTokens = "Branch,Leaf,Leaves,Bush,Foliage,Grass,Plant";
     private float alphaThreshold = 0.5f;
 
     [MenuItem("Tools/Materials/Scoped URP Lit Converter")]

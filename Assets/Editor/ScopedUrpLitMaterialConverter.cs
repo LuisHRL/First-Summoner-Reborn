@@ -18,6 +18,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
     private string alphaNameTokens = "Branch,Leaf,Leaves,Bush,Foliage,Grass,Plant,Burdock";
     private float alphaThreshold = 0.5f;
     private bool detectTextureAlpha = true;
+    private bool includeAmbiguousAlpha;
     private readonly Dictionary<string, string> detectionReasons = new Dictionary<string, string>();
 
     [MenuItem("Tools/Materials/Scoped URP Lit Converter")]
@@ -32,10 +33,12 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         if (alphaClipMode)
         {
             detectTextureAlpha = EditorGUILayout.Toggle("Detect texture alpha (all names)", detectTextureAlpha);
+            if (detectTextureAlpha)
+                includeAmbiguousAlpha = EditorGUILayout.Toggle("Select ambiguous alpha", includeAmbiguousAlpha);
             if (!detectTextureAlpha)
                 alphaNameTokens = EditorGUILayout.TextField("Name tokens (comma-separated)", alphaNameTokens);
             alphaThreshold = EditorGUILayout.Slider("Alpha Cutoff", alphaThreshold, 0f, 1f);
-            EditorGUILayout.HelpBox(detectTextureAlpha ? "Read-only sampling of Base Map alpha. Strong candidates are selected; uncertain ones are excluded by default. Review each material before applying." : "Matches material filenames. Review and exclude false positives.", MessageType.Info);
+            EditorGUILayout.HelpBox(detectTextureAlpha ? "Read-only Base Map alpha sampling. Review ambiguous materials before selecting; no automatic changes." : "Matches material filenames. Review and exclude false positives.", MessageType.Info);
         }
         else includeAlreadyLit = EditorGUILayout.Toggle("Include existing URP/Lit", includeAlreadyLit);
         if (EditorGUI.EndChangeCheck()) { candidates.Clear(); excludedPaths.Clear(); detectionReasons.Clear(); report = "Settings changed. Preview again."; }
@@ -106,7 +109,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
                     bool strong;
                     if (!InspectAlpha(material, out reason, out strong)) continue;
                     detectionReasons[assetPath] = reason;
-                    if (!strong) excludedPaths.Add(assetPath);
+                    if (!strong && !includeAmbiguousAlpha) excludedPaths.Add(assetPath);
                 }
                 else if (tokens.Length == 0 ||
                     !tokens.Any(token => Path.GetFileNameWithoutExtension(assetPath).IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0))
@@ -150,22 +153,30 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
             sample.ReadPixels(new Rect(0, 0, 64, 64), 0, 0);
             sample.Apply(false, false);
             Color32[] pixels = sample.GetPixels32();
-            int transparent = 0, opaque = 0;
+            int transparent = 0, semiTransparent = 0, opaque = 0;
             foreach (Color32 pixel in pixels)
             {
-                if (pixel.a < 245) transparent++;
-                else opaque++;
+                if (pixel.a <= 25) transparent++;
+                else if (pixel.a >= 245) opaque++;
+                else semiTransparent++;
             }
-            float ratio = transparent / (float)pixels.Length;
-            if (ratio >= 0.01f && opaque >= pixels.Length * 0.01f)
+            int total = pixels.Length;
+            float transparentRatio = transparent / (float)total;
+            float semiRatio = semiTransparent / (float)total;
+            float opaqueRatio = opaque / (float)total;
+            reason = "Alpha sample: " + Mathf.RoundToInt(transparentRatio * 100f) +
+                "% transparent, " + Mathf.RoundToInt(semiRatio * 100f) +
+                "% semi-transparent, " + Mathf.RoundToInt(opaqueRatio * 100f) + "% opaque";
+            // Clearly cut-out imagery has both nearly transparent and visible
+            // pixels. Border filtering may produce some intermediate alpha.
+            if (transparentRatio >= 0.01f && opaqueRatio >= 0.01f)
             {
                 strong = true;
-                reason = "Base texture has mixed alpha (" + Mathf.RoundToInt(ratio * 100f) + "% translucent samples)";
                 return true;
             }
-            if (transparent > 0)
+            if (transparent > 0 || semiTransparent > 0)
             {
-                reason = "Alpha detected but ambiguous (manual review)";
+                reason += " (ambiguous; review before applying)";
                 return true;
             }
             return false;

@@ -48,7 +48,9 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         using (new EditorGUI.DisabledScope(selectedCount == 0))
         {
             if (GUILayout.Button(alphaClipMode ? "Enable Alpha Clipping on selected materials" : "Convert previewed materials to URP/Lit", GUILayout.Height(30)))
-                EditorApplication.delayCall += alphaClipMode ? (Action)ApplyAlphaClipping : ConvertPreviewed;
+                EditorApplication.delayCall += alphaClipMode
+                    ? (EditorApplication.CallbackFunction)ApplyAlphaClipping
+                    : ConvertPreviewed;
         }
         scroll = EditorGUILayout.BeginScrollView(scroll);
         foreach (string path in candidates)

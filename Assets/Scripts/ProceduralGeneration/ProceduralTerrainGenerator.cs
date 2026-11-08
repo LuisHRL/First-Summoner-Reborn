@@ -191,9 +191,13 @@ public class ProceduralTerrainGenerator : MonoBehaviour
 
 
         // Appliquer les couches de textures du pack MedievalRuins
-        if (terrainLayers != null && terrainLayers.Length > 0)
+        if (terrainLayers != null && terrainLayers.Length >= 2 && terrainLayers[0] != null && terrainLayers[1] != null)
         {
-            terrainData.terrainLayers = terrainLayers;
+            // Remove null optional layers; indices 0 and 1 remain forest and path.
+            var validLayers = new System.Collections.Generic.List<TerrainLayer>();
+            foreach (TerrainLayer layer in terrainLayers)
+                if (layer != null) validLayers.Add(layer);
+            terrainData.terrainLayers = validLayers.ToArray();
 
             // Préparer la carte de répartition des textures
             terrainData.alphamapResolution = 512;
@@ -274,25 +278,14 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                         )
                     );
 
-                    // Préserver le chemin
-                    rockWeight *= 1f - pathWeight;
-
-                    // Texture 0 : sol forestier
-                    splatmap[z, x, 0] =
-                        (1f - pathWeight) - rockWeight;
-
-                    // Texture 1 : chemin
-                    splatmap[z, x, 1] = pathWeight;
-
-                    // Texture 2 : zones rocheuses
-                    if (layerCount >= 3)
-                    {
-                        splatmap[z, x, 2] = rockWeight;
-                    }
-                    else
-                    {
-                        splatmap[z, x, 0] += rockWeight;
-                    }
+                    // Keep all splat weights in [0, 1] and normalized to 1.
+                    // Optional rock layer is ignored if only two layers are configured.
+                    rockWeight = layerCount >= 3
+                        ? Mathf.Clamp01(rockWeight) * (1f - pathWeight)
+                        : 0f;
+                    splatmap[z, x, 0] = Mathf.Max(0f, 1f - pathWeight - rockWeight);
+                    splatmap[z, x, 1] = Mathf.Clamp01(pathWeight);
+                    if (layerCount >= 3) splatmap[z, x, 2] = rockWeight;
 
 
 
@@ -304,11 +297,25 @@ public class ProceduralTerrainGenerator : MonoBehaviour
         }
 
 
+        else
+        {
+            Debug.LogWarning("[ProceduralTerrainGenerator] Assign at least two TerrainLayers: forest ground and path. Optional third layer: rock.", this);
+        }
+
         // 5. Créer le terrain Unity
         generatedTerrain =
             Terrain.CreateTerrainGameObject(terrainData);
 
         generatedTerrain.name = "GeneratedTerrain";
+
+        // Terrain.CreateTerrainGameObject normally creates this collider. Ensure
+        // it is present, enabled and bound to the newly generated heightmap.
+        TerrainCollider terrainCollider = generatedTerrain.GetComponent<TerrainCollider>();
+        if (terrainCollider == null)
+            terrainCollider = generatedTerrain.AddComponent<TerrainCollider>();
+        terrainCollider.terrainData = terrainData;
+        terrainCollider.enabled = true;
+        generatedTerrain.layer = gameObject.layer;
 
         generatedTerrain.transform.SetParent(
             transform,

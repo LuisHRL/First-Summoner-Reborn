@@ -17,6 +17,8 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
     private bool alphaClipMode;
     private string alphaNameTokens = "Branch,Leaf,Leaves,Bush,Foliage,Grass,Plant,Burdock";
     private float alphaThreshold = 0.5f;
+    private bool detectTextureAlpha = true;
+    private readonly Dictionary<string, string> detectionReasons = new Dictionary<string, string>();
 
     [MenuItem("Tools/Materials/Scoped URP Lit Converter")]
     private static void Open() => GetWindow<ScopedUrpLitMaterialConverter>("URP Lit Converter");
@@ -29,12 +31,14 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         alphaClipMode = EditorGUILayout.Toggle("Alpha Clipping mode", alphaClipMode);
         if (alphaClipMode)
         {
-            alphaNameTokens = EditorGUILayout.TextField("Name tokens (comma-separated)", alphaNameTokens);
+            detectTextureAlpha = EditorGUILayout.Toggle("Detect texture alpha (all names)", detectTextureAlpha);
+            if (!detectTextureAlpha)
+                alphaNameTokens = EditorGUILayout.TextField("Name tokens (comma-separated)", alphaNameTokens);
             alphaThreshold = EditorGUILayout.Slider("Alpha Cutoff", alphaThreshold, 0f, 1f);
-            EditorGUILayout.HelpBox("Matches material filenames. Review and exclude false positives. Only URP/Lit materials are modified.", MessageType.Info);
+            EditorGUILayout.HelpBox(detectTextureAlpha ? "Read-only sampling of Base Map alpha. Strong candidates are selected; uncertain ones are excluded by default. Review each material before applying." : "Matches material filenames. Review and exclude false positives.", MessageType.Info);
         }
         else includeAlreadyLit = EditorGUILayout.Toggle("Include existing URP/Lit", includeAlreadyLit);
-        if (EditorGUI.EndChangeCheck()) { candidates.Clear(); excludedPaths.Clear(); report = "Folder or filter changed. Preview again."; }
+        if (EditorGUI.EndChangeCheck()) { candidates.Clear(); excludedPaths.Clear(); detectionReasons.Clear(); report = "Settings changed. Preview again."; }
         if (GUILayout.Button("Preview (read-only)", GUILayout.Height(30)))
             Preview();
         EditorGUILayout.LabelField(report, EditorStyles.wordWrappedLabel);
@@ -62,7 +66,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
                 bool newSelected = EditorGUILayout.Toggle(selected, GUILayout.Width(20));
                 if (newSelected) excludedPaths.Remove(path);
                 else excludedPaths.Add(path);
-                EditorGUILayout.LabelField(path + "  [" + (material != null && material.shader != null ? material.shader.name : "missing shader") + "]", EditorStyles.wordWrappedMiniLabel);
+                EditorGUILayout.LabelField(path + "  [" + (material != null && material.shader != null ? material.shader.name : "missing shader") + "]" + (detectionReasons.ContainsKey(path) ? " — " + detectionReasons[path] : ""), EditorStyles.wordWrappedMiniLabel);
             }
         }
         EditorGUILayout.EndScrollView();
@@ -80,6 +84,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
     {
         candidates.Clear();
         excludedPaths.Clear();
+        detectionReasons.Clear();
         string path = SelectedFolder();
         if (path == null) { report = "Select a valid folder inside Assets."; return; }
         Shader lit = Shader.Find("Universal Render Pipeline/Lit");
@@ -94,7 +99,16 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
             if (material == null) continue;
             if (alphaClipMode)
             {
-                if (material.shader != lit || !material.HasProperty("_AlphaClip") || tokens.Length == 0 ||
+                if (material.shader != lit || !material.HasProperty("_AlphaClip")) continue;
+                if (detectTextureAlpha)
+                {
+                    string reason;
+                    bool strong;
+                    if (!InspectAlpha(material, out reason, out strong)) continue;
+                    detectionReasons[assetPath] = reason;
+                    if (!strong) excludedPaths.Add(assetPath);
+                }
+                else if (tokens.Length == 0 ||
                     !tokens.Any(token => Path.GetFileNameWithoutExtension(assetPath).IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0))
                     continue;
             }
@@ -102,7 +116,71 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
             candidates.Add(assetPath);
         }
         candidates.Sort(StringComparer.Ordinal);
-        report = candidates.Count + " materials previewed in " + path + ". No changes made.";
+        report = candidates.Count + " materials previewed in " + path + ". " + excludedPaths.Count + " excluded by default. No changes made.";
+    }
+
+    // Uses a temporary GPU-readable copy, without changing texture import settings.
+    // Only the main albedo texture is sampled: alpha in other maps is ambiguous.
+    private static bool InspectAlpha(Material material, out string reason, out bool strong)
+    {
+        reason = "";
+        strong = false;
+        if (material.HasProperty("_AlphaClip") && material.GetFloat("_AlphaClip") > 0.5f)
+        {
+            reason = "Already alpha clipped";
+            return false;
+        }
+
+        Texture texture = FirstTexture(material, "_BaseMap", "_MainTex", "_BaseColorMap");
+        if (texture == null)
+        {
+            reason = "No base texture (manual review)";
+            return true;
+        }
+
+        RenderTexture temporary = null;
+        Texture2D sample = null;
+        RenderTexture previous = RenderTexture.active;
+        try
+        {
+            temporary = RenderTexture.GetTemporary(64, 64, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
+            Graphics.Blit(texture, temporary);
+            RenderTexture.active = temporary;
+            sample = new Texture2D(64, 64, TextureFormat.RGBA32, false, true);
+            sample.ReadPixels(new Rect(0, 0, 64, 64), 0, 0);
+            sample.Apply(false, false);
+            Color32[] pixels = sample.GetPixels32();
+            int transparent = 0, opaque = 0;
+            foreach (Color32 pixel in pixels)
+            {
+                if (pixel.a < 245) transparent++;
+                else opaque++;
+            }
+            float ratio = transparent / (float)pixels.Length;
+            if (ratio >= 0.01f && opaque >= pixels.Length * 0.01f)
+            {
+                strong = true;
+                reason = "Base texture has mixed alpha (" + Mathf.RoundToInt(ratio * 100f) + "% translucent samples)";
+                return true;
+            }
+            if (transparent > 0)
+            {
+                reason = "Alpha detected but ambiguous (manual review)";
+                return true;
+            }
+            return false;
+        }
+        catch (Exception e)
+        {
+            reason = "Texture could not be sampled: " + e.GetType().Name + " (manual review)";
+            return true;
+        }
+        finally
+        {
+            RenderTexture.active = previous;
+            if (sample != null) UnityEngine.Object.DestroyImmediate(sample);
+            if (temporary != null) RenderTexture.ReleaseTemporary(temporary);
+        }
     }
 
     private void ApplyAlphaClipping()

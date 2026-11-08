@@ -14,6 +14,9 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
     private Vector2 scroll;
     private string report = "Select a folder under Assets, then Preview.";
     private bool includeAlreadyLit;
+    private bool alphaClipMode;
+    private string alphaNameTokens = "Branch,Leaf,Leaves,Bush,Foliage";
+    private float alphaThreshold = 0.5f;
 
     [MenuItem("Tools/Materials/Scoped URP Lit Converter")]
     private static void Open() => GetWindow<ScopedUrpLitMaterialConverter>("URP Lit Converter");
@@ -23,7 +26,14 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         EditorGUILayout.HelpBox("Converts only .mat assets inside the selected folder and its subfolders. Start with Assets/Environment/URP; review HDRP separately. Shader Graph and HDRP features may not transfer.", MessageType.Warning);
         EditorGUI.BeginChangeCheck();
         folder = (DefaultAsset)EditorGUILayout.ObjectField("Materials folder", folder, typeof(DefaultAsset), false);
-        includeAlreadyLit = EditorGUILayout.Toggle("Include existing URP/Lit", includeAlreadyLit);
+        alphaClipMode = EditorGUILayout.Toggle("Alpha Clipping mode", alphaClipMode);
+        if (alphaClipMode)
+        {
+            alphaNameTokens = EditorGUILayout.TextField("Name tokens (comma-separated)", alphaNameTokens);
+            alphaThreshold = EditorGUILayout.Slider("Alpha Cutoff", alphaThreshold, 0f, 1f);
+            EditorGUILayout.HelpBox("Matches material filenames. Review and exclude false positives. Only URP/Lit materials are modified.", MessageType.Info);
+        }
+        else includeAlreadyLit = EditorGUILayout.Toggle("Include existing URP/Lit", includeAlreadyLit);
         if (EditorGUI.EndChangeCheck()) { candidates.Clear(); excludedPaths.Clear(); report = "Folder or filter changed. Preview again."; }
         if (GUILayout.Button("Preview (read-only)", GUILayout.Height(30)))
             Preview();
@@ -37,8 +47,8 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         }
         using (new EditorGUI.DisabledScope(selectedCount == 0))
         {
-            if (GUILayout.Button("Convert previewed materials to URP/Lit", GUILayout.Height(30)))
-                EditorApplication.delayCall += ConvertPreviewed;
+            if (GUILayout.Button(alphaClipMode ? "Enable Alpha Clipping on selected materials" : "Convert previewed materials to URP/Lit", GUILayout.Height(30)))
+                EditorApplication.delayCall += alphaClipMode ? (Action)ApplyAlphaClipping : ConvertPreviewed;
         }
         scroll = EditorGUILayout.BeginScrollView(scroll);
         foreach (string path in candidates)
@@ -72,16 +82,66 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         if (path == null) { report = "Select a valid folder inside Assets."; return; }
         Shader lit = Shader.Find("Universal Render Pipeline/Lit");
         if (lit == null) { report = "URP/Lit shader unavailable. Verify URP installation and pipeline configuration."; return; }
+        string[] tokens = alphaNameTokens.Split(',')
+            .Select(token => token.Trim()).Where(token => token.Length > 0).ToArray();
         foreach (string guid in AssetDatabase.FindAssets("t:Material", new[] { path }))
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(guid);
             if (!assetPath.EndsWith(".mat", StringComparison.OrdinalIgnoreCase)) continue;
             Material material = AssetDatabase.LoadAssetAtPath<Material>(assetPath);
-            if (material == null || (!includeAlreadyLit && material.shader == lit)) continue;
+            if (material == null) continue;
+            if (alphaClipMode)
+            {
+                if (material.shader != lit || !material.HasProperty("_AlphaClip") || tokens.Length == 0 ||
+                    !tokens.Any(token => Path.GetFileNameWithoutExtension(assetPath).IndexOf(token, StringComparison.OrdinalIgnoreCase) >= 0))
+                    continue;
+            }
+            else if (!includeAlreadyLit && material.shader == lit) continue;
             candidates.Add(assetPath);
         }
         candidates.Sort(StringComparer.Ordinal);
         report = candidates.Count + " materials previewed in " + path + ". No changes made.";
+    }
+
+    private void ApplyAlphaClipping()
+    {
+        List<string> selected = candidates.Where(path => !excludedPaths.Contains(path)).ToList();
+        string root = SelectedFolder();
+        if (root == null || selected.Count == 0) return;
+        Shader lit = Shader.Find("Universal Render Pipeline/Lit");
+        if (lit == null) { report = "URP/Lit shader unavailable."; return; }
+        if (!EditorUtility.DisplayDialog("Enable Alpha Clipping?",
+            "Enable alpha clipping on " + selected.Count + " selected URP/Lit materials? " +
+            "This changes shared materials. Verify alpha textures and commit a backup first.",
+            "Apply", "Cancel")) return;
+        int changed = 0, skipped = 0;
+        try
+        {
+            for (int i = 0; i < selected.Count; i++)
+            {
+                string path = selected[i];
+                if (!path.StartsWith(root + "/", StringComparison.Ordinal)) { skipped++; continue; }
+                if (EditorUtility.DisplayCancelableProgressBar("Alpha Clipping", path, (float)i / selected.Count)) break;
+                Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
+                if (material == null || material.shader != lit || !material.HasProperty("_AlphaClip") ||
+                    !material.HasProperty("_Cutoff")) { skipped++; continue; }
+                if (material.GetFloat("_AlphaClip") > 0.5f &&
+                    Mathf.Approximately(material.GetFloat("_Cutoff"), alphaThreshold)) { skipped++; continue; }
+                Undo.RecordObject(material, "Enable Alpha Clipping");
+                material.SetFloat("_AlphaClip", 1f);
+                material.SetFloat("_Cutoff", alphaThreshold);
+                material.EnableKeyword("_ALPHATEST_ON");
+                material.renderQueue = (int)UnityEngine.Rendering.RenderQueue.AlphaTest;
+                EditorUtility.SetDirty(material);
+                AssetDatabase.SaveAssetIfDirty(material);
+                changed++;
+            }
+        }
+        finally { EditorUtility.ClearProgressBar(); }
+        report = "Alpha clipping updated: " + changed + "; skipped: " + skipped + ". Inspect foliage and shadows.";
+        Debug.Log("[URP Lit Converter] " + report);
+        candidates.Clear();
+        excludedPaths.Clear();
     }
 
     private void ConvertPreviewed()

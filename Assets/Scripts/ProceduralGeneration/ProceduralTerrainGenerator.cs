@@ -84,6 +84,22 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     public float treeDensityThreshold = 0.3f;
 
 
+    [Header("Torches procédurales")]
+    [Tooltip("Prefab de torche à placer le long du chemin. Aucun objet n'est créé si ce champ est vide.")]
+    public GameObject torchPrefab;
+
+    [Min(0)]
+    public int torchCount = 12;
+
+    [Min(0f)]
+    public float torchPathOffset = 1.5f;
+
+    [Min(0f)]
+    public float torchEndMargin = 5f;
+
+    [Tooltip("Alterner les côtés du chemin pour chaque torche.")]
+    public bool alternateTorchSides = true;
+
     private GameObject generatedTerrain;
 
     [ContextMenu("Generate Terrain")]
@@ -334,6 +350,42 @@ public class ProceduralTerrainGenerator : MonoBehaviour
             transform,
             false
         );
+
+        // Place torches deterministically along the existing curved path.
+        // Their visual effects and lights are provided by the assigned prefab.
+        if (torchPrefab != null && torchCount > 0)
+        {
+            Transform torchesParent = new GameObject("GeneratedTorches").transform;
+            torchesParent.SetParent(generatedTerrain.transform, false);
+
+            float usableLength = Mathf.Max(0f, terrainLength - 2f * torchEndMargin);
+            if (usableLength <= 0f)
+            {
+                Debug.LogWarning("[ProceduralTerrainGenerator] Torch end margin leaves no usable path.", this);
+            }
+            else
+            {
+                System.Random torchRandom = new System.Random(currentSeed ^ 975318);
+                for (int i = 0; i < torchCount; i++)
+                {
+                    float z = torchEndMargin + usableLength * (i + 0.5f) / torchCount;
+                    float normalizedZ = z / terrainLength;
+                    float centerX = terrainWidth * 0.5f +
+                        Mathf.Sin(normalizedZ * Mathf.PI * 2f * pathFrequency) * pathCurvature;
+                    int side = alternateTorchSides ? (i % 2 == 0 ? -1 : 1)
+                        : (torchRandom.Next(2) == 0 ? -1 : 1);
+                    float x = centerX + side * (pathWidth * 0.5f + torchPathOffset);
+                    if (x < 0f || x > terrainWidth)
+                        continue;
+
+                    float y = terrainData.GetInterpolatedHeight(x / terrainWidth, normalizedZ);
+                    GameObject torch = Instantiate(torchPrefab, torchesParent);
+                    torch.name = torchPrefab.name + "_" + i;
+                    torch.transform.localPosition = new Vector3(x, y, z);
+                    torch.transform.localRotation = Quaternion.Euler(0f, side < 0 ? 90f : -90f, 0f);
+                }
+            }
+        }
 
         // Générer les arbres sur le terrain
         if (canGenerateTrees)

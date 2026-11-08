@@ -100,6 +100,28 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     [Tooltip("Alterner les côtés du chemin pour chaque torche.")]
     public bool alternateTorchSides = true;
 
+    [Header("Éclairage des torches")]
+    [Tooltip("Ajoute une lumière ponctuelle uniquement si le prefab ne possède pas déjà de lumière.")]
+    public bool addTorchLights = true;
+
+    [Min(0f)]
+    [Tooltip("Hauteur de la flamme au-dessus de l'origine du prefab de torche.")]
+    public float torchFlameHeight = 2f;
+
+    public Color torchLightColor = new Color(1f, 0.48f, 0.16f, 1f);
+
+    [Min(0f)]
+    public float torchLightIntensity = 2f;
+
+    [Min(0.1f)]
+    public float torchLightRange = 8f;
+
+    [Tooltip("Ombres désactivées par défaut pour limiter le coût sur Android.")]
+    public bool torchLightShadows = false;
+
+    [Tooltip("Effet visuel facultatif de flamme, positionné à la même hauteur que la lumière.")]
+    public GameObject torchFlameEffectPrefab;
+
     private GameObject generatedTerrain;
 
     [ContextMenu("Generate Terrain")]
@@ -394,6 +416,30 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                     Vector3 towardPath = new Vector3(-side / normalLength, 0f,
                         side * slope / normalLength);
                     torch.transform.localRotation = Quaternion.LookRotation(towardPath, Vector3.up);
+                    // Preserve existing prefab lights and effects; avoid duplicate lights.
+                    Vector3 flameLocalPosition = Vector3.up * torchFlameHeight;
+                    if (addTorchLights && torch.GetComponentInChildren<Light>(true) == null)
+                    {
+                        GameObject lightObject = new GameObject("ProceduralTorchLight");
+                        lightObject.transform.SetParent(torch.transform, false);
+                        lightObject.transform.localPosition = flameLocalPosition;
+                        Light pointLight = lightObject.AddComponent<Light>();
+                        pointLight.type = LightType.Point;
+                        pointLight.color = torchLightColor;
+                        pointLight.intensity = torchLightIntensity;
+                        pointLight.range = torchLightRange;
+                        pointLight.shadows = torchLightShadows
+                            ? LightShadows.Soft : LightShadows.None;
+                        pointLight.renderMode = LightRenderMode.Auto;
+                    }
+
+                    if (torchFlameEffectPrefab != null)
+                    {
+                        GameObject flame = Instantiate(torchFlameEffectPrefab, torch.transform);
+                        flame.name = "ProceduralTorchFlame";
+                        flame.transform.localPosition = flameLocalPosition;
+                        flame.transform.localRotation = Quaternion.identity;
+                    }
                 }
             }
         }

@@ -92,7 +92,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     public int torchCount = 12;
 
     [Min(0f)]
-    public float torchPathOffset = 1.5f;
+    public float torchPathOffset = 0.25f;
 
     [Min(0f)]
     public float torchEndMargin = 5f;
@@ -368,21 +368,32 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                 System.Random torchRandom = new System.Random(currentSeed ^ 975318);
                 for (int i = 0; i < torchCount; i++)
                 {
-                    float z = torchEndMargin + usableLength * (i + 0.5f) / torchCount;
-                    float normalizedZ = z / terrainLength;
-                    float centerX = terrainWidth * 0.5f +
-                        Mathf.Sin(normalizedZ * Mathf.PI * 2f * pathFrequency) * pathCurvature;
+                    float pathZ = torchEndMargin + usableLength * (i + 0.5f) / torchCount;
+                    float normalizedZ = pathZ / terrainLength;
+                    float phase = normalizedZ * Mathf.PI * 2f * pathFrequency;
+                    float centerX = terrainWidth * 0.5f + Mathf.Sin(phase) * pathCurvature;
+
+                    // Normal to the curved path, not just a horizontal X offset.
+                    // This places the torch at the actual edge on tight bends.
+                    float slope = pathCurvature * Mathf.Cos(phase) *
+                        Mathf.PI * 2f * pathFrequency / terrainLength;
+                    float normalLength = Mathf.Sqrt(1f + slope * slope);
                     int side = alternateTorchSides ? (i % 2 == 0 ? -1 : 1)
                         : (torchRandom.Next(2) == 0 ? -1 : 1);
-                    float x = centerX + side * (pathWidth * 0.5f + torchPathOffset);
-                    if (x < 0f || x > terrainWidth)
+                    float edgeDistance = pathWidth * 0.5f + torchPathOffset;
+                    float x = centerX + side * edgeDistance / normalLength;
+                    float z = pathZ - side * edgeDistance * slope / normalLength;
+                    if (x < 0f || x > terrainWidth || z < 0f || z > terrainLength)
                         continue;
 
-                    float y = terrainData.GetInterpolatedHeight(x / terrainWidth, normalizedZ);
+                    float y = terrainData.GetInterpolatedHeight(x / terrainWidth, z / terrainLength);
                     GameObject torch = Instantiate(torchPrefab, torchesParent);
                     torch.name = torchPrefab.name + "_" + i;
                     torch.transform.localPosition = new Vector3(x, y, z);
-                    torch.transform.localRotation = Quaternion.Euler(0f, side < 0 ? 90f : -90f, 0f);
+                    // Face the torch toward the path, following its tangent.
+                    Vector3 towardPath = new Vector3(-side / normalLength, 0f,
+                        side * slope / normalLength);
+                    torch.transform.localRotation = Quaternion.LookRotation(towardPath, Vector3.up);
                 }
             }
         }

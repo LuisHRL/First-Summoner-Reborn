@@ -10,6 +10,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
 {
     private DefaultAsset folder;
     private readonly List<string> candidates = new List<string>();
+    private readonly HashSet<string> excludedPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     private Vector2 scroll;
     private string report = "Select a folder under Assets, then Preview.";
     private bool includeAlreadyLit;
@@ -23,11 +24,18 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         EditorGUI.BeginChangeCheck();
         folder = (DefaultAsset)EditorGUILayout.ObjectField("Materials folder", folder, typeof(DefaultAsset), false);
         includeAlreadyLit = EditorGUILayout.Toggle("Include existing URP/Lit", includeAlreadyLit);
-        if (EditorGUI.EndChangeCheck()) { candidates.Clear(); report = "Folder or filter changed. Preview again."; }
+        if (EditorGUI.EndChangeCheck()) { candidates.Clear(); excludedPaths.Clear(); report = "Folder or filter changed. Preview again."; }
         if (GUILayout.Button("Preview (read-only)", GUILayout.Height(30)))
             Preview();
         EditorGUILayout.LabelField(report, EditorStyles.wordWrappedLabel);
-        using (new EditorGUI.DisabledScope(candidates.Count == 0))
+        int selectedCount = candidates.Count(path => !excludedPaths.Contains(path));
+        EditorGUILayout.LabelField("Selected: " + selectedCount + " / " + candidates.Count + " | Excluded: " + excludedPaths.Count);
+        using (new EditorGUILayout.HorizontalScope())
+        {
+            if (GUILayout.Button("Select all")) excludedPaths.Clear();
+            if (GUILayout.Button("Exclude all")) foreach (string path in candidates) excludedPaths.Add(path);
+        }
+        using (new EditorGUI.DisabledScope(selectedCount == 0))
         {
             if (GUILayout.Button("Convert previewed materials to URP/Lit", GUILayout.Height(30)))
                 EditorApplication.delayCall += ConvertPreviewed;
@@ -36,7 +44,14 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         foreach (string path in candidates)
         {
             Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
-            EditorGUILayout.LabelField(path + "  [" + (material != null && material.shader != null ? material.shader.name : "missing shader") + "]", EditorStyles.wordWrappedMiniLabel);
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                bool selected = !excludedPaths.Contains(path);
+                bool newSelected = EditorGUILayout.Toggle(selected, GUILayout.Width(20));
+                if (newSelected) excludedPaths.Remove(path);
+                else excludedPaths.Add(path);
+                EditorGUILayout.LabelField(path + "  [" + (material != null && material.shader != null ? material.shader.name : "missing shader") + "]", EditorStyles.wordWrappedMiniLabel);
+            }
         }
         EditorGUILayout.EndScrollView();
     }
@@ -52,6 +67,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
     private void Preview()
     {
         candidates.Clear();
+        excludedPaths.Clear();
         string path = SelectedFolder();
         if (path == null) { report = "Select a valid folder inside Assets."; return; }
         Shader lit = Shader.Find("Universal Render Pipeline/Lit");
@@ -70,25 +86,26 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
 
     private void ConvertPreviewed()
     {
-        if (candidates.Count == 0) return;
+        List<string> selectedPaths = candidates.Where(path => !excludedPaths.Contains(path)).ToList();
+        if (selectedPaths.Count == 0) return;
         string folderPath = SelectedFolder();
         if (folderPath == null) { candidates.Clear(); report = "Invalid folder; preview again."; return; }
         Shader lit = Shader.Find("Universal Render Pipeline/Lit");
         if (lit == null) { report = "URP/Lit shader not found."; return; }
         if (!EditorUtility.DisplayDialog("Convert materials?",
-            "Change the shader of " + candidates.Count + " material assets under " + folderPath +
+            "Change the shader of " + selectedPaths.Count + " selected material assets under " + folderPath +
             " to URP/Lit? Shared materials will change in every scene/prefab. Commit or back up the project first. Some HDRP/Shader Graph properties may not transfer.",
             "Convert", "Cancel")) return;
 
         int changed = 0, skipped = 0;
         try
         {
-            for (int i = 0; i < candidates.Count; i++)
+            for (int i = 0; i < selectedPaths.Count; i++)
             {
-                string path = candidates[i];
+                string path = selectedPaths[i];
                 if (!path.StartsWith(folderPath + "/", StringComparison.Ordinal) &&
                     path != folderPath) { skipped++; continue; }
-                if (EditorUtility.DisplayCancelableProgressBar("URP/Lit conversion", path, (float)i / candidates.Count))
+                if (EditorUtility.DisplayCancelableProgressBar("URP/Lit conversion", path, (float)i / selectedPaths.Count))
                     break;
                 Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
                 if (material == null || (material.shader == lit && !includeAlreadyLit)) { skipped++; continue; }
@@ -123,6 +140,7 @@ public sealed class ScopedUrpLitMaterialConverter : EditorWindow
         report = "Converted " + changed + " materials; skipped " + skipped + ". Inspect appearance in Unity. Undo may be available in this editor session; Git is the reliable rollback.";
         Debug.Log("[URP Lit Converter] " + report);
         candidates.Clear();
+        excludedPaths.Clear();
     }
 
     private static Texture FirstTexture(Material m, params string[] names)

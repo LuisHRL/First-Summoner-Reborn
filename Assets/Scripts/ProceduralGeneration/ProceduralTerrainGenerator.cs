@@ -44,6 +44,10 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     public int seed = 12345;
     public bool randomizeSeed = true;
 
+    [Header("Collision et déplacement")]
+    [Tooltip("Nom du layer utilisé par les raycasts de déplacement (Click To Move > Ground Layer).")]
+    public string walkableLayerName = "Ground";
+
     [Header("Textures du terrain")]
     public TerrainLayer[] terrainLayers;
 
@@ -315,7 +319,16 @@ public class ProceduralTerrainGenerator : MonoBehaviour
             terrainCollider = generatedTerrain.AddComponent<TerrainCollider>();
         terrainCollider.terrainData = terrainData;
         terrainCollider.enabled = true;
-        generatedTerrain.layer = gameObject.layer;
+        int walkableLayer = LayerMask.NameToLayer(walkableLayerName);
+        if (walkableLayer >= 0)
+            generatedTerrain.layer = walkableLayer;
+        else
+        {
+            generatedTerrain.layer = gameObject.layer;
+            Debug.LogWarning(
+                "[ProceduralTerrainGenerator] Walkable layer '" + walkableLayerName +
+                "' does not exist. Using generator layer; verify Click To Move > Ground Layer.", this);
+        }
 
         generatedTerrain.transform.SetParent(
             transform,

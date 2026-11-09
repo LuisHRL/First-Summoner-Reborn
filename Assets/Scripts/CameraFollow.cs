@@ -11,7 +11,7 @@ public class CameraFollow : MonoBehaviour
     public Vector3 offset = new Vector3(0f, 8f, -9f);
 
     [Header("View angle")]
-    [Range(25f, 75f)] public float downwardAngle = 50f;
+    [Range(25f, 75f)] public float downwardAngle = 45f;
 
     [Header("Vertical screen dead zone")]
     [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.30f;

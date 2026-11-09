@@ -100,6 +100,11 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     [Tooltip("Alterner les côtés du chemin pour chaque torche.")]
     public bool alternateTorchSides = true;
 
+    [Header("Budget des ombres des torches")]
+    public bool useAdaptiveTorchShadows = true;
+    [Min(0)] public int maximumTorchShadowLights = 2;
+    [Min(0f)] public float torchShadowDistance = 18f;
+
     private GameObject generatedTerrain;
 
     [ContextMenu("Generate Terrain")]
@@ -357,6 +362,12 @@ public class ProceduralTerrainGenerator : MonoBehaviour
         {
             Transform torchesParent = new GameObject("GeneratedTorches").transform;
             torchesParent.SetParent(generatedTerrain.transform, false);
+            if (useAdaptiveTorchShadows)
+            {
+                AdaptiveLightShadows shadowBudget = torchesParent.gameObject.AddComponent<AdaptiveLightShadows>();
+                shadowBudget.maximumShadowCastingLights = maximumTorchShadowLights;
+                shadowBudget.maximumShadowDistance = torchShadowDistance;
+            }
 
             float usableLength = Mathf.Max(0f, terrainLength - 2f * torchEndMargin);
             if (usableLength <= 0f)

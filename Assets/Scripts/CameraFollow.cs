@@ -14,11 +14,11 @@ public class CameraFollow : MonoBehaviour
     [Range(25f, 75f)] public float downwardAngle = 40f;
 
     [Header("Vertical screen dead zone")]
-    [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.38f;
+    [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.42f;
     [Range(0.05f, 0.95f)] public float upperScreenThreshold = 0.70f;
     [Min(0.01f)] public float verticalSmoothTime = 0.30f;
     [Min(0.01f)] public float backwardSmoothTime = 0.18f;
-    [Range(0.05f, 0.95f)] public float backwardReturnScreenPosition = 0.48f;
+    [Range(0.05f, 0.95f)] public float backwardReturnScreenPosition = 0.58f;
 
     [Header("Gentle horizontal path framing")]
     public ProceduralTerrainGenerator terrainGenerator;

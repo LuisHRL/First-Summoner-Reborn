@@ -11,12 +11,14 @@ public class CameraFollow : MonoBehaviour
     public Vector3 offset = new Vector3(0f, 8f, -9f);
 
     [Header("View angle")]
-    [Range(25f, 75f)] public float downwardAngle = 45f;
+    [Range(25f, 75f)] public float downwardAngle = 40f;
 
     [Header("Vertical screen dead zone")]
-    [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.30f;
+    [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.38f;
     [Range(0.05f, 0.95f)] public float upperScreenThreshold = 0.70f;
     [Min(0.01f)] public float verticalSmoothTime = 0.30f;
+    [Min(0.01f)] public float backwardSmoothTime = 0.18f;
+    [Range(0.05f, 0.95f)] public float backwardReturnScreenPosition = 0.48f;
 
     [Header("Gentle horizontal path framing")]
     public ProceduralTerrainGenerator terrainGenerator;
@@ -77,7 +79,10 @@ public class CameraFollow : MonoBehaviour
         Vector3 screen = cameraComponent.WorldToViewportPoint(target.position);
         if (screen.z > 0f && (screen.y < low || screen.y > high))
         {
-            float boundary = Mathf.Clamp(screen.y, low, high);
+            // When returning toward the bottom, recover farther into the safe zone.
+            float boundary = screen.y < low
+                ? Mathf.Clamp(backwardReturnScreenPosition, low, high)
+                : high;
             // Measure screen movement per world-Z unit, respecting perspective and camera tilt.
             Vector3 next = cameraComponent.WorldToViewportPoint(target.position + Vector3.forward);
             float sensitivity = next.y - screen.y;
@@ -109,8 +114,9 @@ public class CameraFollow : MonoBehaviour
         Vector3 result = current;
         result.x = Mathf.SmoothDamp(current.x, desired.x, ref horizontalVelocity,
             horizontalSmoothTime, maximumCameraSpeed, dt);
+        float zSmoothTime = desired.z < current.z ? backwardSmoothTime : verticalSmoothTime;
         result.z = Mathf.SmoothDamp(current.z, desired.z, ref verticalVelocity,
-            verticalSmoothTime, maximumCameraSpeed, dt);
+            zSmoothTime, maximumCameraSpeed, dt);
         result.y = target.position.y + offset.y;
 
         if (keepTerrainEndsInView && terrain != null)

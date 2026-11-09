@@ -10,6 +10,9 @@ public class CameraFollow : MonoBehaviour
     public Transform target;
     public Vector3 offset = new Vector3(0f, 8f, -9f);
 
+    [Header("View angle")]
+    [Range(25f, 75f)] public float downwardAngle = 50f;
+
     [Header("Vertical screen dead zone")]
     [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.30f;
     [Range(0.05f, 0.95f)] public float upperScreenThreshold = 0.70f;
@@ -40,6 +43,7 @@ public class CameraFollow : MonoBehaviour
     private void Awake()
     {
         cameraComponent = GetComponent<Camera>();
+        transform.rotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
     }
 
     private void LateUpdate()
@@ -51,6 +55,7 @@ public class CameraFollow : MonoBehaviour
             cameraComponent = GetComponent<Camera>();
 
         ResolveTerrain();
+        transform.rotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
 
         // The scene camera may start at an arbitrary editor position.
         // Establish the intended distance before applying the screen dead zone.

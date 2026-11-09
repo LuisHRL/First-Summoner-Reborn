@@ -28,8 +28,9 @@ public class CameraFollow : MonoBehaviour
     [Header("Gentle horizontal path framing")]
     public ProceduralTerrainGenerator terrainGenerator;
     [Min(0f)] public float pathLookAhead = 6f;
-    [Min(0f)] public float horizontalTolerance = 0.7f;
-    [Min(0.01f)] public float horizontalSmoothTime = 0.9f;
+    [Min(0f)] public float horizontalTolerance = 0.35f;
+    [Range(0f, 1f)] public float playerHorizontalInfluence = 0.65f;
+    [Min(0.01f)] public float horizontalSmoothTime = 0.45f;
     [Min(0.01f)] public float maximumCameraSpeed = 25f;
 
     [Header("Terrain viewport limits")]
@@ -97,7 +98,7 @@ public class CameraFollow : MonoBehaviour
                 desired.z += (screen.y - boundary) / sensitivity;
         }
 
-        // Follow the path center, not the player's lateral dodges.
+        // Blend path centering with player movement, avoiding excessive lateral camera drift.
         if (terrainGenerator != null && terrain != null)
         {
             Vector3 terrainOrigin = terrain.transform.position;
@@ -108,9 +109,10 @@ public class CameraFollow : MonoBehaviour
             float pathCenterX = terrainOrigin.x + terrainGenerator.terrainWidth * 0.5f
                 + Mathf.Sin(normalized * Mathf.PI * 2f * terrainGenerator.pathFrequency)
                 * terrainGenerator.pathCurvature;
-            float delta = pathCenterX - (current.x - offset.x);
+            float desiredCenterX = Mathf.Lerp(pathCenterX, target.position.x, playerHorizontalInfluence);
+            float delta = desiredCenterX - (current.x - offset.x);
             if (Mathf.Abs(delta) > horizontalTolerance)
-                desired.x = pathCenterX + offset.x - Mathf.Sign(delta) * horizontalTolerance;
+                desired.x = desiredCenterX + offset.x - Mathf.Sign(delta) * horizontalTolerance;
         }
         else
         {

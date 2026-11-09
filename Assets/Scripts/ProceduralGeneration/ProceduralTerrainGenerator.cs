@@ -31,6 +31,10 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     [Min(0f)]
     public float terrainHeight = 10f;
 
+    [Header("Relief optionnel")]
+    [Tooltip("Hauteur maximale du relief en metres. Zero donne un sol totalement plat, chemin compris.")]
+    [Min(0f)] public float terrainReliefAmplitude = 0f;
+
 
     [Header("Zones rocheuses")]
     [Range(0f, 1f)]
@@ -196,8 +200,10 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                     )
                 );
 
-                // Relief progressif en dehors du chemin
-                heights[z, x] = noise * 0.35f * pathInfluence;
+                // A zero amplitude keeps the path and the surrounding forest on the same level.
+                // Terrain heights are normalized by the TerrainData vertical size.
+                heights[z, x] = Mathf.Clamp01(
+                    noise * terrainReliefAmplitude * pathInfluence / terrainData.size.y);
             }
         }
 

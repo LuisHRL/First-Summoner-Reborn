@@ -99,7 +99,7 @@ public class CameraFollow : MonoBehaviour
     private void ResolveTerrain()
     {
         if (terrainGenerator == null)
-            terrainGenerator = FindFirstObjectByType<ProceduralTerrainGenerator>();
+            terrainGenerator = FindAnyObjectByType<ProceduralTerrainGenerator>();
 
         if (terrainGenerator != null)
         {

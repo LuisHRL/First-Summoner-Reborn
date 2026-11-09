@@ -8,19 +8,19 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
-    public Vector3 offset = new Vector3(0f, 9.5f, -11.5f);
+    public Vector3 offset = new Vector3(0f, 8f, -9f);
 
     [Header("Vertical screen dead zone")]
     [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.30f;
     [Range(0.05f, 0.95f)] public float upperScreenThreshold = 0.70f;
-    [Min(0.01f)] public float verticalSmoothTime = 0.42f;
+    [Min(0.01f)] public float verticalSmoothTime = 0.30f;
 
     [Header("Gentle horizontal path framing")]
     public ProceduralTerrainGenerator terrainGenerator;
     [Min(0f)] public float pathLookAhead = 6f;
     [Min(0f)] public float horizontalTolerance = 0.7f;
-    [Min(0.01f)] public float horizontalSmoothTime = 1.25f;
-    [Min(0.01f)] public float maximumCameraSpeed = 19f;
+    [Min(0.01f)] public float horizontalSmoothTime = 0.9f;
+    [Min(0.01f)] public float maximumCameraSpeed = 25f;
 
     [Header("Terrain viewport limits")]
     public bool keepTerrainEndsInView = true;
@@ -35,6 +35,7 @@ public class CameraFollow : MonoBehaviour
     private float verticalVelocity;
     private float horizontalVelocity;
     private Terrain terrain;
+    private bool framingInitialized;
 
     private void Awake()
     {
@@ -50,6 +51,17 @@ public class CameraFollow : MonoBehaviour
             cameraComponent = GetComponent<Camera>();
 
         ResolveTerrain();
+
+        // The scene camera may start at an arbitrary editor position.
+        // Establish the intended distance before applying the screen dead zone.
+        if (!framingInitialized)
+        {
+            Vector3 initial = target.position + offset;
+            if (keepTerrainEndsInView && terrain != null)
+                ClampToTerrainEnds(ref initial);
+            transform.position = initial;
+            framingInitialized = true;
+        }
 
         Vector3 current = transform.position;
         Vector3 desired = current;

@@ -8,22 +8,28 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
-    public Vector3 offset = new Vector3(0f, 11f, -14f);
+    public Vector3 offset = new Vector3(0f, 9.5f, -11.5f);
 
     [Header("Vertical screen dead zone")]
     [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.30f;
     [Range(0.05f, 0.95f)] public float upperScreenThreshold = 0.70f;
-    [Min(0.01f)] public float verticalSmoothTime = 0.65f;
+    [Min(0.01f)] public float verticalSmoothTime = 0.42f;
 
     [Header("Gentle horizontal path framing")]
     public ProceduralTerrainGenerator terrainGenerator;
     [Min(0f)] public float pathLookAhead = 6f;
     [Min(0f)] public float horizontalTolerance = 0.7f;
-    [Min(0.01f)] public float horizontalSmoothTime = 2.0f;
-    [Min(0.01f)] public float maximumCameraSpeed = 12f;
+    [Min(0.01f)] public float horizontalSmoothTime = 1.25f;
+    [Min(0.01f)] public float maximumCameraSpeed = 19f;
 
     [Header("Terrain viewport limits")]
     public bool keepTerrainEndsInView = true;
+
+    [Header("Obstacle visibility")]
+    public bool hideObstructingTrees = true;
+    [Min(0.1f)] public float obstacleCheckRadius = 0.35f;
+    private readonly System.Collections.Generic.HashSet<Renderer> hiddenRenderers = new System.Collections.Generic.HashSet<Renderer>();
+    private readonly System.Collections.Generic.HashSet<Renderer> currentlyObstructing = new System.Collections.Generic.HashSet<Renderer>();
 
     private Camera cameraComponent;
     private float verticalVelocity;
@@ -94,6 +100,77 @@ public class CameraFollow : MonoBehaviour
             ClampToTerrainEnds(ref result);
 
         transform.position = result;
+        UpdateObstructions();
+    }
+
+    private void OnDisable()
+    {
+        RestoreHiddenRenderers();
+    }
+
+    private void UpdateObstructions()
+    {
+        if (!hideObstructingTrees || target == null)
+        {
+            RestoreHiddenRenderers();
+            return;
+        }
+
+        currentlyObstructing.Clear();
+        Vector3 start = transform.position;
+        Vector3 end = target.position + Vector3.up * 1.0f;
+        Vector3 direction = end - start;
+        float distance = direction.magnitude;
+        if (distance > 0.01f)
+        {
+            RaycastHit[] hits = Physics.SphereCastAll(start, obstacleCheckRadius,
+                direction / distance, distance, ~0, QueryTriggerInteraction.Ignore);
+            foreach (RaycastHit hit in hits)
+            {
+                if (hit.collider == null || hit.collider.transform.IsChildOf(target))
+                    continue;
+                if (terrain != null && hit.collider.GetComponent<Terrain>() == terrain)
+                    continue;
+                Renderer renderer = hit.collider.GetComponent<Renderer>();
+                if (renderer == null)
+                    renderer = hit.collider.GetComponentInParent<Renderer>();
+                if (renderer != null && IsVegetation(hit.collider.transform))
+                    currentlyObstructing.Add(renderer);
+            }
+        }
+
+        foreach (Renderer renderer in hiddenRenderers)
+            if (renderer != null && !currentlyObstructing.Contains(renderer))
+                renderer.enabled = true;
+
+        hiddenRenderers.RemoveWhere(r => r == null || !currentlyObstructing.Contains(r));
+        foreach (Renderer renderer in currentlyObstructing)
+            if (renderer != null && renderer.enabled)
+            {
+                renderer.enabled = false;
+                hiddenRenderers.Add(renderer);
+            }
+    }
+
+    private static bool IsVegetation(Transform t)
+    {
+        while (t != null)
+        {
+            string n = t.name.ToLowerInvariant();
+            if (n.Contains("tree") || n.Contains("bush") || n.Contains("foliage"))
+                return true;
+            t = t.parent;
+        }
+        return false;
+    }
+
+    private void RestoreHiddenRenderers()
+    {
+        foreach (Renderer renderer in hiddenRenderers)
+            if (renderer != null)
+                renderer.enabled = true;
+        hiddenRenderers.Clear();
+        currentlyObstructing.Clear();
     }
 
     private void ResolveTerrain()

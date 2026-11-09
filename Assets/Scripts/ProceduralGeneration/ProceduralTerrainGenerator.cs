@@ -368,6 +368,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
         {
             Transform torchesParent = new GameObject("GeneratedTorches").transform;
             torchesParent.SetParent(generatedTerrain.transform, false);
+            PersistentParticleEffects torchParticles = torchesParent.gameObject.AddComponent<PersistentParticleEffects>();
             if (useAdaptiveTorchShadows)
             {
                 AdaptiveLightShadows shadowBudget = torchesParent.gameObject.AddComponent<AdaptiveLightShadows>();
@@ -411,8 +412,10 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                     Vector3 towardPath = new Vector3(-side / normalLength, 0f,
                         side * slope / normalLength);
                     torch.transform.localRotation = Quaternion.LookRotation(towardPath, Vector3.up);
+                    // Refresh once after all instances are placed, not once per torch.
 
                 }
+                torchParticles.Refresh();
             }
         }
 

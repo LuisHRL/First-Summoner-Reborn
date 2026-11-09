@@ -10,6 +10,11 @@ public class CameraFollow : MonoBehaviour
     public Transform target;
     public Vector3 offset = new Vector3(0f, 8f, -9f);
 
+    [Header("Field of view")]
+    [Tooltip("A wider perspective reveals more trees on both sides; it also changes vertical framing.")]
+    public bool overrideFieldOfView = true;
+    [Range(35f, 90f)] public float verticalFieldOfView = 66f;
+
     [Header("View angle")]
     [Range(25f, 75f)] public float downwardAngle = 40f;
 
@@ -45,6 +50,7 @@ public class CameraFollow : MonoBehaviour
     private void Awake()
     {
         cameraComponent = GetComponent<Camera>();
+        ApplyFieldOfView();
         transform.rotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
     }
 
@@ -57,6 +63,7 @@ public class CameraFollow : MonoBehaviour
             cameraComponent = GetComponent<Camera>();
 
         ResolveTerrain();
+        ApplyFieldOfView();
         transform.rotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
 
         // The scene camera may start at an arbitrary editor position.
@@ -124,6 +131,14 @@ public class CameraFollow : MonoBehaviour
 
         transform.position = result;
         UpdateObstructions();
+    }
+
+    private void ApplyFieldOfView()
+    {
+        if (cameraComponent != null && overrideFieldOfView && cameraComponent.orthographic)
+            return;
+        if (cameraComponent != null && overrideFieldOfView)
+            cameraComponent.fieldOfView = verticalFieldOfView;
     }
 
     private void OnDisable()

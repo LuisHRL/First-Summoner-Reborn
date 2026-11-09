@@ -13,13 +13,13 @@ public class CameraFollow : MonoBehaviour
     [Header("Vertical screen dead zone")]
     [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.30f;
     [Range(0.05f, 0.95f)] public float upperScreenThreshold = 0.70f;
-    [Min(0.01f)] public float verticalSmoothTime = 0.8f;
+    [Min(0.01f)] public float verticalSmoothTime = 0.65f;
 
     [Header("Gentle horizontal path framing")]
     public ProceduralTerrainGenerator terrainGenerator;
     [Min(0f)] public float pathLookAhead = 6f;
     [Min(0f)] public float horizontalTolerance = 0.7f;
-    [Min(0.01f)] public float horizontalSmoothTime = 2.5f;
+    [Min(0.01f)] public float horizontalSmoothTime = 2.0f;
     [Min(0.01f)] public float maximumCameraSpeed = 12f;
 
     [Header("Terrain viewport limits")]

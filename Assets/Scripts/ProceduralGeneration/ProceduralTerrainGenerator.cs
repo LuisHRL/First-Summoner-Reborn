@@ -12,7 +12,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
 
     [Header("Chemin principal")]
     [Min(2f)]
-    public float pathWidth = 8f;
+    public float pathWidth = 6f;
 
     [Header("Transition du chemin")]
     [Range(0.1f, 5f)]

@@ -26,6 +26,8 @@ public class MinionRangedAI : MonoBehaviour
         player = FindAnyObjectByType<PlayerHealth>();
         playerTargeting = FindAnyObjectByType<PlayerTargeting>();
         controller = GetComponent<CharacterController>();
+        if (GetComponent<CharacterTerrainGravity>() == null)
+            gameObject.AddComponent<CharacterTerrainGravity>();
     }
 
     void Update()

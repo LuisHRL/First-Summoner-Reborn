@@ -2,6 +2,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(CharacterTerrainGravity))]
 public class MinionAI : MonoBehaviour
 {
     public enum AttackType

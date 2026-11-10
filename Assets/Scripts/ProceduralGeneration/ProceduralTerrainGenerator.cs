@@ -105,7 +105,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     public bool alternateTorchSides = true;
 
     [Header("Budget des ombres des torches")]
-    public bool useAdaptiveTorchShadows = true;
+    public bool useAdaptiveTorchShadows = false;
     [Min(0)] public int maximumTorchShadowLights = 2;
     [Min(0f)] public float torchShadowDistance = 18f;
 

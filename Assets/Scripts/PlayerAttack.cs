@@ -128,10 +128,14 @@ public class PlayerAttack : MonoBehaviour
         if (firePoint == null || projectilePrefab == null)
             return;
 
-        Vector3 direction =
-            target.transform.position - firePoint.position;
+        // Aim at the target collider center in full 3D.
+        // Do not flatten Y: the shooter and target may stand at different heights.
+        Collider targetCollider = target.GetComponentInChildren<Collider>();
+        Vector3 targetPosition = targetCollider != null
+            ? targetCollider.bounds.center
+            : target.transform.position;
 
-        direction.y = 0f;
+        Vector3 direction = targetPosition - firePoint.position;
 
         if (direction.sqrMagnitude <= 0.001f)
             return;

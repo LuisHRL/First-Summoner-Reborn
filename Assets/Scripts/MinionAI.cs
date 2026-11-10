@@ -57,6 +57,8 @@ public class MinionAI : MonoBehaviour
         playerTargeting = FindAnyObjectByType<PlayerTargeting>();
 
         controller = GetComponent<CharacterController>();
+        if (GetComponent<CharacterTerrainGravity>() == null)
+            gameObject.AddComponent<CharacterTerrainGravity>();
         animator = GetComponentInChildren<Animator>();
 
         previousPosition = transform.position;

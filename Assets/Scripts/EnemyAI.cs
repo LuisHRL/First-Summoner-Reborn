@@ -1,6 +1,8 @@
 
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(CharacterTerrainGravity))]
 public class EnemyAI : MonoBehaviour
 {
     [Header("Déplacement")]
@@ -21,6 +23,7 @@ public class EnemyAI : MonoBehaviour
     [Header("Mémoire de l'attaquant")]
     public float attackerMemoryDuration = 10f;
 
+    private CharacterController controller;
     private PlayerHealth player;
     private Transform currentTarget;
     private float nextAttackTime;
@@ -30,6 +33,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        controller = GetComponent<CharacterController>();
         player = FindAnyObjectByType<PlayerHealth>();
     }
 
@@ -202,7 +206,7 @@ public class EnemyAI : MonoBehaviour
                 speed *
                 Time.deltaTime;
 
-            transform.position += movement;
+            controller.Move(movement);
 
             if (direction.sqrMagnitude > 0.001f)
             {

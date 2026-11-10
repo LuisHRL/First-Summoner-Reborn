@@ -1,6 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(CharacterTerrainGravity))]
 public class PlayerMovement : MonoBehaviour
 {
     public float speed = 5f;

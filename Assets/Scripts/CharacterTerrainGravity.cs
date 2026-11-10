@@ -23,6 +23,14 @@ public sealed class CharacterTerrainGravity : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
+    private static bool HasActiveTerrain()
+    {
+        foreach (Terrain terrain in Terrain.activeTerrains)
+            if (terrain != null && terrain.isActiveAndEnabled && terrain.terrainData != null)
+                return true;
+        return false;
+    }
+
     private void RecoverFromTerrainPenetration()
     {
         if (!recoverBelowTerrain) return;
@@ -58,6 +66,14 @@ public sealed class CharacterTerrainGravity : MonoBehaviour
     private void LateUpdate()
     {
         if (controller == null || !controller.enabled) return;
+
+        // Preview characters and characters waiting for procedural generation
+        // must not fall through an empty scene.
+        if (!HasActiveTerrain())
+        {
+            verticalSpeed = 0f;
+            return;
+        }
 
         RecoverFromTerrainPenetration();
 

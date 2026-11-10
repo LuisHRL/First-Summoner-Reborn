@@ -14,6 +14,8 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+        if (GetComponent<CharacterTerrainGravity>() == null)
+            gameObject.AddComponent<CharacterTerrainGravity>();
     }
 
     void Update()

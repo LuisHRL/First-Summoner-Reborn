@@ -34,6 +34,9 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        if (controller == null) controller = gameObject.AddComponent<CharacterController>();
+        if (GetComponent<CharacterTerrainGravity>() == null)
+            gameObject.AddComponent<CharacterTerrainGravity>();
         player = FindAnyObjectByType<PlayerHealth>();
     }
 

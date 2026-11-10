@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterTerrainGravity))]
 public class MinionRangedAI : MonoBehaviour
 {
     [Header("Déplacement")]

@@ -1,5 +1,4 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,7 +8,6 @@ public sealed class MissionLoadingScreen : MonoBehaviour
 {
     private static MissionLoadingScreen active;
     private Image progressFill;
-    private TMP_Text percentage;
 
     public static void Load(string sceneName, Sprite emblem)
     {
@@ -77,17 +75,7 @@ public sealed class MissionLoadingScreen : MonoBehaviour
         progressFill.fillMethod = Image.FillMethod.Horizontal;
         progressFill.fillAmount = 0f;
 
-        var label = new GameObject("ProgressText", typeof(RectTransform), typeof(TextMeshProUGUI));
-        label.transform.SetParent(background.transform, false);
-        var labelRect = label.GetComponent<RectTransform>();
-        labelRect.anchorMin = labelRect.anchorMax = new Vector2(0.5f, 0.27f);
-        labelRect.sizeDelta = new Vector2(420f, 90f);
-        percentage = label.GetComponent<TextMeshProUGUI>();
-        percentage.alignment = TextAlignmentOptions.Center;
-        percentage.fontSize = 36f;
-        percentage.color = Color.white;
-        percentage.raycastTarget = false;
-        percentage.text = "Loading... 0%";
+
     }
 
     private IEnumerator LoadRoutine(string sceneName)
@@ -118,6 +106,5 @@ public sealed class MissionLoadingScreen : MonoBehaviour
     private void SetProgress(float value)
     {
         progressFill.fillAmount = value;
-        percentage.text = "Loading... " + Mathf.RoundToInt(value * 100f) + "%";
     }
 }

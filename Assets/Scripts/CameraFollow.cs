@@ -39,6 +39,7 @@ public class CameraFollow : MonoBehaviour
 
     [Header("Terrain viewport limits")]
     public bool keepTerrainEndsInView = true;
+    [Min(0f)] public float terrainEdgePadding = 2f;
 
     [Header("Obstacle visibility")]
     public bool hideObstructingTrees = true;
@@ -249,8 +250,9 @@ public class CameraFollow : MonoBehaviour
         if (data == null)
             return;
 
-        float minZ = terrain.transform.position.z;
-        float maxZ = minZ + data.size.z;
+        float padding = Mathf.Min(terrainEdgePadding, data.size.z * 0.25f);
+        float minZ = terrain.transform.position.z + padding;
+        float maxZ = terrain.transform.position.z + data.size.z - padding;
 
         // Intersect the top and bottom viewport rays with the terrain's base plane.
         // Translating the camera in Z shifts both intersections by the same amount.

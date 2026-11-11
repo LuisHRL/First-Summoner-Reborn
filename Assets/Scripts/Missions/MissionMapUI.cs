@@ -83,9 +83,10 @@ public sealed class MissionMapUI : MonoBehaviour
                         {
                             bool available = MissionProgress.IsMissionUnlocked(
                                 navigator.World, regionSelected, mission, difficulty);
-                            string label = (MissionProgress.IsCompleted(mission, difficulty) ? "✓ " :
-                                available ? "" : "🔒 ") + mission.displayName;
-                            AddEntry(label, () => navigator.SelectMission(mission), available);
+                            if (!available) continue; // Future missions stay hidden.
+                            string label = (MissionProgress.IsCompleted(mission, difficulty) ? "✓ " : "") +
+                                mission.displayName;
+                            AddEntry(label, () => navigator.SelectMission(mission));
                         }
                 break;
 

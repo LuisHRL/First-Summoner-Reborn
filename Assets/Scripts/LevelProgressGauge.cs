@@ -26,6 +26,10 @@ public class LevelProgressGauge : MonoBehaviour
     private GameObject watchedFinalEnemy;
     private EnemyHealth watchedHealth;
     private bool finalEnemyKilled;
+    private bool loggedMissingMarker;
+    private bool loggedMissingEnemy;
+    private bool? previousEngaged;
+    private bool? previousVisible;
 
     private void Awake()
     {

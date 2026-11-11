@@ -42,27 +42,37 @@ public static class MissionProgress
         return hasMission;
     }
 
-    /// <summary>
-    /// Missions unlock in their configured order, separately for each difficulty.
-    /// The first mission of each region is available when the difficulty is unlocked.
-    /// </summary>
-    public static bool IsMissionUnlocked(
-        MissionWorldDefinition world,
-        MissionRegionDefinition region,
-        MissionDefinition mission,
-        Difficulty difficulty)
+    /// <summary>Regions unlock in world order after all missions in prior regions.</summary>
+    public static bool IsRegionUnlocked(MissionWorldDefinition world,
+        MissionRegionDefinition region, Difficulty difficulty)
     {
-        if (world == null || region == null || mission == null ||
-            world.regions == null || Array.IndexOf(world.regions, region) < 0 ||
-            region.missions == null || !IsUnlocked(world, difficulty))
-            return false;
+        if (world == null || region == null || world.regions == null ||
+            !IsUnlocked(world, difficulty)) return false;
+        int index = Array.IndexOf(world.regions, region);
+        if (index < 0) return false;
+        for (int r = 0; r < index; r++)
+        {
+            var previousRegion = world.regions[r];
+            if (previousRegion == null || previousRegion.missions == null ||
+                previousRegion.missions.Length == 0) return false;
+            foreach (var mission in previousRegion.missions)
+                if (!HasId(mission) || !IsCompleted(mission, difficulty))
+                    return false;
+        }
+        return true;
+    }
 
+    /// <summary>Missions unlock sequentially inside an unlocked region.</summary>
+    public static bool IsMissionUnlocked(MissionWorldDefinition world,
+        MissionRegionDefinition region, MissionDefinition mission, Difficulty difficulty)
+    {
+        if (!IsRegionUnlocked(world, region, difficulty) ||
+            mission == null || region.missions == null) return false;
         int index = Array.IndexOf(region.missions, mission);
         if (index < 0) return false;
         if (index == 0) return true;
-
-        MissionDefinition previous = region.missions[index - 1];
-        return previous != null && IsCompleted(previous, difficulty);
+        var previous = region.missions[index - 1];
+        return HasId(previous) && IsCompleted(previous, difficulty);
     }
 
     public static int CompletedCount(MissionRegionDefinition region, Difficulty difficulty)

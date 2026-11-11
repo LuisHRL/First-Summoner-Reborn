@@ -26,7 +26,16 @@ public sealed class MissionMapUI : MonoBehaviour
     public void ShowNormal() { difficulty = MissionProgress.Difficulty.Normal; Refresh(); }
     public void ShowMedium() { difficulty = MissionProgress.Difficulty.Medium; Refresh(); }
 
-    private void OnEnable() => Refresh();
+    private void OnEnable()
+    {
+        if (navigator != null) navigator.SelectionChanged += Refresh;
+        Refresh();
+    }
+
+    private void OnDisable()
+    {
+        if (navigator != null) navigator.SelectionChanged -= Refresh;
+    }
 
     public void Refresh()
     {

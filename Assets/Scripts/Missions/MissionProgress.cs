@@ -20,6 +20,40 @@ public static class MissionProgress
         PlayerPrefs.Save();
     }
 
+    public static float BestTime(MissionDefinition mission, Difficulty difficulty)
+    {
+        if (!HasId(mission)) return -1f;
+        return PlayerPrefs.GetFloat(Key(mission, difficulty) + ".BestSeconds", -1f);
+    }
+
+    public static int BestStars(MissionDefinition mission, Difficulty difficulty)
+    {
+        if (!HasId(mission)) return 0;
+        return PlayerPrefs.GetInt(Key(mission, difficulty) + ".Stars", 0);
+    }
+
+    public static int StarsForTime(MissionDefinition mission, float seconds)
+    {
+        if (mission == null || seconds < 0f) return 0;
+        if (mission.threeStarMaxSeconds > 0f &&
+            mission.twoStarMaxSeconds >= mission.threeStarMaxSeconds &&
+            seconds <= mission.threeStarMaxSeconds) return 3;
+        if (mission.twoStarMaxSeconds > 0f && seconds <= mission.twoStarMaxSeconds) return 2;
+        return 1;
+    }
+
+    public static void RecordVictory(MissionDefinition mission, Difficulty difficulty, float seconds)
+    {
+        if (!HasId(mission) || seconds < 0f ||
+            !Enum.IsDefined(typeof(Difficulty), difficulty)) return;
+        float previous = BestTime(mission, difficulty);
+        if (previous < 0f || seconds < previous)
+            PlayerPrefs.SetFloat(Key(mission, difficulty) + ".BestSeconds", seconds);
+        PlayerPrefs.SetInt(Key(mission, difficulty) + ".Stars",
+            Mathf.Max(BestStars(mission, difficulty), StarsForTime(mission, seconds)));
+        MarkCompleted(mission, difficulty);
+    }
+
     /// <summary>Medium unlocks globally when every mission in every region is complete on Normal.</summary>
     public static bool IsUnlocked(MissionWorldDefinition world, Difficulty difficulty)
     {

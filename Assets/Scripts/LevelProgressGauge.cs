@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LevelProgressGauge : MonoBehaviour
 {
@@ -15,6 +16,37 @@ public class LevelProgressGauge : MonoBehaviour
     [Header("Synchronisation avec les groupes")]
     [SerializeField] private bool useLastEnemyAsLevelEnd = true;
     private EnemySpawner spawner;
+    [Header("Marqueur du dernier ennemi")]
+    [SerializeField] private RectTransform finalEnemyMarker;
+    [SerializeField] private Color finalEnemyColor = Color.red;
+    private Image finalEnemyImage;
+
+    private void Awake()
+    {
+        ResolveFinalEnemyMarker();
+    }
+
+    private void ResolveFinalEnemyMarker()
+    {
+        if (finalEnemyMarker == null)
+        {
+            RectTransform[] markers = GetComponentsInChildren<RectTransform>(true);
+            foreach (RectTransform marker in markers)
+            {
+                if (marker.name == "FinalEnemy")
+                {
+                    finalEnemyMarker = marker;
+                    break;
+                }
+            }
+        }
+        if (finalEnemyMarker != null)
+        {
+            finalEnemyImage = finalEnemyMarker.GetComponent<Image>();
+            if (finalEnemyImage != null)
+                finalEnemyImage.color = finalEnemyColor;
+        }
+    }
 
     private void Update()
     {
@@ -53,5 +85,17 @@ public class LevelProgressGauge : MonoBehaviour
         position.y = progress * progressGauge.rect.height;
 
         playerProgressMarker.anchoredPosition = position;
+
+        // The top of the gauge represents the last spawned enemy, not the terrain edge.
+        if (finalEnemyMarker == null)
+            ResolveFinalEnemyMarker();
+        if (finalEnemyMarker != null)
+        {
+            Vector2 endPosition = finalEnemyMarker.anchoredPosition;
+            endPosition.y = progressGauge.rect.height;
+            finalEnemyMarker.anchoredPosition = endPosition;
+            if (finalEnemyImage != null && finalEnemyImage.color != finalEnemyColor)
+                finalEnemyImage.color = finalEnemyColor;
+        }
     }
 }

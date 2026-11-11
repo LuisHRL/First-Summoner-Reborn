@@ -31,7 +31,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     [Min(0f)] public float safeZoneLength = 15f;
     [Min(0f)] public float safeZoneTransitionLength = 12f;
 
-    private float PathCenter(float z)
+    public float PathCenter(float z)
     {
         float start = Mathf.Clamp(safeZoneLength, 0f, terrainLength);
         float transition = Mathf.Max(0.001f, safeZoneTransitionLength);

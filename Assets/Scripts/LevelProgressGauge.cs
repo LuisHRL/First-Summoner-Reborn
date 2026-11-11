@@ -22,6 +22,7 @@ public class LevelProgressGauge : MonoBehaviour
     private Image finalEnemyImage;
     private Sprite idleFinalEnemySprite;
     private bool finalEnemySpriteCaptured;
+    private bool finalEnemyWasSpawned;
 
     private void Awake()
     {
@@ -55,14 +56,32 @@ public class LevelProgressGauge : MonoBehaviour
 
     private void Update()
     {
+        // Marker lifetime is independent of gauge movement and player references.
+        if (spawner == null)
+            spawner = FindAnyObjectByType<EnemySpawner>();
+        if (finalEnemyMarker == null)
+            ResolveFinalEnemyMarker();
+
+        if (spawner != null && !float.IsNegativeInfinity(spawner.FurthestSpawnZ))
+            finalEnemyWasSpawned = true;
+
+        GameObject trackedEnemy = spawner != null ? spawner.FinalEnemy : null;
+        EnemyHealth trackedHealth = trackedEnemy != null ? trackedEnemy.GetComponent<EnemyHealth>() : null;
+        bool enemyAlive = trackedEnemy != null && trackedEnemy.activeInHierarchy &&
+            (trackedHealth == null || trackedHealth.CurrentHealth > 0);
+        bool spawning = spawner != null && !spawner.IsWaveFinished && !finalEnemyWasSpawned;
+        bool showMarker = enemyAlive || spawning;
+        if (finalEnemyMarker != null && finalEnemyMarker.gameObject.activeSelf != showMarker)
+            finalEnemyMarker.gameObject.SetActive(showMarker);
+
+        if (!showMarker)
+            return;
+
         if (player == null || playerProgressMarker == null ||
             progressGauge == null)
             return;
 
         // Progression sur l'axe du chemin (début -> fin).
-        if (spawner == null)
-            spawner = FindAnyObjectByType<EnemySpawner>();
-
         Terrain terrain = Terrain.activeTerrain;
         float startZ = levelStart != null ? levelStart.position.z :
             (terrain != null ? terrain.transform.position.z : player.position.z);
@@ -97,21 +116,12 @@ public class LevelProgressGauge : MonoBehaviour
         if (finalEnemyMarker == null)
             return;
 
-        bool finalExists = spawner != null && spawner.FinalEnemy != null;
-        bool finalSpawning = spawner != null && !spawner.IsWaveFinished &&
-            spawner.FinalEnemy == null;
-        bool showMarker = finalExists || finalSpawning;
-        if (finalEnemyMarker.gameObject.activeSelf != showMarker)
-            finalEnemyMarker.gameObject.SetActive(showMarker);
-        if (!showMarker)
-            return;
-
         Vector2 endPosition = finalEnemyMarker.anchoredPosition;
         endPosition.y = progressGauge.rect.height;
         finalEnemyMarker.anchoredPosition = endPosition;
 
         // Default ring before aggro; dedicated red sprite during combat.
-        bool engaged = finalExists && spawner.FinalEnemyGroup != null &&
+        bool engaged = enemyAlive && spawner.FinalEnemyGroup != null &&
             spawner.FinalEnemyGroup.IsEngaged;
         if (finalEnemyImage != null)
         {

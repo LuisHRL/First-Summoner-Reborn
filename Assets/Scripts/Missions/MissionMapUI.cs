@@ -80,8 +80,13 @@ public sealed class MissionMapUI : MonoBehaviour
                 if (regionSelected != null && regionSelected.missions != null)
                     foreach (var mission in regionSelected.missions)
                         if (mission != null)
-                            AddEntry((MissionProgress.IsCompleted(mission, difficulty) ? "✓ " : "") + mission.displayName,
-                                () => { if (MissionProgress.IsUnlocked(navigator.World, difficulty)) navigator.SelectMission(mission); }, unlocked);
+                        {
+                            bool available = MissionProgress.IsMissionUnlocked(
+                                navigator.World, regionSelected, mission, difficulty);
+                            string label = (MissionProgress.IsCompleted(mission, difficulty) ? "✓ " :
+                                available ? "" : "🔒 ") + mission.displayName;
+                            AddEntry(label, () => navigator.SelectMission(mission), available);
+                        }
                 break;
 
             case MissionMenuNavigator.Page.Mission:

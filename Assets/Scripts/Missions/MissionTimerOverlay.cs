@@ -22,7 +22,7 @@ public sealed class MissionTimerOverlay : MonoBehaviour
     private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (GameSession.SelectedMission == null || scene.name != "GameScene") return;
-        if (FindFirstObjectByType<MissionTimerOverlay>() != null) return;
+        if (FindAnyObjectByType<MissionTimerOverlay>() != null) return;
         var root = new GameObject("MissionTimerOverlay", typeof(RectTransform),
             typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster),
             typeof(MissionTimerOverlay));

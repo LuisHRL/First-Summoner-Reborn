@@ -87,6 +87,11 @@ public class LevelProgressGauge : MonoBehaviour
         }
         if (finalEnemyMarker == null)
             ResolveFinalEnemyMarker();
+        if (finalEnemyMarker == null && !loggedMissingMarker)
+        {
+            Debug.LogWarning("[FinalEnemy] UI marker not found under ProgressGauge or scene.", this);
+            loggedMissingMarker = true;
+        }
 
         if (spawner != null && !float.IsNegativeInfinity(spawner.FurthestSpawnZ))
             finalEnemyWasSpawned = true;
@@ -103,11 +108,25 @@ public class LevelProgressGauge : MonoBehaviour
                 watchedHealth.OnDeath.AddListener(OnFinalEnemyDeath);
         }
 
+        if (spawner != null && spawner.IsWaveFinished && trackedEnemy == null &&
+            !finalEnemyWasSpawned && !loggedMissingEnemy)
+        {
+            Debug.LogWarning("[FinalEnemy] Spawner finished without a tracked final enemy.", spawner);
+            loggedMissingEnemy = true;
+        }
+
         bool enemyAlive = !finalEnemyKilled && trackedEnemy != null &&
             trackedEnemy.activeInHierarchy &&
             (watchedHealth == null || watchedHealth.CurrentHealth > 0);
         bool spawning = spawner != null && !spawner.IsWaveFinished && !finalEnemyWasSpawned;
         bool showMarker = enemyAlive || spawning;
+        if (previousVisible != showMarker)
+        {
+            Debug.Log("[FinalEnemy] visible=" + showMarker + " enemy=" +
+                (trackedEnemy != null ? trackedEnemy.name : "null") +
+                " waveFinished=" + (spawner != null && spawner.IsWaveFinished), this);
+            previousVisible = showMarker;
+        }
         if (finalEnemyMarker != null && finalEnemyMarker.gameObject.activeSelf != showMarker)
             finalEnemyMarker.gameObject.SetActive(showMarker);
 
@@ -160,6 +179,14 @@ public class LevelProgressGauge : MonoBehaviour
         // Default ring before aggro; dedicated red sprite during combat.
         bool engaged = enemyAlive && spawner.FinalEnemyGroup != null &&
             spawner.FinalEnemyGroup.IsEngaged;
+        if (previousEngaged != engaged)
+        {
+            Debug.Log("[FinalEnemy] engaged=" + engaged + " group=" +
+                (spawner.FinalEnemyGroup != null ? spawner.FinalEnemyGroup.name : "null") +
+                " redSprite=" + (finalEnemySprite != null ? finalEnemySprite.name : "null") +
+                " image=" + (finalEnemyImage != null ? finalEnemyImage.name : "null"), this);
+            previousEngaged = engaged;
+        }
         if (finalEnemyImage != null)
         {
             Sprite desiredSprite = engaged && finalEnemySprite != null

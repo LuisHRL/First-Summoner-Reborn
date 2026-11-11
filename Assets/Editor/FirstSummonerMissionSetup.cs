@@ -45,6 +45,15 @@ public static class FirstSummonerMissionSetup
         illustration.enabled = illustration.sprite != null;
         Stretch((RectTransform)illustration.transform, new Vector2(.05f, .49f), new Vector2(.95f, .85f));
 
+        RectTransform missionMapArea = Rect(root, "MissionMapArea");
+        Stretch(missionMapArea, new Vector2(.08f, .14f), new Vector2(.92f, .86f));
+        missionMapArea.SetAsLastSibling();
+        var placeholder = Component<Image>(missionMapArea.gameObject);
+        placeholder.color = new Color(.13f, .18f, .23f, .85f);
+        placeholder.raycastTarget = false;
+        var mapLayout = missionMapArea.GetComponent<VerticalLayoutGroup>();
+        if (mapLayout != null) Object.DestroyImmediate(mapLayout);
+
         RectTransform entries = Rect(root, "Entries");
         Stretch(entries, new Vector2(.05f, .15f), new Vector2(.95f, .47f));
         var layout = Component<VerticalLayoutGroup>(entries.gameObject);
@@ -63,6 +72,7 @@ public static class FirstSummonerMissionSetup
         Stretch((RectTransform)launch.transform, new Vector2(.70f, .02f), new Vector2(.95f, .12f));
 
         Reference(map, "entriesContainer", entries);
+        Reference(map, "missionMapArea", missionMapArea);
         Reference(map, "entryButtonPrefab", template);
         Reference(map, "heading", heading);
         Reference(map, "mapIllustration", illustration);

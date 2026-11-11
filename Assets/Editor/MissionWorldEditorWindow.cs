@@ -45,11 +45,27 @@ public sealed class MissionWorldEditorWindow : EditorWindow
         EditorGUILayout.Space(8);
         EditorGUILayout.LabelField("Regions", EditorStyles.boldLabel);
         if (world.regions != null)
-            foreach (var item in world.regions)
-                if (item != null && GUILayout.Button(item.displayName + (item == region ? "  ✓" : "")))
-                {
+            for (int i = 0; i < world.regions.Length; i++)
+            {
+                var item = world.regions[i];
+                if (item == null) continue;
+                EditorGUILayout.BeginHorizontal();
+                if (GUILayout.Button(item.displayName + (item == region ? "  ✓" : ""), GUILayout.ExpandWidth(true)))
                     region = item;
-                }
+                using (new EditorGUI.DisabledScope(i == 0))
+                    if (GUILayout.Button("↑", GUILayout.Width(32)))
+                    {
+                        MoveRegion(i, i - 1);
+                        GUIUtility.ExitGUI();
+                    }
+                using (new EditorGUI.DisabledScope(i == world.regions.Length - 1))
+                    if (GUILayout.Button("↓", GUILayout.Width(32)))
+                    {
+                        MoveRegion(i, i + 1);
+                        GUIUtility.ExitGUI();
+                    }
+                EditorGUILayout.EndHorizontal();
+            }
         NewNameField("New region name");
         using (new EditorGUI.DisabledScope(string.IsNullOrWhiteSpace(newName)))
             if (GUILayout.Button("Add Region"))
@@ -85,6 +101,18 @@ public sealed class MissionWorldEditorWindow : EditorWindow
                 }
         }
         EditorGUILayout.EndScrollView();
+    }
+
+    private void MoveRegion(int from, int to)
+    {
+        if (world == null || world.regions == null || from < 0 || to < 0 ||
+            from >= world.regions.Length || to >= world.regions.Length) return;
+        Undo.RecordObject(world, "Reorder mission regions");
+        var temp = world.regions[from];
+        world.regions[from] = world.regions[to];
+        world.regions[to] = temp;
+        EditorUtility.SetDirty(world);
+        AssetDatabase.SaveAssets();
     }
 
     private void NewNameField(string label) => newName = EditorGUILayout.TextField(label, newName);

@@ -38,20 +38,30 @@ public class LevelProgressGauge : MonoBehaviour
 
     private void ResolveFinalEnemyMarker()
     {
+        if (finalEnemyMarker == null && progressGauge != null)
+            finalEnemyMarker = progressGauge.Find("FinalEnemy") as RectTransform;
+
+        if (finalEnemyMarker == null && playerProgressMarker != null &&
+            playerProgressMarker.parent != null)
+            finalEnemyMarker = playerProgressMarker.parent.Find("FinalEnemy") as RectTransform;
+
         if (finalEnemyMarker == null)
             finalEnemyMarker = transform.Find("FinalEnemy") as RectTransform;
+
         if (finalEnemyMarker == null)
         {
-            // Fallback for nonstandard scene layouts.
-            RectTransform[] markers = Resources.FindObjectsOfTypeAll<RectTransform>();
-            foreach (RectTransform marker in markers)
+            // Search the active scene hierarchy, including inactive UI objects.
+            var roots = gameObject.scene.GetRootGameObjects();
+            foreach (GameObject root in roots)
             {
-                if (marker.name == "FinalEnemy" && marker.gameObject.scene.IsValid() &&
-                    marker.gameObject.scene == gameObject.scene)
+                RectTransform[] markers = root.GetComponentsInChildren<RectTransform>(true);
+                foreach (RectTransform marker in markers)
                 {
+                    if (marker.name != "FinalEnemy") continue;
                     finalEnemyMarker = marker;
                     break;
                 }
+                if (finalEnemyMarker != null) break;
             }
         }
 
@@ -64,6 +74,18 @@ public class LevelProgressGauge : MonoBehaviour
                 finalEnemySpriteCaptured = true;
             }
         }
+    }
+
+    private static string GetTransformPath(Transform item)
+    {
+        if (item == null) return "null";
+        string path = item.name;
+        while (item.parent != null)
+        {
+            item = item.parent;
+            path = item.name + "/" + path;
+        }
+        return path;
     }
 
     private void OnFinalEnemyDeath()
@@ -93,7 +115,11 @@ public class LevelProgressGauge : MonoBehaviour
             ResolveFinalEnemyMarker();
         if (finalEnemyMarker == null && !loggedMissingMarker)
         {
-            Debug.LogWarning("[FinalEnemy] UI marker not found under ProgressGauge or scene.", this);
+            Debug.LogWarning("[FinalEnemy] UI marker absent. gauge=" +
+                (progressGauge != null ? GetTransformPath(progressGauge) : "null") +
+                " playerMarker=" +
+                (playerProgressMarker != null ? GetTransformPath(playerProgressMarker) : "null") +
+                " script=" + GetTransformPath(transform), this);
             loggedMissingMarker = true;
         }
 

@@ -41,6 +41,22 @@ public class CameraFollow : MonoBehaviour
     public bool keepTerrainEndsInView = true;
     [Min(0f)] public float terrainEdgePadding = 2f;
 
+    [Header("Introduction de mission")]
+    public bool playMissionIntro = true;
+    [Min(0f)] public float introHoldSeconds = 0.8f;
+    [Min(0.1f)] public float introTransitionSeconds = 2f;
+    [Min(1f)] public float introCameraDistance = 3.5f;
+    [Min(0f)] public float introLookHeight = 1.2f;
+    [Range(20f, 90f)] public float introFieldOfView = 48f;
+
+    private bool introStarted;
+    private bool introFinished;
+    private float introStartTime;
+    private Vector3 introPosition;
+    private Quaternion introRotation;
+    private Vector3 gameplayStartPosition;
+    private Quaternion gameplayStartRotation;
+
     [Header("Obstacle visibility")]
     public bool hideObstructingTrees = true;
     [Min(0.1f)] public float obstacleCheckRadius = 0.35f;
@@ -69,6 +85,12 @@ public class CameraFollow : MonoBehaviour
             cameraComponent = GetComponent<Camera>();
 
         ResolveTerrain();
+        if (playMissionIntro && !introFinished)
+        {
+            UpdateMissionIntro();
+            return;
+        }
+
         ApplyFieldOfView();
         transform.rotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
 
@@ -150,6 +172,55 @@ public class CameraFollow : MonoBehaviour
             ClampToTerrainEnds(ref result);
 
         transform.position = result;
+        UpdateObstructions();
+    }
+
+    private void UpdateMissionIntro()
+    {
+        if (!introStarted)
+        {
+            introStarted = true;
+            introStartTime = Time.time;
+            gameplayStartRotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
+            gameplayStartPosition = target.position + offset;
+            transform.rotation = gameplayStartRotation;
+            if (keepTerrainEndsInView && terrain != null)
+                ClampToTerrainEnds(ref gameplayStartPosition);
+
+            Vector3 focus = target.position + Vector3.up * introLookHeight;
+            // Start in front of the hero, on the same side as the gameplay camera.
+            Vector3 backward = gameplayStartRotation * Vector3.back;
+            introPosition = focus + backward * introCameraDistance;
+            introRotation = Quaternion.LookRotation(focus - introPosition, Vector3.up);
+        }
+
+        float elapsed = Time.time - introStartTime;
+        float blend = Mathf.Clamp01((elapsed - introHoldSeconds) /
+            Mathf.Max(0.1f, introTransitionSeconds));
+        blend = blend * blend * (3f - 2f * blend);
+        Vector3 endPosition = target.position + offset;
+        if (keepTerrainEndsInView && terrain != null)
+        {
+            transform.rotation = gameplayStartRotation;
+            ClampToTerrainEnds(ref endPosition);
+        }
+
+        transform.position = Vector3.Lerp(introPosition, endPosition, blend);
+        transform.rotation = Quaternion.Slerp(introRotation, gameplayStartRotation, blend);
+        if (cameraComponent != null && !cameraComponent.orthographic)
+        {
+            float normalFov = overrideFieldOfView ? verticalFieldOfView : cameraComponent.fieldOfView;
+            cameraComponent.fieldOfView = Mathf.Lerp(introFieldOfView, normalFov, blend);
+        }
+
+        if (elapsed >= introHoldSeconds + introTransitionSeconds)
+        {
+            introFinished = true;
+            framingInitialized = true;
+            verticalVelocity = 0f;
+            horizontalVelocity = 0f;
+            ApplyFieldOfView();
+        }
         UpdateObstructions();
     }
 

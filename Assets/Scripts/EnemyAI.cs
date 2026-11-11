@@ -66,7 +66,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     // --------------------------------------------------
-    // AGGRO GLOBAL
+    // AGGRO PAR GROUPE
     // --------------------------------------------------
 
     public void AlertedBy(Transform attacker)
@@ -119,11 +119,6 @@ public class EnemyAI : MonoBehaviour
 
     void UpdateTarget()
     {
-        if (!IsTargetValid(sharedTarget))
-        {
-            currentTarget = null;
-        }
-
         if (aggroGroup != null && aggroGroup.CurrentTarget != null)
         {
             currentTarget = aggroGroup.CurrentTarget;

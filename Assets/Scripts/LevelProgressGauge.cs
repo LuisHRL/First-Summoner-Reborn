@@ -20,6 +20,8 @@ public class LevelProgressGauge : MonoBehaviour
     [SerializeField] private RectTransform finalEnemyMarker;
     [SerializeField] private Sprite finalEnemySprite;
     private Image finalEnemyImage;
+    private Sprite idleFinalEnemySprite;
+    private bool finalEnemySpriteCaptured;
 
     private void Awake()
     {
@@ -43,10 +45,10 @@ public class LevelProgressGauge : MonoBehaviour
         if (finalEnemyMarker != null)
         {
             finalEnemyImage = finalEnemyMarker.GetComponent<Image>();
-            if (finalEnemyImage != null && finalEnemySprite != null)
+            if (finalEnemyImage != null && !finalEnemySpriteCaptured)
             {
-                finalEnemyImage.sprite = finalEnemySprite;
-                finalEnemyImage.color = Color.white;
+                idleFinalEnemySprite = finalEnemyImage.sprite;
+                finalEnemySpriteCaptured = true;
             }
         }
     }
@@ -89,19 +91,35 @@ public class LevelProgressGauge : MonoBehaviour
 
         playerProgressMarker.anchoredPosition = position;
 
-        // The top of the gauge represents the last spawned enemy, not the terrain edge.
+        // Keep the final marker aligned with the last enemy's original position.
         if (finalEnemyMarker == null)
             ResolveFinalEnemyMarker();
-        if (finalEnemyMarker != null)
+        if (finalEnemyMarker == null)
+            return;
+
+        bool finalExists = spawner != null && spawner.FinalEnemy != null;
+        bool finalSpawning = spawner != null && !spawner.IsWaveFinished &&
+            spawner.FinalEnemy == null;
+        bool showMarker = finalExists || finalSpawning;
+        if (finalEnemyMarker.gameObject.activeSelf != showMarker)
+            finalEnemyMarker.gameObject.SetActive(showMarker);
+        if (!showMarker)
+            return;
+
+        Vector2 endPosition = finalEnemyMarker.anchoredPosition;
+        endPosition.y = progressGauge.rect.height;
+        finalEnemyMarker.anchoredPosition = endPosition;
+
+        // Default ring before aggro; dedicated red sprite during combat.
+        bool engaged = finalExists && spawner.FinalEnemyGroup != null &&
+            spawner.FinalEnemyGroup.IsEngaged;
+        if (finalEnemyImage != null)
         {
-            Vector2 endPosition = finalEnemyMarker.anchoredPosition;
-            endPosition.y = progressGauge.rect.height;
-            finalEnemyMarker.anchoredPosition = endPosition;
-            if (finalEnemyImage != null && finalEnemySprite != null && finalEnemyImage.sprite != finalEnemySprite)
-            {
-                finalEnemyImage.sprite = finalEnemySprite;
-                finalEnemyImage.color = Color.white;
-            }
+            Sprite desiredSprite = engaged && finalEnemySprite != null
+                ? finalEnemySprite : idleFinalEnemySprite;
+            if (finalEnemyImage.sprite != desiredSprite)
+                finalEnemyImage.sprite = desiredSprite;
+            finalEnemyImage.color = Color.white;
         }
     }
 }

@@ -29,7 +29,17 @@ public class EnemyAI : MonoBehaviour
     private float nextAttackTime;
 
     // Cible globale commune au camp ennemi.
-    private static Transform sharedTarget;
+    private EnemyAggroGroup aggroGroup;
+    public void AssignAggroGroup(EnemyAggroGroup group)
+    {
+        if (aggroGroup != null) aggroGroup.Unregister(this);
+        aggroGroup = group;
+        if (group != null) group.Register(this);
+    }
+    private void OnDestroy()
+    {
+        if (aggroGroup != null) aggroGroup.Unregister(this);
+    }
 
     void Start()
     {
@@ -65,10 +75,10 @@ public class EnemyAI : MonoBehaviour
             return;
 
         // Une cible collective vivante reste prioritaire.
-        if (IsTargetValid(sharedTarget))
+        if (IsTargetValid(aggroGroup != null ? aggroGroup.CurrentTarget : null))
             return;
 
-        sharedTarget = attacker;
+        if (aggroGroup != null) aggroGroup.Alert(attacker);
         currentTarget = attacker;
     }
 
@@ -111,18 +121,21 @@ public class EnemyAI : MonoBehaviour
     {
         if (!IsTargetValid(sharedTarget))
         {
-            sharedTarget = null;
+            currentTarget = null;
         }
 
-        if (sharedTarget != null)
+        if (aggroGroup != null && aggroGroup.CurrentTarget != null)
         {
-            currentTarget = sharedTarget;
+            currentTarget = aggroGroup.CurrentTarget;
             return;
         }
 
         // Conserver l'adversaire engagé.
         if (IsTargetValid(currentTarget))
+        {
+            if (aggroGroup != null) aggroGroup.Alert(currentTarget);
             return;
+        }
 
         currentTarget = null;
 
@@ -132,6 +145,7 @@ public class EnemyAI : MonoBehaviour
         if (minion != null)
         {
             currentTarget = minion.transform;
+            if (aggroGroup != null) aggroGroup.Alert(currentTarget);
             return;
         }
 
@@ -146,6 +160,7 @@ public class EnemyAI : MonoBehaviour
             if (distance <= playerAggroRange)
             {
                 currentTarget = player.transform;
+                if (aggroGroup != null) aggroGroup.Alert(currentTarget);
             }
         }
     }

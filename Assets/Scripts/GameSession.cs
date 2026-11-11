@@ -29,10 +29,25 @@ public static class GameSession
         return true;
     }
 
+    public static float MissionElapsedSeconds { get; private set; }
+    public static bool MissionTimerRunning { get; private set; }
+
+    public static void StartMissionTimer()
+    {
+        MissionElapsedSeconds = 0f;
+        MissionTimerRunning = SelectedMission != null;
+    }
+
+    public static void TickMissionTimer(float deltaSeconds)
+    {
+        if (MissionTimerRunning) MissionElapsedSeconds += UnityEngine.Mathf.Max(0f, deltaSeconds);
+    }
+
     public static void ClearMissionSelection()
     {
         SelectedMission = null;
         SelectedWorld = null;
+        MissionTimerRunning = false;
     }
 
     /// <summary>Call only from the actual victory condition, never on scene exit.</summary>
@@ -43,7 +58,8 @@ public static class GameSession
         var difficulty = (MissionProgress.Difficulty)SelectedDifficulty;
         if (!System.Enum.IsDefined(typeof(MissionProgress.Difficulty), difficulty))
             return false;
-        MissionProgress.MarkCompleted(SelectedMission, difficulty);
+        MissionTimerRunning = false;
+        MissionProgress.RecordVictory(SelectedMission, difficulty, MissionElapsedSeconds);
         return true;
     }
 }

@@ -259,22 +259,33 @@ public class LevelProgressGauge : MonoBehaviour
         if (finalEnemyMarker == null)
             return;
 
-        if (finalEnemyMarker.parent != progressGauge)
-            finalEnemyMarker.SetParent(progressGauge, false);
+        // The player triangle already uses the correct gauge coordinate system.
+        // Match its anchors instead of using the gauge RectTransform pivot.
+        RectTransform markerParent = playerProgressMarker.parent as RectTransform;
+        if (markerParent != null && finalEnemyMarker.parent != markerParent)
+            finalEnemyMarker.SetParent(markerParent, false);
 
-        finalEnemyMarker.anchorMin = new Vector2(0.5f, 0.5f);
-        finalEnemyMarker.anchorMax = new Vector2(0.5f, 0.5f);
+        finalEnemyMarker.anchorMin = playerProgressMarker.anchorMin;
+        finalEnemyMarker.anchorMax = playerProgressMarker.anchorMax;
         finalEnemyMarker.pivot = new Vector2(0.5f, 0.5f);
 
         float enemyZ = trackedEnemy != null ? trackedEnemy.transform.position.z : endZ;
         float enemyProgress = Mathf.Clamp01((enemyZ - startZ) / (endZ - startZ));
-        float halfMarkerHeight = finalEnemyMarker.rect.height * 0.5f;
-        float lowerY = progressGauge.rect.yMin + halfMarkerHeight;
-        float upperY = progressGauge.rect.yMax - halfMarkerHeight;
-        float markerY = lowerY <= upperY
-            ? Mathf.Lerp(lowerY, upperY, enemyProgress)
-            : progressGauge.rect.center.y;
-        finalEnemyMarker.anchoredPosition = new Vector2(0f, markerY);
+        float markerY = enemyProgress * progressGauge.rect.height;
+        // Keep the marker centered on the gauge's vertical axis.
+        Vector2 gaugeCenterInParent = Vector2.zero;
+        if (markerParent != null)
+            gaugeCenterInParent = markerParent.InverseTransformPoint(progressGauge.TransformPoint(progressGauge.rect.center));
+        Vector2 anchorReference = Vector2.zero;
+        if (markerParent != null)
+        {
+            Rect parentRect = markerParent.rect;
+            anchorReference = new Vector2(
+                parentRect.xMin + parentRect.width * finalEnemyMarker.anchorMin.x,
+                parentRect.yMin + parentRect.height * finalEnemyMarker.anchorMin.y);
+        }
+        finalEnemyMarker.anchoredPosition = new Vector2(
+            gaugeCenterInParent.x - anchorReference.x, markerY);
 
         // Default ring before aggro; dedicated red sprite during combat.
         bool engaged = enemyAlive && spawner.FinalEnemyGroup != null &&

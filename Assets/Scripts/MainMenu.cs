@@ -52,8 +52,15 @@ public class MainMenu : MonoBehaviour
     {
         ControlSettings.LoadSavedMode();
 
-        // Héros est l'écran d'accueil.
+        // Start on Heroes normally; return directly to Missions after a battle.
         BackToHero();
+        if (GameSession.ConsumeMissionMenuReturn())
+        {
+            heroPanel.SetActive(false);
+            missionPanel.SetActive(true);
+            topButtonsPanel.SetActive(false);
+            if (missionNavigator != null) missionNavigator.ShowWorld();
+        }
 
         quitConfirmPanel.SetActive(false);
     }

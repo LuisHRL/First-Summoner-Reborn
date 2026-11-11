@@ -110,7 +110,7 @@ public class CameraFollow : MonoBehaviour
         bool inCombat = false;
         if (tiltOnEnemyAggro)
         {
-            EnemyAggroGroup[] groups = FindObjectsByType<EnemyAggroGroup>(FindObjectsSortMode.None);
+            EnemyAggroGroup[] groups = FindObjectsByType<EnemyAggroGroup>();
             foreach (EnemyAggroGroup group in groups)
             {
                 if (group != null && group.isActiveAndEnabled && group.IsEngaged)

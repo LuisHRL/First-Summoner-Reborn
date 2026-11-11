@@ -35,7 +35,7 @@ public static class RuntimeLightShadowComparison
         if (comparisonActive)
             Restore();
 
-        foreach (Light light in Object.FindObjectsByType<Light>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
+        foreach (Light light in Object.FindObjectsByType<Light>(FindObjectsInactive.Exclude))
         {
             if (light == null || !light.enabled || light.type == LightType.Directional) continue;
             originals[light] = light.shadows;

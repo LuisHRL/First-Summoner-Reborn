@@ -27,6 +27,11 @@ public class EnemySpawner : MonoBehaviour
     [Min(0f)]
     public float timeBetweenSpawns = 1.5f;
 
+    [Header("Zone protégée")]
+    public bool respectStartingSafeZone = true;
+    [Min(0f)] public float safeZoneMargin = 1f;
+    [Min(1)] public int spawnPositionAttempts = 24;
+
     public bool IsWaveFinished { get; private set; }
 
     private List<EnemyDefinitions> availableEnemies =
@@ -124,11 +129,12 @@ public class EnemySpawner : MonoBehaviour
         if (selectedEnemy == null)
             return;
 
-        Vector2 randomCircle =
-            Random.insideUnitCircle * spawnRadius;
-
-        Vector3 spawnPosition = spawnPoint.position +
-            new Vector3(randomCircle.x, 0f, randomCircle.y);
+        Vector3 spawnPosition;
+        if (!TryFindSpawnPosition(out spawnPosition))
+        {
+            Debug.LogWarning("EnemySpawner : aucun emplacement valide hors de la zone protégée.", this);
+            return;
+        }
 
         GameObject spawnedEnemy = Instantiate(
             selectedEnemy.prefab,
@@ -138,4 +144,51 @@ public class EnemySpawner : MonoBehaviour
 
         spawnedEnemy.name = selectedEnemy.enemyName;
     }
+    private bool TryFindSpawnPosition(out Vector3 position)
+    {
+        position = spawnPoint.position;
+        Terrain terrain = Terrain.activeTerrain;
+        if (terrain == null)
+        {
+            Debug.LogWarning("EnemySpawner : aucun terrain actif pour vérifier la zone protégée.", this);
+            return !respectStartingSafeZone;
+        }
+
+        Vector3 origin = terrain.transform.position;
+        Vector3 size = terrain.terrainData.size;
+        float safeLength = 0f;
+        if (respectStartingSafeZone)
+        {
+            var mission = GameSession.SelectedMission;
+            if (mission != null)
+                safeLength = mission.startingSafeZoneMeters;
+            else
+            {
+                var generator = FindAnyObjectByType<ProceduralTerrainGenerator>();
+                if (generator != null) safeLength = generator.safeZoneLength;
+            }
+        }
+
+        float minimumZ = origin.z + safeLength + (respectStartingSafeZone ? safeZoneMargin : 0f);
+        float maximumZ = origin.z + size.z;
+        if (minimumZ > maximumZ) return false;
+
+        for (int attempt = 0; attempt < Mathf.Max(1, spawnPositionAttempts); attempt++)
+        {
+            Vector2 offset = Random.insideUnitCircle * spawnRadius;
+            Vector3 candidate = spawnPoint.position + new Vector3(offset.x, 0f, offset.y);
+            if (candidate.x < origin.x || candidate.x > origin.x + size.x ||
+                candidate.z < minimumZ || candidate.z > maximumZ)
+                continue;
+            candidate.y = terrain.SampleHeight(candidate) + origin.y;
+            position = candidate;
+            return true;
+        }
+
+        position.x = Mathf.Clamp(spawnPoint.position.x, origin.x, origin.x + size.x);
+        position.z = Mathf.Clamp(spawnPoint.position.z, minimumZ, maximumZ);
+        position.y = terrain.SampleHeight(position) + origin.y;
+        return true;
+    }
+
 }

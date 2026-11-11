@@ -4,6 +4,15 @@ public static class GameSession
     public static int SelectedDifficulty = 1;
 
     // Runtime-only selection; ScriptableObject definitions are never mutated.
+    private static bool pendingMissionMenuReturn;
+    public static void RequestMissionMenuReturn() { pendingMissionMenuReturn = true; }
+    public static bool ConsumeMissionMenuReturn()
+    {
+        bool pending = pendingMissionMenuReturn;
+        pendingMissionMenuReturn = false;
+        return pending;
+    }
+
     public static string MissionReturnSceneName { get; private set; }
     public static void SetMissionReturnScene(string sceneName) { MissionReturnSceneName = sceneName; }
 

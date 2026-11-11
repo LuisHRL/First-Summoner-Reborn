@@ -30,7 +30,7 @@ public class EnemySpawner : MonoBehaviour
     public bool distributeAlongTerrain = true;
     [Min(1)] public int desiredGroupCount = 4;
     [Min(0f)] public float firstGroupDistanceAfterSafeZone = 10f;
-    [Min(0f)] public float endOfTerrainMargin = 12f;
+    [Min(0f)] public float endOfTerrainMargin = 40f;
     [Min(0f)] public float groupLateralRadius = 3f;
 
     public bool spawnAllAtOnce = true;
@@ -97,7 +97,7 @@ public class EnemySpawner : MonoBehaviour
         if (useGroups)
         {
             startZ = Mathf.Max(0f, safeLength + safeZoneMargin + firstGroupDistanceAfterSafeZone);
-            endZ = terrain.terrainData.size.z - endOfTerrainMargin;
+            endZ = terrain.terrainData.size.z - GetEffectiveEndMargin();
             if (startZ > endZ)
             {
                 Debug.LogWarning("EnemySpawner : terrain trop court pour répartir les groupes.", this);
@@ -218,13 +218,33 @@ public class EnemySpawner : MonoBehaviour
         return planned;
     }
 
+    private float GetEffectiveEndMargin()
+    {
+        float margin = Mathf.Max(0f, endOfTerrainMargin);
+        CameraFollow follow = FindAnyObjectByType<CameraFollow>();
+        if (follow == null) return margin;
+
+        Camera view = follow.GetComponent<Camera>();
+        if (view == null || view.orthographic) return margin;
+
+        // Reserve the forward ground footprint visible from the gameplay camera.
+        // This keeps the final encounter away from the map edge across FOV settings.
+        float angle = Mathf.Clamp(follow.downwardAngle, 1f, 89f);
+        float halfFov = view.fieldOfView * 0.5f;
+        float shallowAngle = Mathf.Max(5f, angle - halfFov);
+        float cameraHeight = Mathf.Max(0f, follow.offset.y);
+        float forwardView = cameraHeight / Mathf.Tan(shallowAngle * Mathf.Deg2Rad);
+        float cameraBehind = Mathf.Max(0f, -follow.offset.z);
+        return Mathf.Max(margin, forwardView - cameraBehind + follow.terrainEdgePadding + groupLateralRadius + 5f);
+    }
+
     private bool TryFindGroupPosition(Terrain terrain, ProceduralTerrainGenerator generator,
         float centerZ, float safeLength, out Vector3 position)
     {
         Vector3 origin = terrain.transform.position;
         Vector3 size = terrain.terrainData.size;
         float minZ = origin.z + (respectStartingSafeZone ? safeLength + safeZoneMargin : 0f);
-        float maxZ = origin.z + size.z - Mathf.Max(0f, endOfTerrainMargin);
+        float maxZ = origin.z + size.z - GetEffectiveEndMargin();
         if (minZ > maxZ || size.x <= 1f)
         {
             position = default;

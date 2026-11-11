@@ -19,6 +19,9 @@ public class MainMenu : MonoBehaviour
     public GameObject arenaPanel;
     public GameObject clanPanel;
 
+    [Header("Navigation des missions (optionnel)")]
+    [SerializeField] private MissionMenuNavigator missionNavigator;
+
     [Header("Sous-menus")]
     public GameObject cardsPanel;
     public GameObject settingsPanel;
@@ -79,6 +82,10 @@ public class MainMenu : MonoBehaviour
         else if (settingsPanel.activeSelf)
         {
             BackToHero();
+        }
+        else if (missionPanel.activeSelf && missionNavigator != null && missionNavigator.TryGoBack())
+        {
+            // Return to the previous mission level before leaving the Missions tab.
         }
         else if (missionPanel.activeSelf ||
          villagePanel.activeSelf ||
@@ -452,6 +459,8 @@ public class MainMenu : MonoBehaviour
     }
     public void OpenMissions()
     {
+        if (missionNavigator != null)
+            missionNavigator.ShowWorld();
         NavigateToPanel(2);
     }
 

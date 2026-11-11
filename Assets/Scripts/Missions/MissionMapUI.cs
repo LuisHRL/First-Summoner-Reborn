@@ -21,6 +21,7 @@ public sealed class MissionMapUI : MonoBehaviour
     [SerializeField] private Sprite earnedStarSprite;
     [SerializeField] private Sprite unearnedStarSprite;
     [SerializeField] private Sprite enterButtonSprite;
+    [SerializeField] private Sprite loadingEmblemSprite;
     [SerializeField] private Vector2 mapStarSize = new Vector2(24f, 24f);
     [SerializeField] private TMP_Text heading;
     [SerializeField] private Image mapIllustration;
@@ -145,9 +146,9 @@ public sealed class MissionMapUI : MonoBehaviour
             GameSession.ClearMissionSelection();
             return;
         }
-        MissionVisualStyle.Set(earnedStarSprite, unearnedStarSprite, enterButtonSprite);
+        MissionVisualStyle.Set(earnedStarSprite, unearnedStarSprite, enterButtonSprite, loadingEmblemSprite);
         GameSession.SetMissionReturnScene(SceneManager.GetActiveScene().name);
-        SceneManager.LoadScene(gameplaySceneName);
+        MissionLoadingScreen.Load(gameplaySceneName, loadingEmblemSprite);
     }
 
     public void GoBack()

@@ -4,6 +4,9 @@ public static class GameSession
     public static int SelectedDifficulty = 1;
 
     // Runtime-only selection; ScriptableObject definitions are never mutated.
+    public static string MissionReturnSceneName { get; private set; }
+    public static void SetMissionReturnScene(string sceneName) { MissionReturnSceneName = sceneName; }
+
     public static MissionDefinition SelectedMission { get; private set; }
     public static MissionWorldDefinition SelectedWorld { get; private set; }
 
@@ -59,6 +62,7 @@ public static class GameSession
     {
         SelectedMission = null;
         SelectedWorld = null;
+        MissionReturnSceneName = null;
         MissionTimerRunning = false;
         MissionTimedOut = false;
     }

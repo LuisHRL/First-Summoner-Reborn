@@ -55,7 +55,7 @@ public class EnemySpawner : MonoBehaviour
 
         MissionDefinition mission = GameSession.SelectedMission;
         bool missionConfigured = mission != null && mission.enemies != null && mission.enemies.Length > 0;
-        if (spawnPoint == null || (!missionConfigured && enemyDatabase == null))
+        if ((!distributeAlongTerrain && spawnPoint == null) || (!missionConfigured && enemyDatabase == null))
         {
             Debug.LogError(
                 "EnemySpawner : EnemyDatabase ou SpawnPoint manquant."
@@ -64,38 +64,88 @@ public class EnemySpawner : MonoBehaviour
             yield break;
         }
 
-        if (missionConfigured)
+        List<GameObject> planned = missionConfigured
+            ? BuildMissionPlan(mission)
+            : BuildDatabasePlan();
+
+        if (planned.Count == 0)
         {
-            yield return SpawnMissionEnemies(mission);
+            Debug.LogWarning("EnemySpawner : aucun ennemi compatible à générer.", this);
             IsWaveFinished = true;
             yield break;
         }
 
-        missionDifficulty = Mathf.Max(1, GameSession.SelectedDifficulty);
-        availableEnemies = GetAvailableEnemies();
+        Terrain terrain = Terrain.activeTerrain;
+        ProceduralTerrainGenerator generator = FindAnyObjectByType<ProceduralTerrainGenerator>();
+        bool useGroups = distributeAlongTerrain && terrain != null && terrain.terrainData != null;
+        if (distributeAlongTerrain && !useGroups)
+            Debug.LogWarning("EnemySpawner : terrain absent, retour au SpawnPoint.", this);
 
-        if (availableEnemies.Count == 0)
+        int groupCount = useGroups ? Mathf.Min(Mathf.Max(1, desiredGroupCount), planned.Count) : 1;
+        float safeLength = mission != null ? mission.startingSafeZoneMeters :
+            (generator != null ? generator.safeZoneLength : 0f);
+        float startZ = 0f;
+        float endZ = 0f;
+        if (useGroups)
         {
-            Debug.LogWarning(
-                "EnemySpawner : aucun ennemi compatible avec la difficulté "
-                + missionDifficulty
-            );
-
-            yield break;
+            startZ = Mathf.Max(0f, safeLength + safeZoneMargin + firstGroupDistanceAfterSafeZone);
+            endZ = terrain.terrainData.size.z - endOfTerrainMargin;
+            if (startZ > endZ)
+            {
+                Debug.LogWarning("EnemySpawner : terrain trop court pour répartir les groupes.", this);
+                IsWaveFinished = true;
+                yield break;
+            }
         }
 
-        int waveCount = GetScaledWaveCount();
-        for (int i = 0; i < waveCount; i++)
-        {
-            SpawnEnemy();
+        // Distribute round-robin to avoid putting all enemies of one type together.
+        List<GameObject>[] groups = new List<GameObject>[groupCount];
+        for (int i = 0; i < groupCount; i++)
+            groups[i] = new List<GameObject>();
+        for (int i = 0; i < planned.Count; i++)
+            groups[i % groupCount].Add(planned[i]);
 
-            if (!spawnAllAtOnce && i < waveCount - 1)
+        for (int i = 0; i < groupCount; i++)
+        {
+            float centerZ = groupCount == 1 ? (startZ + endZ) * 0.5f :
+                Mathf.Lerp(startZ, endZ, (float)i / (groupCount - 1));
+            EnemyAggroGroup group = aggroGroup;
+            if (useGroups)
             {
-                yield return new WaitForSeconds(timeBetweenSpawns);
+                GameObject groupObject = new GameObject("EnemyGroup_" + (i + 1));
+                groupObject.transform.SetParent(transform, false);
+                group = groupObject.AddComponent<EnemyAggroGroup>();
+            }
+
+            foreach (GameObject prefab in groups[i])
+            {
+                Vector3 position;
+                bool valid = useGroups
+                    ? TryFindGroupPosition(terrain, generator, centerZ, safeLength, out position)
+                    : TryFindSpawnPosition(out position);
+                if (valid)
+                    SpawnPrefabAt(prefab, prefab.name, position, group);
+                else
+                    Debug.LogWarning("EnemySpawner : position de groupe invalide.", this);
+                if (!spawnAllAtOnce)
+                    yield return new WaitForSeconds(timeBetweenSpawns);
             }
         }
 
         IsWaveFinished = true;
+    }
+
+    private List<GameObject> BuildDatabasePlan()
+    {
+        missionDifficulty = Mathf.Max(1, GameSession.SelectedDifficulty);
+        availableEnemies = GetAvailableEnemies();
+        List<GameObject> result = new List<GameObject>();
+        for (int i = 0; i < GetScaledWaveCount(); i++)
+        {
+            EnemyDefinitions enemy = SelectRandomEnemy();
+            if (enemy != null) result.Add(enemy.prefab);
+        }
+        return result;
     }
 
     private int GetScaledWaveCount()
@@ -105,7 +155,7 @@ public class EnemySpawner : MonoBehaviour
             (scaleWaveWithSelectedDifficulty ? (level - 1) * additionalEnemiesPerDifficultyLevel : 0));
     }
 
-    private IEnumerator SpawnMissionEnemies(MissionDefinition mission)
+    private List<GameObject> BuildMissionPlan(MissionDefinition mission)
     {
         // Each entry is an explicit allowed prefab, with independent min/max limits.
         List<EnemySpawnEntry> entries = new List<EnemySpawnEntry>();
@@ -157,12 +207,39 @@ public class EnemySpawner : MonoBehaviour
             planned[j] = temp;
         }
 
-        for (int i = 0; i < planned.Count; i++)
+        return planned;
+    }
+
+    private bool TryFindGroupPosition(Terrain terrain, ProceduralTerrainGenerator generator,
+        float centerZ, float safeLength, out Vector3 position)
+    {
+        Vector3 origin = terrain.transform.position;
+        Vector3 size = terrain.terrainData.size;
+        float minZ = origin.z + (respectStartingSafeZone ? safeLength + safeZoneMargin : 0f);
+        float maxZ = origin.z + size.z - Mathf.Max(0f, endOfTerrainMargin);
+        for (int attempt = 0; attempt < Mathf.Max(1, spawnPositionAttempts); attempt++)
         {
-            SpawnPrefab(planned[i], planned[i].name);
-            if (!spawnAllAtOnce && i < planned.Count - 1)
-                yield return new WaitForSeconds(timeBetweenSpawns);
+            float localZ = Mathf.Clamp(centerZ + Random.Range(-groupLateralRadius, groupLateralRadius),
+                minZ - origin.z, maxZ - origin.z);
+            float pathX = generator != null ? generator.PathCenter(localZ) : size.x * 0.5f;
+            float localX = Mathf.Clamp(pathX + Random.Range(-groupLateralRadius, groupLateralRadius),
+                0.5f, size.x - 0.5f);
+            position = new Vector3(origin.x + localX, 0f, origin.z + localZ);
+            position.y = terrain.SampleHeight(position) + origin.y;
+            return true;
         }
+        position = default;
+        return false;
+    }
+
+    private void SpawnPrefabAt(GameObject prefab, string displayName,
+        Vector3 position, EnemyAggroGroup group)
+    {
+        if (prefab == null) return;
+        GameObject spawned = Instantiate(prefab, position, Quaternion.identity);
+        spawned.name = displayName;
+        EnemyAI ai = spawned.GetComponent<EnemyAI>();
+        if (ai != null) ai.AssignAggroGroup(group);
     }
 
     private List<EnemyDefinitions> GetAvailableEnemies()

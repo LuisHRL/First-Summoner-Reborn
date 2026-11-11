@@ -26,8 +26,8 @@ public class CameraFollow : MonoBehaviour
     [Range(0.05f, 0.95f)] public float backwardReturnScreenPosition = 0.58f;
 
     [Header("Distance de suivi")]
-    [Min(0f)] public float maximumForwardSeparation = 3f;
-    [Min(0f)] public float maximumBackwardSeparation = 3f;
+    [Min(0f)] public float maximumForwardSeparation = 1.5f;
+    [Min(0f)] public float maximumBackwardSeparation = 1.5f;
 
     [Header("Gentle horizontal path framing")]
     public ProceduralTerrainGenerator terrainGenerator;
@@ -132,9 +132,6 @@ public class CameraFollow : MonoBehaviour
             zSmoothTime, maximumCameraSpeed, dt);
         result.y = target.position.y + offset.y;
 
-        if (keepTerrainEndsInView && terrain != null)
-            ClampToTerrainEnds(ref result);
-
         float idealZ = target.position.z + offset.z;
         float boundedZ = Mathf.Clamp(result.z,
             idealZ - maximumBackwardSeparation,
@@ -144,6 +141,9 @@ public class CameraFollow : MonoBehaviour
             result.z = boundedZ;
             verticalVelocity = 0f;
         }
+
+        if (keepTerrainEndsInView && terrain != null)
+            ClampToTerrainEnds(ref result);
 
         transform.position = result;
         UpdateObstructions();

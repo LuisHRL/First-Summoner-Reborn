@@ -31,16 +31,28 @@ public static class GameSession
 
     public static float MissionElapsedSeconds { get; private set; }
     public static bool MissionTimerRunning { get; private set; }
+    public static bool MissionTimedOut { get; private set; }
+    public static float MissionTimeRemaining => UnityEngine.Mathf.Max(0f,
+        (SelectedMission != null ? SelectedMission.timeLimitSeconds : 0f) - MissionElapsedSeconds);
 
     public static void StartMissionTimer()
     {
         MissionElapsedSeconds = 0f;
+        MissionTimedOut = false;
         MissionTimerRunning = SelectedMission != null;
     }
 
     public static void TickMissionTimer(float deltaSeconds)
     {
-        if (MissionTimerRunning) MissionElapsedSeconds += UnityEngine.Mathf.Max(0f, deltaSeconds);
+        if (!MissionTimerRunning) return;
+        MissionElapsedSeconds += UnityEngine.Mathf.Max(0f, deltaSeconds);
+        if (MissionTimeRemaining <= 0f)
+        {
+            MissionElapsedSeconds = SelectedMission.timeLimitSeconds;
+            MissionTimerRunning = false;
+            MissionTimedOut = true;
+            UnityEngine.Debug.Log("Mission failed: time limit reached.");
+        }
     }
 
     public static void ClearMissionSelection()
@@ -48,12 +60,14 @@ public static class GameSession
         SelectedMission = null;
         SelectedWorld = null;
         MissionTimerRunning = false;
+        MissionTimedOut = false;
     }
 
     /// <summary>Call only from the actual victory condition, never on scene exit.</summary>
     public static bool CompleteSelectedMission()
     {
-        if (SelectedMission == null || SelectedWorld == null)
+        if (SelectedMission == null || SelectedWorld == null ||
+            MissionTimedOut || !MissionTimerRunning)
             return false;
         var difficulty = (MissionProgress.Difficulty)SelectedDifficulty;
         if (!System.Enum.IsDefined(typeof(MissionProgress.Difficulty), difficulty))

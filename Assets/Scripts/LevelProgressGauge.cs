@@ -33,7 +33,9 @@ public class LevelProgressGauge : MonoBehaviour
     {
         if (finalEnemyMarker == null)
         {
-            RectTransform[] markers = GetComponentsInChildren<RectTransform>(true);
+            // FinalEnemy is often a sibling of ProgressGauge, not its child.
+            Transform searchRoot = transform.root;
+            RectTransform[] markers = searchRoot.GetComponentsInChildren<RectTransform>(true);
             foreach (RectTransform marker in markers)
             {
                 if (marker.name == "FinalEnemy")
@@ -43,6 +45,7 @@ public class LevelProgressGauge : MonoBehaviour
                 }
             }
         }
+
         if (finalEnemyMarker != null)
         {
             finalEnemyImage = finalEnemyMarker.GetComponent<Image>();

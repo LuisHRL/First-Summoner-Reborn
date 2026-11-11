@@ -199,11 +199,20 @@ public class CameraFollow : MonoBehaviour
             Mathf.Max(0.1f, introTransitionSeconds));
         blend = blend * blend * (3f - 2f * blend);
         Vector3 endPosition = target.position + offset;
+        // Frame the hero near the middle of the gameplay dead zone before handing
+        // control back to the regular camera follow logic.
+        transform.rotation = gameplayStartRotation;
+        transform.position = endPosition;
+        float desiredViewportY = Mathf.Clamp(
+            (lowerScreenThreshold + upperScreenThreshold) * 0.5f, 0.05f, 0.95f);
+        Vector3 heroViewport = cameraComponent.WorldToViewportPoint(target.position);
+        Vector3 forwardViewport = cameraComponent.WorldToViewportPoint(
+            target.position + Vector3.forward);
+        float sensitivity = forwardViewport.y - heroViewport.y;
+        if (heroViewport.z > 0f && Mathf.Abs(sensitivity) > 0.0001f)
+            endPosition.z += (heroViewport.y - desiredViewportY) / sensitivity;
         if (keepTerrainEndsInView && terrain != null)
-        {
-            transform.rotation = gameplayStartRotation;
             ClampToTerrainEnds(ref endPosition);
-        }
 
         transform.position = Vector3.Lerp(introPosition, endPosition, blend);
         transform.rotation = Quaternion.Slerp(introRotation, gameplayStartRotation, blend);

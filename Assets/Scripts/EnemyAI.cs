@@ -27,6 +27,15 @@ public class EnemyAI : MonoBehaviour
     private PlayerHealth player;
     private Transform currentTarget;
     private float nextAttackTime;
+    private Vector3 homePosition;
+    private bool returningHome;
+    public Vector3 HomePosition => homePosition;
+
+    public void Disengage()
+    {
+        currentTarget = null;
+        returningHome = true;
+    }
 
     // Cible globale commune au camp ennemi.
     private EnemyAggroGroup aggroGroup;
@@ -47,6 +56,7 @@ public class EnemyAI : MonoBehaviour
         if (controller == null) controller = gameObject.AddComponent<CharacterController>();
         if (GetComponent<CharacterTerrainGravity>() == null)
             gameObject.AddComponent<CharacterTerrainGravity>();
+        homePosition = transform.position;
         player = FindAnyObjectByType<PlayerHealth>();
     }
 
@@ -55,6 +65,12 @@ public class EnemyAI : MonoBehaviour
         if (player == null)
         {
             player = FindAnyObjectByType<PlayerHealth>();
+        }
+
+        if (returningHome)
+        {
+            ReturnHome();
+            return;
         }
 
         UpdateTarget();
@@ -71,7 +87,7 @@ public class EnemyAI : MonoBehaviour
 
     public void AlertedBy(Transform attacker)
     {
-        if (!IsTargetValid(attacker))
+        if (returningHome || !IsTargetValid(attacker))
             return;
 
         // Une cible collective vivante reste prioritaire.
@@ -124,6 +140,12 @@ public class EnemyAI : MonoBehaviour
             currentTarget = aggroGroup.CurrentTarget;
             return;
         }
+
+        // Un ennemi isolé perd aussi sa cible lorsqu'elle est trop éloignée.
+        if (aggroGroup == null && IsTargetValid(currentTarget) &&
+            Vector3.Distance(homePosition, currentTarget.position) > playerLoseRange)
+            Disengage();
+        if (returningHome) return;
 
         // Conserver l'adversaire engagé.
         if (IsTargetValid(currentTarget))
@@ -235,6 +257,21 @@ public class EnemyAI : MonoBehaviour
         AttackTarget();
 
         nextAttackTime = Time.time + attackCooldown;
+    }
+
+    private void ReturnHome()
+    {
+        Vector3 delta = homePosition - transform.position;
+        delta.y = 0f;
+        if (delta.sqrMagnitude <= 0.16f)
+        {
+            returningHome = false;
+            return;
+        }
+
+        Vector3 direction = delta.normalized;
+        controller.Move(direction * Mathf.Min(speed * Time.deltaTime, delta.magnitude));
+        transform.forward = direction;
     }
 
     // --------------------------------------------------

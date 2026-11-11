@@ -110,10 +110,13 @@ public class CameraFollow : MonoBehaviour
             float length = terrain.terrainData.size.z;
             float sampleZ = Mathf.Clamp(target.position.z + pathLookAhead,
                 terrainOrigin.z, terrainOrigin.z + length);
-            float normalized = Mathf.Clamp01((sampleZ - terrainOrigin.z) / Mathf.Max(length, 0.001f));
-            float pathCenterX = terrainOrigin.x + terrainGenerator.terrainWidth * 0.5f
-                + Mathf.Sin(normalized * Mathf.PI * 2f * terrainGenerator.pathFrequency)
-                * terrainGenerator.pathCurvature;
+            // Use the same path definition as terrain generation.
+            // Do not anticipate a curve while the hero is still in the safe zone.
+            float localHeroZ = target.position.z - terrainOrigin.z;
+            if (localHeroZ <= terrainGenerator.safeZoneLength)
+                sampleZ = Mathf.Min(sampleZ, terrainOrigin.z + terrainGenerator.safeZoneLength);
+            float pathCenterX = terrainOrigin.x +
+                terrainGenerator.PathCenter(sampleZ - terrainOrigin.z);
             float desiredCenterX = Mathf.Lerp(pathCenterX, target.position.x, playerHorizontalInfluence);
             float delta = desiredCenterX - (current.x - offset.x);
             if (Mathf.Abs(delta) > horizontalTolerance)

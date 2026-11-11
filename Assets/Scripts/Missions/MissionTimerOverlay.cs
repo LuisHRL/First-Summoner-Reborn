@@ -54,7 +54,8 @@ public sealed class MissionTimerOverlay : MonoBehaviour
         if (GameSession.MissionTimerRunning)
             GameSession.TickMissionTimer(Time.deltaTime);
         if (clockText == null) return;
-        int total = Mathf.FloorToInt(GameSession.MissionElapsedSeconds);
-        clockText.text = string.Format("{0:00}:{1:00}", total / 60, total % 60);
+        int total = Mathf.CeilToInt(GameSession.MissionTimeRemaining);
+        clockText.text = GameSession.MissionTimedOut ? "00:00 - Failed" :
+            string.Format("{0:00}:{1:00}", total / 60, total % 60);
     }
 }

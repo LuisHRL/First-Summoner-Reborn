@@ -7,12 +7,13 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Renders the mission hierarchy from ScriptableObject definitions.
 /// Attach to the Missions panel and assign the UI references in the Inspector.
-/// No region, subzone or mission is hardcoded.
+/// No region or mission is hardcoded.
 /// </summary>
 public sealed class MissionMapUI : MonoBehaviour
 {
     [SerializeField] private MissionMenuNavigator navigator;
     [SerializeField] private RectTransform entriesContainer;
+    [SerializeField] private RectTransform missionMapArea;
     [SerializeField] private Button entryButtonPrefab;
     [SerializeField] private TMP_Text heading;
     [SerializeField] private Image mapIllustration;
@@ -42,8 +43,12 @@ public sealed class MissionMapUI : MonoBehaviour
         if (navigator == null || entriesContainer == null || entryButtonPrefab == null)
             return;
 
-        for (int i = entriesContainer.childCount - 1; i >= 0; --i)
-            Destroy(entriesContainer.GetChild(i).gameObject);
+        ClearEntries(entriesContainer);
+        if (missionMapArea != null && missionMapArea != entriesContainer)
+            ClearEntries(missionMapArea);
+        if (missionMapArea != null)
+            missionMapArea.gameObject.SetActive(navigator.CurrentPage == MissionMenuNavigator.Page.Region);
+        entriesContainer.gameObject.SetActive(navigator.CurrentPage == MissionMenuNavigator.Page.World);
 
         if (backButton != null)
         {
@@ -78,7 +83,9 @@ public sealed class MissionMapUI : MonoBehaviour
                     " - Medium locked - complete all Normal world missions");
                 SetImage(regionSelected != null ? regionSelected.mapIllustration : null);
                 if (regionSelected != null && regionSelected.missions != null)
-                    foreach (var mission in regionSelected.missions)
+                    for (int missionIndex = 0; missionIndex < regionSelected.missions.Length; missionIndex++)
+                    {
+                        var mission = regionSelected.missions[missionIndex];
                         if (mission != null)
                         {
                             bool available = MissionProgress.IsMissionUnlocked(
@@ -86,8 +93,9 @@ public sealed class MissionMapUI : MonoBehaviour
                             if (!available) continue; // Future missions stay hidden.
                             string label = (MissionProgress.IsCompleted(mission, difficulty) ? "✓ " : "") +
                                 mission.displayName;
-                            AddEntry(label, () => navigator.SelectMission(mission));
+                            AddMapMarker(label, mission, missionIndex, () => navigator.SelectMission(mission));
                         }
+                    }
                 break;
 
             case MissionMenuNavigator.Page.Mission:
@@ -121,6 +129,43 @@ public sealed class MissionMapUI : MonoBehaviour
     {
         if (navigator != null && navigator.TryGoBack())
             Refresh();
+    }
+
+    private void ClearEntries(RectTransform parent)
+    {
+        if (parent == null) return;
+        for (int i = parent.childCount - 1; i >= 0; --i)
+        {
+            var child = parent.GetChild(i).gameObject;
+            child.SetActive(false);
+            Destroy(child);
+        }
+    }
+
+    private void AddMapMarker(string label, MissionDefinition mission, int index,
+        UnityEngine.Events.UnityAction action)
+    {
+        if (missionMapArea == null)
+        {
+            AddEntry(label, action);
+            return;
+        }
+        Button button = Instantiate(entryButtonPrefab, missionMapArea);
+        button.gameObject.SetActive(true);
+        var layout = button.GetComponent<LayoutElement>();
+        if (layout != null) layout.ignoreLayout = true;
+        var rect = button.GetComponent<RectTransform>();
+        Vector2 point = new Vector2(Mathf.Clamp01(mission.mapPosition.x),
+            Mathf.Clamp01(mission.mapPosition.y));
+        rect.anchorMin = point;
+        rect.anchorMax = point;
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
+        rect.sizeDelta = new Vector2(92f, 64f);
+        TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
+        if (text != null) text.text = (index + 1).ToString() + "\\n" + label;
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(action);
     }
 
     private void AddEntry(string label, UnityEngine.Events.UnityAction action, bool interactable = true)

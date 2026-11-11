@@ -10,7 +10,7 @@ public sealed class MissionRegionDefinition : ScriptableObject
     public Sprite mapIllustration;
     [Tooltip("Normalized position on the world map (0 to 1).")]
     public Vector2 mapPosition = new Vector2(0.5f, 0.5f);
-    public MissionSubzoneDefinition[] subzones = Array.Empty<MissionSubzoneDefinition>();
+    public MissionDefinition[] missions = Array.Empty<MissionDefinition>();
 
 #if UNITY_EDITOR
     private void OnValidate()

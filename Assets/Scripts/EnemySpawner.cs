@@ -44,6 +44,7 @@ public class EnemySpawner : MonoBehaviour
     [Min(1)] public int spawnPositionAttempts = 24;
 
     public bool IsWaveFinished { get; private set; }
+    public float FurthestSpawnZ { get; private set; } = float.NegativeInfinity;
     private EnemyAggroGroup aggroGroup;
 
     private void Awake()
@@ -246,6 +247,7 @@ public class EnemySpawner : MonoBehaviour
         if (prefab == null) return;
         GameObject spawned = Instantiate(prefab, position, Quaternion.identity);
         spawned.name = displayName;
+        FurthestSpawnZ = Mathf.Max(FurthestSpawnZ, position.z);
         EnemyAI ai = spawned.GetComponent<EnemyAI>();
         if (ai != null) ai.AssignAggroGroup(group);
     }

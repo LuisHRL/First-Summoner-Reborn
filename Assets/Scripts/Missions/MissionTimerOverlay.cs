@@ -119,7 +119,7 @@ public sealed class MissionTimerOverlay : MonoBehaviour
     private void RetryMission()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(gameObject.scene.name);
+        MissionLoadingScreen.Load(gameObject.scene.name, MissionVisualStyle.LoadingEmblem);
     }
 
     private void ReturnToMissions()

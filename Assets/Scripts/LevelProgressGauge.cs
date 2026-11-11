@@ -20,7 +20,9 @@ public class LevelProgressGauge : MonoBehaviour
     [SerializeField] private RectTransform finalEnemyMarker;
     [SerializeField] private Sprite finalEnemySprite;
     private Image finalEnemyImage;
-    private Sprite idleFinalEnemySprite;
+    [SerializeField] private Sprite idleFinalEnemySprite;
+    private Sprite generatedIdleSprite;
+    private Texture2D generatedIdleTexture;
     private bool finalEnemySpriteCaptured;
     private bool finalEnemyWasSpawned;
     private GameObject watchedFinalEnemy;
@@ -34,6 +36,54 @@ public class LevelProgressGauge : MonoBehaviour
     private void Awake()
     {
         ResolveFinalEnemyMarker();
+        if (finalEnemyMarker == null)
+            CreateFinalEnemyMarker();
+    }
+
+    private void CreateFinalEnemyMarker()
+    {
+        if (finalEnemyMarker != null) return;
+        RectTransform parent = progressGauge != null ? progressGauge : transform as RectTransform;
+        if (parent == null) return;
+
+        GameObject marker = new GameObject("FinalEnemy", typeof(RectTransform), typeof(Image));
+        marker.transform.SetParent(parent, false);
+        finalEnemyMarker = marker.GetComponent<RectTransform>();
+        finalEnemyMarker.anchorMin = new Vector2(0.5f, 1f);
+        finalEnemyMarker.anchorMax = new Vector2(0.5f, 1f);
+        finalEnemyMarker.pivot = new Vector2(0.5f, 0.5f);
+        finalEnemyMarker.sizeDelta = new Vector2(38f, 38f);
+        finalEnemyImage = marker.GetComponent<Image>();
+        finalEnemyImage.raycastTarget = false;
+        if (idleFinalEnemySprite == null)
+            idleFinalEnemySprite = CreateWhiteRingSprite();
+        finalEnemyImage.sprite = idleFinalEnemySprite;
+        finalEnemyImage.color = Color.white;
+        finalEnemySpriteCaptured = true;
+        marker.SetActive(false);
+        Debug.Log("[FinalEnemy] UI marker created under " + GetTransformPath(parent), this);
+    }
+
+    private Sprite CreateWhiteRingSprite()
+    {
+        const int size = 64;
+        generatedIdleTexture = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        generatedIdleTexture.filterMode = FilterMode.Bilinear;
+        Color[] pixels = new Color[size * size];
+        float center = (size - 1) * 0.5f;
+        for (int y = 0; y < size; y++)
+        for (int x = 0; x < size; x++)
+        {
+            float distance = Vector2.Distance(new Vector2(x, y), new Vector2(center, center));
+            float outer = Mathf.Clamp01((29f - distance) * 1.5f);
+            float inner = Mathf.Clamp01((distance - 23f) * 1.5f);
+            pixels[y * size + x] = new Color(1f, 1f, 1f, outer * inner);
+        }
+        generatedIdleTexture.SetPixels(pixels);
+        generatedIdleTexture.Apply();
+        generatedIdleSprite = Sprite.Create(generatedIdleTexture,
+            new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
+        return generatedIdleSprite;
     }
 
     private void ResolveFinalEnemyMarker()
@@ -97,6 +147,8 @@ public class LevelProgressGauge : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (generatedIdleSprite != null) Destroy(generatedIdleSprite);
+        if (generatedIdleTexture != null) Destroy(generatedIdleTexture);
         if (watchedHealth != null)
             watchedHealth.OnDeath.RemoveListener(OnFinalEnemyDeath);
     }
@@ -112,7 +164,11 @@ public class LevelProgressGauge : MonoBehaviour
                     spawner = candidate;
         }
         if (finalEnemyMarker == null)
+        {
             ResolveFinalEnemyMarker();
+            if (finalEnemyMarker == null)
+                CreateFinalEnemyMarker();
+        }
         if (finalEnemyMarker == null && !loggedMissingMarker)
         {
             Debug.LogWarning("[FinalEnemy] UI marker absent. gauge=" +

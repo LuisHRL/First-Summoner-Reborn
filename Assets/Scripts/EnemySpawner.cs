@@ -224,19 +224,20 @@ public class EnemySpawner : MonoBehaviour
         Vector3 size = terrain.terrainData.size;
         float minZ = origin.z + (respectStartingSafeZone ? safeLength + safeZoneMargin : 0f);
         float maxZ = origin.z + size.z - Mathf.Max(0f, endOfTerrainMargin);
-        for (int attempt = 0; attempt < Mathf.Max(1, spawnPositionAttempts); attempt++)
+        if (minZ > maxZ || size.x <= 1f)
         {
-            float localZ = Mathf.Clamp(centerZ + Random.Range(-groupLateralRadius, groupLateralRadius),
-                minZ - origin.z, maxZ - origin.z);
-            float pathX = generator != null ? generator.PathCenter(localZ) : size.x * 0.5f;
-            float localX = Mathf.Clamp(pathX + Random.Range(-groupLateralRadius, groupLateralRadius),
-                0.5f, size.x - 0.5f);
-            position = new Vector3(origin.x + localX, 0f, origin.z + localZ);
-            position.y = terrain.SampleHeight(position) + origin.y;
-            return true;
+            position = default;
+            return false;
         }
-        position = default;
-        return false;
+
+        float localZ = Mathf.Clamp(centerZ + Random.Range(-groupLateralRadius, groupLateralRadius),
+            minZ - origin.z, maxZ - origin.z);
+        float pathX = generator != null ? generator.PathCenter(localZ) : size.x * 0.5f;
+        float localX = Mathf.Clamp(pathX + Random.Range(-groupLateralRadius, groupLateralRadius),
+            0.5f, size.x - 0.5f);
+        position = new Vector3(origin.x + localX, 0f, origin.z + localZ);
+        position.y = terrain.SampleHeight(position) + origin.y;
+        return true;
     }
 
     private void SpawnPrefabAt(GameObject prefab, string displayName,

@@ -18,6 +18,13 @@ public class CameraFollow : MonoBehaviour
     [Header("View angle")]
     [Range(25f, 75f)] public float downwardAngle = 40f;
 
+    [Header("Caméra de combat")]
+    public bool tiltOnEnemyAggro = true;
+    [Range(0f, 20f)] public float combatAdditionalDownwardAngle = 7f;
+    [Min(0.05f)] public float combatTiltSmoothTime = 0.55f;
+    private float currentCameraAngle;
+    private float cameraAngleVelocity;
+
     [Header("Vertical screen dead zone")]
     [Range(0.05f, 0.95f)] public float lowerScreenThreshold = 0.42f;
     [Range(0.05f, 0.95f)] public float upperScreenThreshold = 0.70f;
@@ -79,6 +86,7 @@ public class CameraFollow : MonoBehaviour
     {
         cameraComponent = GetComponent<Camera>();
         ApplyFieldOfView();
+        currentCameraAngle = downwardAngle;
         transform.rotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
     }
 
@@ -99,7 +107,23 @@ public class CameraFollow : MonoBehaviour
         }
 
         ApplyFieldOfView();
-        transform.rotation = Quaternion.Euler(downwardAngle, transform.eulerAngles.y, 0f);
+        bool inCombat = false;
+        if (tiltOnEnemyAggro)
+        {
+            EnemyAggroGroup[] groups = FindObjectsByType<EnemyAggroGroup>(FindObjectsSortMode.None);
+            foreach (EnemyAggroGroup group in groups)
+            {
+                if (group != null && group.isActiveAndEnabled && group.IsEngaged)
+                {
+                    inCombat = true;
+                    break;
+                }
+            }
+        }
+        float targetAngle = downwardAngle + (inCombat ? combatAdditionalDownwardAngle : 0f);
+        currentCameraAngle = Mathf.SmoothDampAngle(currentCameraAngle, targetAngle,
+            ref cameraAngleVelocity, combatTiltSmoothTime, Mathf.Infinity, Time.deltaTime);
+        transform.rotation = Quaternion.Euler(currentCameraAngle, transform.eulerAngles.y, 0f);
 
         // The scene camera may start at an arbitrary editor position.
         // Establish the intended distance before applying the screen dead zone.
@@ -268,6 +292,8 @@ public class CameraFollow : MonoBehaviour
         if (elapsed >= introHoldSeconds + introTransitionSeconds)
         {
             introFinished = true;
+            currentCameraAngle = downwardAngle;
+            cameraAngleVelocity = 0f;
             framingInitialized = true;
             verticalVelocity = 0f;
             horizontalVelocity = 0f;

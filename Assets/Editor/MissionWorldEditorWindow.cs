@@ -83,6 +83,25 @@ public sealed class MissionWorldEditorWindow : EditorWindow
             EditorGUILayout.Space(12);
             EditorGUILayout.LabelField("Region: " + region.displayName, EditorStyles.boldLabel);
             if (GUILayout.Button("Edit Region Details")) Selection.activeObject = region;
+            int emptySlots = 0;
+            if (region.missions != null)
+                foreach (var mission in region.missions)
+                    if (mission == null) emptySlots++;
+            if (emptySlots > 0)
+            {
+                EditorGUILayout.HelpBox(emptySlots + " empty mission slots prevent progression.", MessageType.Warning);
+                if (GUILayout.Button("Remove Empty Mission Slots (Keep Assets)"))
+                {
+                    Undo.RecordObject(region, "Remove empty mission slots");
+                    var remaining = new System.Collections.Generic.List<MissionDefinition>();
+                    foreach (var mission in region.missions)
+                        if (mission != null) remaining.Add(mission);
+                    region.missions = remaining.ToArray();
+                    EditorUtility.SetDirty(region);
+                    AssetDatabase.SaveAssets();
+                    GUIUtility.ExitGUI();
+                }
+            }
             if (region.missions != null)
                 foreach (var item in region.missions)
                     if (item != null && GUILayout.Button(item.displayName))

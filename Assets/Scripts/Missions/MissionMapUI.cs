@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Renders the mission hierarchy from ScriptableObject definitions.
@@ -16,6 +17,9 @@ public sealed class MissionMapUI : MonoBehaviour
     [SerializeField] private TMP_Text heading;
     [SerializeField] private Image mapIllustration;
     [SerializeField] private Button backButton;
+    [Header("Mission launch")]
+    [SerializeField] private Button launchButton;
+    [SerializeField] private string gameplaySceneName = "GameScene";
 
     [SerializeField] private MissionProgress.Difficulty difficulty = MissionProgress.Difficulty.Normal;
 
@@ -37,6 +41,13 @@ public sealed class MissionMapUI : MonoBehaviour
             backButton.gameObject.SetActive(navigator.CurrentPage != MissionMenuNavigator.Page.World);
             backButton.onClick.RemoveListener(GoBack);
             backButton.onClick.AddListener(GoBack);
+        }
+
+        if (launchButton != null)
+        {
+            launchButton.gameObject.SetActive(navigator.CurrentPage == MissionMenuNavigator.Page.Mission);
+            launchButton.onClick.RemoveListener(LaunchSelectedMission);
+            launchButton.onClick.AddListener(LaunchSelectedMission);
         }
 
         switch (navigator.CurrentPage)
@@ -79,6 +90,25 @@ public sealed class MissionMapUI : MonoBehaviour
                 SetImage(selected != null ? selected.illustration : null);
                 break;
         }
+    }
+
+    public void LaunchSelectedMission()
+    {
+        if (navigator == null || navigator.CurrentPage != MissionMenuNavigator.Page.Mission ||
+            !GameSession.TrySelectMission(navigator.World, navigator.SelectedSubzone,
+                navigator.SelectedMission, difficulty))
+        {
+            Debug.LogWarning("MissionMapUI: mission unavailable or incomplete selection.");
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(gameplaySceneName) ||
+            !Application.CanStreamedLevelBeLoaded(gameplaySceneName))
+        {
+            Debug.LogError("MissionMapUI: gameplay scene is not available in Build Settings: " + gameplaySceneName);
+            GameSession.ClearMissionSelection();
+            return;
+        }
+        SceneManager.LoadScene(gameplaySceneName);
     }
 
     public void GoBack()

@@ -12,6 +12,10 @@ public class EnemySpawner : MonoBehaviour
     [Min(1)]
     public int missionDifficulty = 1;
 
+    [Header("Progression par difficulté")]
+    public bool scaleWaveWithSelectedDifficulty = true;
+    [Min(0)] public int additionalEnemiesPerDifficultyLevel = 2;
+
     [Header("Configuration des apparitions")]
     public Transform spawnPoint;
 
@@ -49,7 +53,9 @@ public class EnemySpawner : MonoBehaviour
     {
         IsWaveFinished = false;
 
-        if (enemyDatabase == null || spawnPoint == null)
+        MissionDefinition mission = GameSession.SelectedMission;
+        bool missionConfigured = mission != null && mission.enemies != null && mission.enemies.Length > 0;
+        if (spawnPoint == null || (!missionConfigured && enemyDatabase == null))
         {
             Debug.LogError(
                 "EnemySpawner : EnemyDatabase ou SpawnPoint manquant."
@@ -58,6 +64,14 @@ public class EnemySpawner : MonoBehaviour
             yield break;
         }
 
+        if (missionConfigured)
+        {
+            yield return SpawnMissionEnemies(mission);
+            IsWaveFinished = true;
+            yield break;
+        }
+
+        missionDifficulty = Mathf.Max(1, GameSession.SelectedDifficulty);
         availableEnemies = GetAvailableEnemies();
 
         if (availableEnemies.Count == 0)
@@ -70,17 +84,85 @@ public class EnemySpawner : MonoBehaviour
             yield break;
         }
 
-        for (int i = 0; i < enemiesInWave; i++)
+        int waveCount = GetScaledWaveCount();
+        for (int i = 0; i < waveCount; i++)
         {
             SpawnEnemy();
 
-            if (!spawnAllAtOnce && i < enemiesInWave - 1)
+            if (!spawnAllAtOnce && i < waveCount - 1)
             {
                 yield return new WaitForSeconds(timeBetweenSpawns);
             }
         }
 
         IsWaveFinished = true;
+    }
+
+    private int GetScaledWaveCount()
+    {
+        int level = Mathf.Max(1, GameSession.SelectedDifficulty);
+        return Mathf.Max(0, enemiesInWave +
+            (scaleWaveWithSelectedDifficulty ? (level - 1) * additionalEnemiesPerDifficultyLevel : 0));
+    }
+
+    private IEnumerator SpawnMissionEnemies(MissionDefinition mission)
+    {
+        // Each entry is an explicit allowed prefab, with independent min/max limits.
+        List<EnemySpawnEntry> entries = new List<EnemySpawnEntry>();
+        List<int> counts = new List<int>();
+        int minimumTotal = 0;
+        foreach (EnemySpawnEntry entry in mission.enemies)
+        {
+            if (entry == null || entry.prefab == null || entry.weight <= 0)
+                continue;
+            int minimum = Mathf.Clamp(entry.minimumCount, 0, Mathf.Max(0, entry.maximumCount));
+            entries.Add(entry);
+            counts.Add(minimum);
+            minimumTotal += minimum;
+        }
+
+        int total = Mathf.Max(minimumTotal, GetScaledWaveCount());
+        int remaining = total - minimumTotal;
+        while (remaining > 0)
+        {
+            int weightSum = 0;
+            for (int i = 0; i < entries.Count; i++)
+                if (counts[i] < Mathf.Max(0, entries[i].maximumCount))
+                    weightSum += entries[i].weight;
+            if (weightSum <= 0) break;
+
+            int roll = Random.Range(0, weightSum);
+            for (int i = 0; i < entries.Count; i++)
+            {
+                if (counts[i] >= Mathf.Max(0, entries[i].maximumCount)) continue;
+                roll -= entries[i].weight;
+                if (roll >= 0) continue;
+                counts[i]++;
+                remaining--;
+                break;
+            }
+        }
+
+        List<GameObject> planned = new List<GameObject>();
+        for (int i = 0; i < entries.Count; i++)
+            for (int n = 0; n < counts[i]; n++)
+                planned.Add(entries[i].prefab);
+
+        // Shuffle so minimum quotas do not force a fixed spawn order.
+        for (int i = planned.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            GameObject temp = planned[i];
+            planned[i] = planned[j];
+            planned[j] = temp;
+        }
+
+        for (int i = 0; i < planned.Count; i++)
+        {
+            SpawnPrefab(planned[i], planned[i].name);
+            if (!spawnAllAtOnce && i < planned.Count - 1)
+                yield return new WaitForSeconds(timeBetweenSpawns);
+        }
     }
 
     private List<EnemyDefinitions> GetAvailableEnemies()
@@ -137,6 +219,12 @@ public class EnemySpawner : MonoBehaviour
         if (selectedEnemy == null)
             return;
 
+        SpawnPrefab(selectedEnemy.prefab, selectedEnemy.enemyName);
+    }
+
+    private void SpawnPrefab(GameObject prefab, string displayName)
+    {
+        if (prefab == null) return;
         Vector3 spawnPosition;
         if (!TryFindSpawnPosition(out spawnPosition))
         {
@@ -145,12 +233,12 @@ public class EnemySpawner : MonoBehaviour
         }
 
         GameObject spawnedEnemy = Instantiate(
-            selectedEnemy.prefab,
+            prefab,
             spawnPosition,
             Quaternion.identity
         );
 
-        spawnedEnemy.name = selectedEnemy.enemyName;
+        spawnedEnemy.name = displayName;
         EnemyAI ai = spawnedEnemy.GetComponent<EnemyAI>();
         if (ai != null) ai.AssignAggroGroup(aggroGroup);
     }

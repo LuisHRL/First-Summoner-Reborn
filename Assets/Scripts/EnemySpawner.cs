@@ -143,6 +143,8 @@ public class EnemySpawner : MonoBehaviour
         );
 
         spawnedEnemy.name = selectedEnemy.enemyName;
+        EnemyAI ai = spawnedEnemy.GetComponent<EnemyAI>();
+        if (ai != null) ai.AssignAggroGroup(aggroGroup);
     }
     private bool TryFindSpawnPosition(out Vector3 position)
     {

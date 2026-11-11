@@ -15,6 +15,9 @@ public sealed class MissionMapUI : MonoBehaviour
     [SerializeField] private RectTransform entriesContainer;
     [SerializeField] private RectTransform missionMapArea;
     [SerializeField] private Button entryButtonPrefab;
+    [Header("Mission markers")]
+    [SerializeField] private Sprite missionMarkerSprite;
+    [SerializeField] private Vector2 missionMarkerSize = new Vector2(88f, 100f);
     [SerializeField] private TMP_Text heading;
     [SerializeField] private Image mapIllustration;
     [SerializeField] private Button backButton;
@@ -107,8 +110,7 @@ public sealed class MissionMapUI : MonoBehaviour
                             bool available = MissionProgress.IsMissionUnlocked(
                                 navigator.World, regionSelected, mission, difficulty);
                             if (!available) continue; // Future missions stay hidden.
-                            string label = (MissionProgress.IsCompleted(mission, difficulty) ? "✓ " : "") +
-                                mission.displayName;
+                            string label = mission.displayName;
                             AddMapMarker(label, mission, missionIndex, () => navigator.SelectMission(mission));
                         }
                     }
@@ -177,9 +179,37 @@ public sealed class MissionMapUI : MonoBehaviour
         rect.anchorMax = point;
         rect.pivot = new Vector2(0.5f, 0.5f);
         rect.anchoredPosition = Vector2.zero;
-        rect.sizeDelta = new Vector2(116f, 78f);
+        rect.sizeDelta = missionMarkerSprite != null ? missionMarkerSize : new Vector2(116f, 78f);
+        Image markerImage = button.GetComponent<Image>();
+        if (markerImage != null && missionMarkerSprite != null)
+        {
+            markerImage.sprite = missionMarkerSprite;
+            markerImage.type = Image.Type.Simple;
+            markerImage.preserveAspect = true;
+            markerImage.color = Color.white;
+        }
+        int stars = MissionProgress.BestStars(mission, difficulty);
+        if (stars == 0 && MissionProgress.IsCompleted(mission, difficulty)) stars = 1;
+        stars = Mathf.Clamp(stars, 0, 3);
+        string rating = stars == 0 ? "☆☆☆" : new string('★', stars) + new string('☆', 3 - stars);
         TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
-        if (text != null) { text.text = (index + 1).ToString() + "\n" + label; text.color = Color.black; }
+        if (text == null)
+        {
+            var labelObject = new GameObject("MissionLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
+            labelObject.transform.SetParent(button.transform, false);
+            text = labelObject.GetComponent<TextMeshProUGUI>();
+        }
+        text.text = label + "\n" + rating;
+        text.color = Color.white;
+        text.alignment = TextAlignmentOptions.Center;
+        text.fontSize = 21f;
+        text.enableAutoSizing = false;
+        text.raycastTarget = false;
+        RectTransform labelRect = text.rectTransform;
+        labelRect.anchorMin = labelRect.anchorMax = new Vector2(0.5f, 0f);
+        labelRect.pivot = new Vector2(0.5f, 1f);
+        labelRect.anchoredPosition = new Vector2(0f, -3f);
+        labelRect.sizeDelta = new Vector2(130f, 60f);
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(action);
     }

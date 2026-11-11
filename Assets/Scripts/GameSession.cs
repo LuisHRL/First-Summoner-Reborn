@@ -9,26 +9,18 @@ public static class GameSession
 
     public static bool TrySelectMission(
         MissionWorldDefinition world,
-        MissionSubzoneDefinition subzone,
+        MissionRegionDefinition region,
         MissionDefinition mission,
         MissionProgress.Difficulty difficulty)
     {
-        if (world == null || subzone == null || mission == null ||
+        if (world == null || region == null || mission == null ||
             !MissionProgress.IsUnlocked(world, difficulty))
             return false;
 
-        bool belongsToWorld = false;
-        if (world.regions != null)
-            foreach (MissionRegionDefinition region in world.regions)
-                if (region != null && region.subzones != null &&
-                    System.Array.IndexOf(region.subzones, subzone) >= 0)
-                {
-                    belongsToWorld = true;
-                    break;
-                }
-
-        if (!belongsToWorld || subzone.missions == null ||
-            System.Array.IndexOf(subzone.missions, mission) < 0)
+        if (world.regions == null ||
+            System.Array.IndexOf(world.regions, region) < 0 ||
+            region.missions == null ||
+            System.Array.IndexOf(region.missions, mission) < 0)
             return false;
 
         SelectedWorld = world;

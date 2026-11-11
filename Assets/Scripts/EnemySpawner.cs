@@ -33,6 +33,14 @@ public class EnemySpawner : MonoBehaviour
     [Min(1)] public int spawnPositionAttempts = 24;
 
     public bool IsWaveFinished { get; private set; }
+    private EnemyAggroGroup aggroGroup;
+
+    private void Awake()
+    {
+        aggroGroup = GetComponent<EnemyAggroGroup>();
+        if (aggroGroup == null)
+            aggroGroup = gameObject.AddComponent<EnemyAggroGroup>();
+    }
 
     private List<EnemyDefinitions> availableEnemies =
         new List<EnemyDefinitions>();

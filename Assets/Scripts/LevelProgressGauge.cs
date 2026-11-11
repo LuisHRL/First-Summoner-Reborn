@@ -23,6 +23,9 @@ public class LevelProgressGauge : MonoBehaviour
     private Sprite idleFinalEnemySprite;
     private bool finalEnemySpriteCaptured;
     private bool finalEnemyWasSpawned;
+    private GameObject watchedFinalEnemy;
+    private EnemyHealth watchedHealth;
+    private bool finalEnemyKilled;
 
     private void Awake()
     {
@@ -32,8 +35,10 @@ public class LevelProgressGauge : MonoBehaviour
     private void ResolveFinalEnemyMarker()
     {
         if (finalEnemyMarker == null)
+            finalEnemyMarker = transform.Find("FinalEnemy") as RectTransform;
+        if (finalEnemyMarker == null)
         {
-            // FinalEnemy is often a sibling of ProgressGauge, not its child.
+            // Fallback for nonstandard scene layouts.
             RectTransform[] markers = Resources.FindObjectsOfTypeAll<RectTransform>();
             foreach (RectTransform marker in markers)
             {
@@ -57,6 +62,19 @@ public class LevelProgressGauge : MonoBehaviour
         }
     }
 
+    private void OnFinalEnemyDeath()
+    {
+        finalEnemyKilled = true;
+        if (finalEnemyMarker != null)
+            finalEnemyMarker.gameObject.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        if (watchedHealth != null)
+            watchedHealth.OnDeath.RemoveListener(OnFinalEnemyDeath);
+    }
+
     private void Update()
     {
         // Marker lifetime is independent of gauge movement and player references.
@@ -74,9 +92,20 @@ public class LevelProgressGauge : MonoBehaviour
             finalEnemyWasSpawned = true;
 
         GameObject trackedEnemy = spawner != null ? spawner.FinalEnemy : null;
-        EnemyHealth trackedHealth = trackedEnemy != null ? trackedEnemy.GetComponent<EnemyHealth>() : null;
-        bool enemyAlive = trackedEnemy != null && trackedEnemy.activeInHierarchy &&
-            (trackedHealth == null || trackedHealth.CurrentHealth > 0);
+        if (trackedEnemy != null && watchedFinalEnemy != trackedEnemy)
+        {
+            if (watchedHealth != null)
+                watchedHealth.OnDeath.RemoveListener(OnFinalEnemyDeath);
+            watchedFinalEnemy = trackedEnemy;
+            watchedHealth = trackedEnemy.GetComponent<EnemyHealth>();
+            finalEnemyKilled = false;
+            if (watchedHealth != null)
+                watchedHealth.OnDeath.AddListener(OnFinalEnemyDeath);
+        }
+
+        bool enemyAlive = !finalEnemyKilled && trackedEnemy != null &&
+            trackedEnemy.activeInHierarchy &&
+            (watchedHealth == null || watchedHealth.CurrentHealth > 0);
         bool spawning = spawner != null && !spawner.IsWaveFinished && !finalEnemyWasSpawned;
         bool showMarker = enemyAlive || spawning;
         if (finalEnemyMarker != null && finalEnemyMarker.gameObject.activeSelf != showMarker)

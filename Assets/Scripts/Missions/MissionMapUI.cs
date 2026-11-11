@@ -140,6 +140,7 @@ public sealed class MissionMapUI : MonoBehaviour
             GameSession.ClearMissionSelection();
             return;
         }
+        GameSession.SetMissionReturnScene(SceneManager.GetActiveScene().name);
         SceneManager.LoadScene(gameplaySceneName);
     }
 

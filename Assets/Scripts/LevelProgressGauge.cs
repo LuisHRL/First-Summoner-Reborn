@@ -126,6 +126,29 @@ public class LevelProgressGauge : MonoBehaviour
         }
     }
 
+    private void SetMarkerOnGauge(RectTransform marker, float normalizedPosition, bool centerOnGauge)
+    {
+        if (marker == null || progressGauge == null) return;
+        RectTransform parent = marker.parent as RectTransform;
+        if (parent == null) return;
+
+        Rect rect = progressGauge.rect;
+        Vector3 gaugeLocalPoint = new Vector3(
+            centerOnGauge ? rect.center.x : rect.center.x,
+            Mathf.Lerp(rect.yMin, rect.yMax, Mathf.Clamp01(normalizedPosition)),
+            0f);
+        Vector3 worldPoint = progressGauge.TransformPoint(gaugeLocalPoint);
+        Vector3 parentPoint = parent.InverseTransformPoint(worldPoint);
+        Rect parentRect = parent.rect;
+        Vector2 anchorPoint = new Vector2(
+            parentRect.xMin + parentRect.width * marker.anchorMin.x,
+            parentRect.yMin + parentRect.height * marker.anchorMin.y);
+        Vector2 anchored = marker.anchoredPosition;
+        if (centerOnGauge) anchored.x = parentPoint.x - anchorPoint.x;
+        anchored.y = parentPoint.y - anchorPoint.y;
+        marker.anchoredPosition = anchored;
+    }
+
     private static string GetTransformPath(Transform item)
     {
         if (item == null) return "null";
@@ -246,46 +269,19 @@ public class LevelProgressGauge : MonoBehaviour
 
         progress = Mathf.Clamp01(progress);
 
-        // Le triangle est ancré en bas de l'échelle.
-        Vector2 position = playerProgressMarker.anchoredPosition;
-        position.y = progress * progressGauge.rect.height;
+        // The last group's furthest initial spawn defines 100% of the gauge.
+        // Both UI markers use the same world-to-gauge mapping, independent of
+        // the gauge's anchors, pivot and scene-authored LevelEnd Z value.
+        SetMarkerOnGauge(playerProgressMarker, progress, false);
 
-        playerProgressMarker.anchoredPosition = position;
-
-        // Track the enemy's current world position, not its original spawn position.
-        // Use the gauge's own local coordinates to avoid top-anchor offsets.
         if (finalEnemyMarker == null)
             ResolveFinalEnemyMarker();
         if (finalEnemyMarker == null)
             return;
 
-        // The player triangle already uses the correct gauge coordinate system.
-        // Match its anchors instead of using the gauge RectTransform pivot.
-        RectTransform markerParent = playerProgressMarker.parent as RectTransform;
-        if (markerParent != null && finalEnemyMarker.parent != markerParent)
-            finalEnemyMarker.SetParent(markerParent, false);
-
-        finalEnemyMarker.anchorMin = playerProgressMarker.anchorMin;
-        finalEnemyMarker.anchorMax = playerProgressMarker.anchorMax;
-        finalEnemyMarker.pivot = new Vector2(0.5f, 0.5f);
-
         float enemyZ = trackedEnemy != null ? trackedEnemy.transform.position.z : endZ;
         float enemyProgress = Mathf.Clamp01((enemyZ - startZ) / (endZ - startZ));
-        float markerY = enemyProgress * progressGauge.rect.height;
-        // Keep the marker centered on the gauge's vertical axis.
-        Vector2 gaugeCenterInParent = Vector2.zero;
-        if (markerParent != null)
-            gaugeCenterInParent = markerParent.InverseTransformPoint(progressGauge.TransformPoint(progressGauge.rect.center));
-        Vector2 anchorReference = Vector2.zero;
-        if (markerParent != null)
-        {
-            Rect parentRect = markerParent.rect;
-            anchorReference = new Vector2(
-                parentRect.xMin + parentRect.width * finalEnemyMarker.anchorMin.x,
-                parentRect.yMin + parentRect.height * finalEnemyMarker.anchorMin.y);
-        }
-        finalEnemyMarker.anchoredPosition = new Vector2(
-            gaugeCenterInParent.x - anchorReference.x, markerY);
+        SetMarkerOnGauge(finalEnemyMarker, enemyProgress, true);
 
         // Default ring before aggro; dedicated red sprite during combat.
         bool engaged = enemyAlive && spawner.FinalEnemyGroup != null &&

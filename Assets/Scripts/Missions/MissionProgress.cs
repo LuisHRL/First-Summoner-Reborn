@@ -20,17 +20,31 @@ public static class MissionProgress
         PlayerPrefs.Save();
     }
 
-    /// <summary>Medium unlocks only after all configured Normal missions in this subzone are complete.</summary>
-    public static bool IsUnlocked(MissionSubzoneDefinition subzone, Difficulty difficulty)
+    /// <summary>Medium unlocks globally when every mission in every subzone is complete on Normal.</summary>
+    public static bool IsUnlocked(MissionWorldDefinition world, Difficulty difficulty)
     {
         if (difficulty == Difficulty.Normal) return true;
-        if (difficulty != Difficulty.Medium || subzone == null ||
-            subzone.missions == null || subzone.missions.Length == 0) return false;
+        if (difficulty != Difficulty.Medium || world == null ||
+            world.regions == null || world.regions.Length == 0) return false;
 
-        foreach (MissionDefinition mission in subzone.missions)
-            if (!HasId(mission) || !IsCompleted(mission, Difficulty.Normal))
+        bool hasMission = false;
+        foreach (MissionRegionDefinition region in world.regions)
+        {
+            if (region == null || region.subzones == null || region.subzones.Length == 0)
                 return false;
-        return true;
+            foreach (MissionSubzoneDefinition subzone in region.subzones)
+            {
+                if (subzone == null || subzone.missions == null || subzone.missions.Length == 0)
+                    return false;
+                foreach (MissionDefinition mission in subzone.missions)
+                {
+                    if (!HasId(mission) || !IsCompleted(mission, Difficulty.Normal))
+                        return false;
+                    hasMission = true;
+                }
+            }
+        }
+        return hasMission;
     }
 
     public static int CompletedCount(MissionSubzoneDefinition subzone, Difficulty difficulty)

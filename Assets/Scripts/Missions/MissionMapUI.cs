@@ -85,15 +85,18 @@ public sealed class MissionMapUI : MonoBehaviour
                 if (navigator.World != null && navigator.World.regions != null)
                     foreach (var region in navigator.World.regions)
                         if (region != null)
-                            AddEntry(region.displayName, () => { navigator.SelectRegion(region); Refresh(); });
+                            AddEntry(
+                                (MissionProgress.IsRegionUnlocked(navigator.World, region, difficulty) ? "" : "🔒 ") + region.displayName,
+                                () => navigator.SelectRegion(region),
+                                MissionProgress.IsRegionUnlocked(navigator.World, region, difficulty));
                 break;
 
             case MissionMenuNavigator.Page.Region:
                 var regionSelected = navigator.SelectedRegion;
                 SetHeading(regionSelected != null ? regionSelected.displayName : "");
-                bool unlocked = MissionProgress.IsUnlocked(navigator.World, difficulty);
+                bool unlocked = MissionProgress.IsRegionUnlocked(navigator.World, regionSelected, difficulty);
                 if (!unlocked) SetHeading((regionSelected != null ? regionSelected.displayName : "") +
-                    " - Medium locked - complete all Normal world missions");
+                    " - Locked");
                 SetImage(regionSelected != null ? regionSelected.mapIllustration : null);
                 if (regionSelected != null && regionSelected.missions != null)
                     for (int missionIndex = 0; missionIndex < regionSelected.missions.Length; missionIndex++)

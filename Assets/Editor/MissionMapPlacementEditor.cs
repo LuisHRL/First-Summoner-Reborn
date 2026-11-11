@@ -37,25 +37,39 @@ public sealed class MissionMapPlacementEditor : EditorWindow
                 region = candidate;
         }
         if (region == null) return;
-        if (region.mapIllustration == null)
-        {
-            EditorGUILayout.HelpBox("Assign Map Illustration to the selected region in its Inspector.", MessageType.Warning);
-            if (GUILayout.Button("Select Region Asset")) Selection.activeObject = region;
-            return;
-        }
-
         var sprite = region.mapIllustration;
-        Texture2D texture = sprite.texture;
-        if (texture == null) return;
-        Rect spriteRect = sprite.rect;
+        Texture2D texture = sprite != null ? sprite.texture : null;
+        Rect spriteRect = sprite != null ? sprite.rect : new Rect(0f, 0f, 16f, 9f);
         float aspect = spriteRect.height / spriteRect.width;
         float width = Mathf.Min(MaxMapWidth, Mathf.Max(100f, position.width - 35f));
         float height = width * aspect;
         scroll = EditorGUILayout.BeginScrollView(scroll);
         Rect area = GUILayoutUtility.GetRect(width, height, GUILayout.Width(width));
-        Rect uv = new Rect(spriteRect.x / texture.width, spriteRect.y / texture.height,
-            spriteRect.width / texture.width, spriteRect.height / texture.height);
-        GUI.DrawTextureWithTexCoords(area, texture, uv, true);
+        if (texture != null)
+        {
+            Rect uv = new Rect(spriteRect.x / texture.width, spriteRect.y / texture.height,
+                spriteRect.width / texture.width, spriteRect.height / texture.height);
+            GUI.DrawTextureWithTexCoords(area, texture, uv, true);
+        }
+        else
+        {
+            EditorGUI.DrawRect(area, new Color(0.14f, 0.19f, 0.23f));
+            Handles.BeginGUI();
+            Handles.color = new Color(1f, 1f, 1f, 0.15f);
+            for (int i = 1; i < 10; i++)
+            {
+                float x = area.x + area.width * i / 10f;
+                Handles.DrawLine(new Vector3(x, area.y), new Vector3(x, area.yMax));
+            }
+            for (int i = 1; i < 6; i++)
+            {
+                float y = area.y + area.height * i / 6f;
+                Handles.DrawLine(new Vector3(area.x, y), new Vector3(area.xMax, y));
+            }
+            Handles.EndGUI();
+            GUI.Label(new Rect(area.x + 8f, area.y + 8f, area.width - 16f, 22f),
+                "Temporary map - " + region.displayName);
+        }
 
         if (region.missions != null)
         {

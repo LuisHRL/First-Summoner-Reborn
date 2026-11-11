@@ -26,6 +26,13 @@ public class EnemySpawner : MonoBehaviour
     public float spawnRadius = 4f;
 
     [Header("Mode d'apparition")]
+    [Header("Groupes repartis sur le parcours")]
+    public bool distributeAlongTerrain = true;
+    [Min(1)] public int desiredGroupCount = 4;
+    [Min(0f)] public float firstGroupDistanceAfterSafeZone = 10f;
+    [Min(0f)] public float endOfTerrainMargin = 12f;
+    [Min(0f)] public float groupLateralRadius = 3f;
+
     public bool spawnAllAtOnce = true;
 
     [Min(0f)]

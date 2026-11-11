@@ -39,12 +39,12 @@ public sealed class MissionMapPlacementEditor : EditorWindow
         if (region == null) return;
         var sprite = region.mapIllustration;
         Texture2D texture = sprite != null ? sprite.texture : null;
-        Rect spriteRect = sprite != null ? sprite.rect : new Rect(0f, 0f, 16f, 9f);
+        Rect spriteRect = sprite != null ? sprite.rect : new Rect(0f, 0f, 9f, 16f);
         float aspect = spriteRect.height / spriteRect.width;
-        float width = Mathf.Min(MaxMapWidth, Mathf.Max(100f, position.width - 35f));
+        float width = Mathf.Min(MaxMapWidth, Mathf.Max(100f, position.width - 55f));
         float height = width * aspect;
-        scroll = EditorGUILayout.BeginScrollView(scroll);
-        Rect area = GUILayoutUtility.GetRect(width, height, GUILayout.Width(width));
+        scroll = EditorGUILayout.BeginScrollView(scroll, GUILayout.ExpandHeight(true));
+        Rect area = GUILayoutUtility.GetRect(width, height, GUILayout.Width(width), GUILayout.Height(height));
         if (texture != null)
         {
             Rect uv = new Rect(spriteRect.x / texture.width, spriteRect.y / texture.height,
@@ -61,9 +61,9 @@ public sealed class MissionMapPlacementEditor : EditorWindow
                 float x = area.x + area.width * i / 10f;
                 Handles.DrawLine(new Vector3(x, area.y), new Vector3(x, area.yMax));
             }
-            for (int i = 1; i < 6; i++)
+            for (int i = 1; i < 17; i++)
             {
-                float y = area.y + area.height * i / 6f;
+                float y = area.y + area.height * i / 17f;
                 Handles.DrawLine(new Vector3(area.x, y), new Vector3(area.xMax, y));
             }
             Handles.EndGUI();
@@ -109,7 +109,7 @@ public sealed class MissionMapPlacementEditor : EditorWindow
             e.Use();
         }
         EditorGUILayout.EndScrollView();
-        EditorGUILayout.HelpBox("Drag the numbered markers to position missions. Positions are saved on the mission assets.", MessageType.Info);
+        EditorGUILayout.HelpBox("Portrait map: scroll vertically to reach all markers. Drag markers to save their normalized positions.", MessageType.Info);
     }
 
     private MissionDefinition dragging;

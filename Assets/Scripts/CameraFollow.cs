@@ -200,7 +200,23 @@ public class CameraFollow : MonoBehaviour
         }
 
         if (keepTerrainEndsInView && terrain != null)
+        {
             ClampToTerrainEnds(ref result);
+
+            // At the far end, terrain framing must not prevent following the hero.
+            // Allow the upper terrain edge to leave the screen rather than lose the player.
+            Vector3 savedPosition = transform.position;
+            transform.position = result;
+            Vector3 heroScreen = cameraComponent.WorldToViewportPoint(target.position);
+            if (heroScreen.z > 0f && heroScreen.y > upperScreenThreshold)
+            {
+                Vector3 nextScreen = cameraComponent.WorldToViewportPoint(target.position + Vector3.forward);
+                float sensitivity = nextScreen.y - heroScreen.y;
+                if (Mathf.Abs(sensitivity) > 0.0001f)
+                    result.z += (heroScreen.y - upperScreenThreshold) / sensitivity;
+            }
+            transform.position = savedPosition;
+        }
 
         transform.position = result;
         UpdateObstructions();

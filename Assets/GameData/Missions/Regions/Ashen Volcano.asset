@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e4fc04d00414ec42a41d2db60f0d651, type: 3}
+  m_Name: Ashen Volcano
+  m_EditorClassIdentifier: Assembly-CSharp::MissionRegionDefinition
+  persistentId: 4f4aa46b73884854b7566face30e2a52
+  displayName: Ashen Volcano
+  mapIllustration: {fileID: 0}
+  mapPosition: {x: 0.5, y: 0.5}
+  missions: []

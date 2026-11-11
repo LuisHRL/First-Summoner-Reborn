@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e4fc04d00414ec42a41d2db60f0d651, type: 3}
+  m_Name: Frozen Hell
+  m_EditorClassIdentifier: Assembly-CSharp::MissionRegionDefinition
+  persistentId: 8347195ee63c4cca9470454454b056ee
+  displayName: Frozen Hell
+  mapIllustration: {fileID: 0}
+  mapPosition: {x: 0.5, y: 0.5}
+  missions:
+  - {fileID: 11400000, guid: 244452f4bfc0c0245bdc78cafa995d17, type: 2}
+  - {fileID: 11400000, guid: 1cc03bde702afc247bfea1327f533bab, type: 2}
+  - {fileID: 11400000, guid: cde34886de84d004ab9b02958c8b3bc5, type: 2}
+  - {fileID: 11400000, guid: 703878b8cd143a24b8046822a5f59e0a, type: 2}
+  - {fileID: 11400000, guid: 348a0e857d4ce7a44b3523485d91b4d4, type: 2}
+  - {fileID: 11400000, guid: 8066464bbfeef5e4a89dd8c1e77b96ca, type: 2}
+  - {fileID: 11400000, guid: 787ba0d413da8504faa6f897e241bc66, type: 2}
+  - {fileID: 11400000, guid: 48da0dc1d7a7a2448ae8d1a0111d2831, type: 2}
+  - {fileID: 11400000, guid: 7ed03dea936d10f4d9d93f4363e392bb, type: 2}
+  - {fileID: 11400000, guid: 5d2e9e63db79fdd439169f3b4d030e4f, type: 2}

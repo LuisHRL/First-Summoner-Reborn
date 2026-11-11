@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d47710894f0b5f47aaf252a075f2680, type: 3}
+  m_Name: 1-2
+  m_EditorClassIdentifier: Assembly-CSharp::MissionDefinition
+  persistentId: 1ce43d941b1c427595cc174eb8cef979
+  displayName: 1-2
+  description: 
+  illustration: {fileID: 0}
+  mapPosition: {x: 0.60518134, y: 0.107226074}
+  recommendedPower: 1
+  startingSafeZoneMeters: 15
+  enemies: []

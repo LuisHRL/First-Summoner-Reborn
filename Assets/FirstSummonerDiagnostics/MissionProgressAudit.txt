@@ -1,0 +1,38 @@
+﻿Mission progression audit (read-only)
+World asset: Assets/GameData/Missions/MissionWorld.asset
+Regions: 5
+Region [0]: Forest of Indolence asset=Assets/GameData/Missions/Regions/Forest of Indolence.asset missions=20
+  [0] NULL - blocks progression after this slot
+  [1] NULL - blocks progression after this slot
+  [2] NULL - blocks progression after this slot
+  [3] NULL - blocks progression after this slot
+  [4] NULL - blocks progression after this slot
+  [5] NULL - blocks progression after this slot
+  [6] NULL - blocks progression after this slot
+  [7] NULL - blocks progression after this slot
+  [8] NULL - blocks progression after this slot
+  [9] NULL - blocks progression after this slot
+  [10] 1-1 asset=Assets/GameData/Missions/Missions/1-1.asset unlocked=False completed=False position=(0.53, 0.03)
+  [11] 1-2 asset=Assets/GameData/Missions/Missions/1-2.asset unlocked=False completed=False position=(0.61, 0.11)
+  [12] 1-3 asset=Assets/GameData/Missions/Missions/1-3.asset unlocked=False completed=False position=(0.64, 0.18)
+  [13] 1-4 asset=Assets/GameData/Missions/Missions/1-4.asset unlocked=False completed=False position=(0.60, 0.25)
+  [14] 1-5 asset=Assets/GameData/Missions/Missions/1-5.asset unlocked=False completed=False position=(0.53, 0.32)
+  [15] 1-6 asset=Assets/GameData/Missions/Missions/1-6.asset unlocked=False completed=False position=(0.45, 0.39)
+  [16] 1-7 asset=Assets/GameData/Missions/Missions/1-7.asset unlocked=False completed=False position=(0.50, 0.47)
+  [17] 1-8 asset=Assets/GameData/Missions/Missions/1-8.asset unlocked=False completed=False position=(0.56, 0.55)
+  [18] 1-9 asset=Assets/GameData/Missions/Missions/1-9.asset unlocked=False completed=False position=(0.62, 0.64)
+  [19] 1-10 asset=Assets/GameData/Missions/Missions/1-10.asset unlocked=False completed=False position=(0.67, 0.73)
+Region [1]: Frozen Hell asset=Assets/GameData/Missions/Regions/Frozen Hell.asset missions=10
+  [0] 2-1 asset=Assets/GameData/Missions/Missions/2-1.asset unlocked=False completed=False position=(0.81, 0.05)
+  [1] 2-2 asset=Assets/GameData/Missions/Missions/2-2.asset unlocked=False completed=False position=(0.68, 0.14)
+  [2] 2-3 asset=Assets/GameData/Missions/Missions/2-3.asset unlocked=False completed=False position=(0.61, 0.23)
+  [3] 2-4 asset=Assets/GameData/Missions/Missions/2-4.asset unlocked=False completed=False position=(0.58, 0.32)
+  [4] 2-5 asset=Assets/GameData/Missions/Missions/2-5.asset unlocked=False completed=False position=(0.59, 0.41)
+  [5] 2-6 asset=Assets/GameData/Missions/Missions/2-6.asset unlocked=False completed=False position=(0.57, 0.50)
+  [6] 2-7 asset=Assets/GameData/Missions/Missions/2-7.asset unlocked=False completed=False position=(0.51, 0.60)
+  [7] 2-8 asset=Assets/GameData/Missions/Missions/2-8.asset unlocked=False completed=False position=(0.40, 0.70)
+  [8] 2-9 asset=Assets/GameData/Missions/Missions/2-9.asset unlocked=False completed=False position=(0.41, 0.79)
+  [9] 2-10 asset=Assets/GameData/Missions/Missions/2-10.asset unlocked=False completed=False position=(0.48, 0.88)
+Region [2]: Paradise of Hunger asset=Assets/GameData/Missions/Regions/Paradise of Hunger.asset missions=0
+Region [3]: Ashen Volcano asset=Assets/GameData/Missions/Regions/Ashen Volcano.asset missions=0
+Region [4]: Death's Cavern asset=Assets/GameData/Missions/Regions/Death's Cavern.asset missions=0

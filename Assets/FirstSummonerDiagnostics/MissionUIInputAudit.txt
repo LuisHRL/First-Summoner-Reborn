@@ -1,0 +1,33 @@
+﻿First Summoner - Mission UI Input Audit
+Unity: 6000.5.5f1
+Scene: Assets/Scenes/MainMenu.unity
+MainMenu: Canvas
+MissionPanel: Canvas/MissionPanel active=True
+MissionPanel Rect: size=(1080.00, 2220.00) scale=(1.33, 1.33, 1.33)
+Canvas: Canvas enabled=True active=True overrideSorting=False order=0 renderMode=ScreenSpaceOverlay raycaster=True group=(none)
+Canvas: Canvas/MissionPanel/GeneratedMissionMapUI enabled=True active=True overrideSorting=False order=0 renderMode=ScreenSpaceOverlay raycaster=MISSING group=(none)
+Parent Raycaster: Canvas enabled=True active=True
+Button: Canvas/MissionPanel/NormalButton active=False enabled=True interactable=True listeners=1 label=MISSION 1 ★ graphicRaycast=True
+Button: Canvas/MissionPanel/HardButton active=False enabled=True interactable=True listeners=1 label=MISSION 1 ★★ graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) active=True enabled=True interactable=True listeners=0 label=Forest of Indolence graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) active=True enabled=True interactable=True listeners=0 label=Paradise of Hunger graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) active=True enabled=True interactable=True listeners=0 label=Ashen Volcano graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) active=True enabled=True interactable=True listeners=0 label=Death's Cavern graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) active=True enabled=True interactable=True listeners=0 label=Frozen Hell graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/EntryTemplate active=False enabled=True interactable=True listeners=0 label=Mission graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/Back active=False enabled=True interactable=True listeners=0 label=Back graphicRaycast=True
+Button: Canvas/MissionPanel/GeneratedMissionMapUI/Launch active=False enabled=True interactable=True listeners=0 label=Launch graphicRaycast=True
+Raycast Graphic: Canvas/MissionPanel type=Image depth=0 rect=(x:-540.00, y:-1110.00, width:1080.00, height:2220.00) canvas=Canvas
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) type=Image depth=2 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone)/Label type=TextMeshProUGUI depth=3 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) type=Image depth=4 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone)/Label type=TextMeshProUGUI depth=5 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) type=Image depth=6 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone)/Label type=TextMeshProUGUI depth=7 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) type=Image depth=8 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone)/Label type=TextMeshProUGUI depth=9 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone) type=Image depth=10 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Entries/EntryTemplate(Clone)/Label type=TextMeshProUGUI depth=11 rect=(x:-110.00, y:-36.00, width:220.00, height:72.00) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+Raycast Graphic: Canvas/MissionPanel/GeneratedMissionMapUI/Heading type=TextMeshProUGUI depth=12 rect=(x:-485.76, y:-95.76, width:971.52, height:191.52) canvas=Canvas/MissionPanel/GeneratedMissionMapUI
+MissionMapUI: Canvas/MissionPanel/GeneratedMissionMapUI
+EventSystem: EventSystem enabled=True active=True module=InputSystemUIInputModule

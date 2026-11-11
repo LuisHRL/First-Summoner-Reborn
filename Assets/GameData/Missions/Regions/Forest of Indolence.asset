@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e4fc04d00414ec42a41d2db60f0d651, type: 3}
+  m_Name: Forest of Indolence
+  m_EditorClassIdentifier: Assembly-CSharp::MissionRegionDefinition
+  persistentId: 7f9b9d4fcd2e41f2816136ce53b91c86
+  displayName: Forest of Indolence
+  mapIllustration: {fileID: 0}
+  mapPosition: {x: 0.5, y: 0.5}
+  missions:
+  - {fileID: 11400000, guid: 48eab47efc6fb264ebf37db6192a59d2, type: 2}
+  - {fileID: 11400000, guid: edb43cd243d189f4d9f628edfa6f6b1d, type: 2}
+  - {fileID: 11400000, guid: c7543d73c24a2004baf95c4b2a15774e, type: 2}
+  - {fileID: 11400000, guid: 0969671152ebdc4459faea6e77a5a089, type: 2}
+  - {fileID: 11400000, guid: 5204669db8d1ec24dabf34b79063b6eb, type: 2}
+  - {fileID: 11400000, guid: a92b000fc7533c04cb9cb5d586648810, type: 2}
+  - {fileID: 11400000, guid: 38236c5e9ef712d4ba8afd5c4c267d07, type: 2}
+  - {fileID: 11400000, guid: 3cedd2bc68939c14989bf82f4f258df3, type: 2}
+  - {fileID: 11400000, guid: 061b0630000282d44a9faad824230373, type: 2}
+  - {fileID: 11400000, guid: 8d389c76dd557ac42857ac2f22b900a1, type: 2}

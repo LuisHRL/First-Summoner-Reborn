@@ -1,13 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>Independent combat alert state for enemies created by one spawner.</summary>
+/// <summary>Independent aggro and leash for enemies created by one spawner.</summary>
 public sealed class EnemyAggroGroup : MonoBehaviour
 {
+    [Header("Désengagement du groupe")]
+    [Min(1f)] public float maximumPursuitDistance = 14f;
+    [Min(0f)] public float disengageDelay = 1.5f;
+
     private readonly HashSet<EnemyAI> members = new HashSet<EnemyAI>();
     private Transform sharedTarget;
+    private float outsideSince = -1f;
 
-    public bool IsEngaged => IsValid(sharedTarget);
+    public bool IsEngaged => CurrentTarget != null;
     public Transform CurrentTarget => IsValid(sharedTarget) ? sharedTarget : null;
 
     public void Register(EnemyAI enemy)
@@ -18,17 +23,57 @@ public sealed class EnemyAggroGroup : MonoBehaviour
     public void Unregister(EnemyAI enemy)
     {
         members.Remove(enemy);
-        if (members.Count == 0) sharedTarget = null;
+        if (members.Count == 0) ResetAggro();
     }
 
     public void Alert(Transform target)
     {
-        if (IsValid(target)) sharedTarget = target;
+        if (IsValid(target))
+        {
+            sharedTarget = target;
+            outsideSince = -1f;
+        }
     }
 
-    public void ClearTarget(Transform target)
+    private void Update()
     {
-        if (sharedTarget == target) sharedTarget = null;
+        if (sharedTarget == null) return;
+        if (!IsValid(sharedTarget))
+        {
+            ResetAggro();
+            return;
+        }
+
+        bool inRange = false;
+        foreach (EnemyAI enemy in members)
+        {
+            if (enemy == null || !enemy.isActiveAndEnabled) continue;
+            Vector3 delta = sharedTarget.position - enemy.HomePosition;
+            delta.y = 0f;
+            if (delta.sqrMagnitude <= maximumPursuitDistance * maximumPursuitDistance)
+            {
+                inRange = true;
+                break;
+            }
+        }
+
+        if (inRange)
+        {
+            outsideSince = -1f;
+            return;
+        }
+
+        if (outsideSince < 0f) outsideSince = Time.time;
+        if (Time.time - outsideSince >= disengageDelay)
+            ResetAggro();
+    }
+
+    private void ResetAggro()
+    {
+        sharedTarget = null;
+        outsideSince = -1f;
+        foreach (EnemyAI enemy in members)
+            if (enemy != null) enemy.Disengage();
     }
 
     private static bool IsValid(Transform target)

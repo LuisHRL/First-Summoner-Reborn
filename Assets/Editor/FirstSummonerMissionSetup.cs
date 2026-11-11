@@ -29,8 +29,17 @@ public static class FirstSummonerMissionSetup
 
         RectTransform root = Rect(menu.missionPanel.transform, "GeneratedMissionMapUI");
         Stretch(root, Vector2.zero, Vector2.one);
-        root.offsetMin = new Vector2(20, 20);
-        root.offsetMax = new Vector2(-20, -20);
+        root.offsetMin = new Vector2(12, 72);
+        root.offsetMax = new Vector2(-12, -20);
+        root.SetAsLastSibling();
+
+        // Keep legacy difficulty buttons available but avoid overlaying the map.
+        foreach (string oldName in new[] { "NormalButton", "HardButton" })
+        {
+            Transform legacy = menu.missionPanel.transform.Find(oldName);
+            if (legacy != null)
+                legacy.gameObject.SetActive(false);
+        }
 
         var navigator = Component<MissionMenuNavigator>(root.gameObject);
         var map = Component<MissionMapUI>(root.gameObject);
@@ -39,14 +48,19 @@ public static class FirstSummonerMissionSetup
         Reference(menu, "missionNavigator", navigator);
 
         var heading = Text(root, "Heading", "World", 30);
-        Stretch((RectTransform)heading.transform, new Vector2(0, .87f), Vector2.one);
+        Stretch((RectTransform)heading.transform, new Vector2(.04f, .89f), new Vector2(.96f, .98f));
+        heading.fontSize = 36;
+        heading.enableAutoSizing = true;
+        heading.fontSizeMin = 22;
+        heading.fontSizeMax = 36;
         var illustration = Component<Image>(Rect(root, "Illustration").gameObject);
         illustration.raycastTarget = false;
         illustration.enabled = illustration.sprite != null;
-        Stretch((RectTransform)illustration.transform, new Vector2(.05f, .49f), new Vector2(.95f, .85f));
+        Stretch((RectTransform)illustration.transform, new Vector2(.04f, .13f), new Vector2(.96f, .88f));
+        illustration.preserveAspect = true;
 
         RectTransform missionMapArea = Rect(root, "MissionMapArea");
-        Stretch(missionMapArea, new Vector2(.08f, .14f), new Vector2(.92f, .86f));
+        Stretch(missionMapArea, new Vector2(.06f, .14f), new Vector2(.94f, .87f));
         missionMapArea.SetAsLastSibling();
         var placeholder = Component<Image>(missionMapArea.gameObject);
         placeholder.color = new Color(.13f, .18f, .23f, .85f);
@@ -55,7 +69,7 @@ public static class FirstSummonerMissionSetup
         if (mapLayout != null) Object.DestroyImmediate(mapLayout);
 
         RectTransform entries = Rect(root, "Entries");
-        Stretch(entries, new Vector2(.05f, .15f), new Vector2(.95f, .47f));
+        Stretch(entries, new Vector2(.08f, .18f), new Vector2(.92f, .82f));
         var layout = Component<VerticalLayoutGroup>(entries.gameObject);
         layout.spacing = 8;
         layout.childAlignment = TextAnchor.UpperCenter;
@@ -64,12 +78,24 @@ public static class FirstSummonerMissionSetup
 
         Button template = Button(root, "EntryTemplate", "Mission");
         template.gameObject.SetActive(false);
-        Component<LayoutElement>(template.gameObject).preferredHeight = 54;
+        Component<LayoutElement>(template.gameObject).preferredHeight = 72;
+        ((RectTransform)template.transform).sizeDelta = new Vector2(220f, 72f);
+        var templateLabel = template.GetComponentInChildren<TMP_Text>(true);
+        if (templateLabel != null)
+        {
+            templateLabel.fontSize = 28;
+            templateLabel.enableAutoSizing = true;
+            templateLabel.fontSizeMin = 18;
+            templateLabel.fontSizeMax = 28;
+        }
 
         Button back = Button(root, "Back", "Back");
-        Stretch((RectTransform)back.transform, new Vector2(.05f, .02f), new Vector2(.30f, .12f));
+        Stretch((RectTransform)back.transform, new Vector2(.05f, .015f), new Vector2(.35f, .115f));
         Button launch = Button(root, "Launch", "Launch");
-        Stretch((RectTransform)launch.transform, new Vector2(.70f, .02f), new Vector2(.95f, .12f));
+        Stretch((RectTransform)launch.transform, new Vector2(.65f, .015f), new Vector2(.95f, .115f));
+        heading.transform.SetAsLastSibling();
+        back.transform.SetAsLastSibling();
+        launch.transform.SetAsLastSibling();
 
         Reference(map, "entriesContainer", entries);
         Reference(map, "missionMapArea", missionMapArea);
@@ -78,6 +104,14 @@ public static class FirstSummonerMissionSetup
         Reference(map, "mapIllustration", illustration);
         Reference(map, "backButton", back);
         Reference(map, "launchButton", launch);
+
+        // Set only this generated UI's canvas scaling, without changing other menu screens.
+        var localCanvas = root.GetComponent<Canvas>();
+        if (localCanvas == null) localCanvas = Undo.AddComponent<Canvas>(root.gameObject);
+        localCanvas.overrideSorting = true;
+        localCanvas.sortingOrder = 10;
+        var scaler = root.GetComponent<CanvasScaler>();
+        if (scaler != null) Object.DestroyImmediate(scaler);
 
         EditorUtility.SetDirty(menu);
         EditorUtility.SetDirty(map);

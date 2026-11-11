@@ -62,32 +62,32 @@ public sealed class MissionTimerOverlay : MonoBehaviour
         resultsPanel = new GameObject("MissionResults", typeof(RectTransform), typeof(Image));
         resultsPanel.transform.SetParent(root, false);
         var rect = resultsPanel.GetComponent<RectTransform>();
-        rect.anchorMin = new Vector2(0.1f, 0.32f);
-        rect.anchorMax = new Vector2(0.9f, 0.68f);
+        rect.anchorMin = new Vector2(0.06f, 0.28f);
+        rect.anchorMax = new Vector2(0.94f, 0.72f);
         rect.offsetMin = rect.offsetMax = Vector2.zero;
         resultsPanel.GetComponent<Image>().color = new Color(0.06f, 0.08f, 0.12f, 0.94f);
         var textObject = new GameObject("ResultText", typeof(RectTransform), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(rect, false);
         var labelRect = textObject.GetComponent<RectTransform>();
-        labelRect.anchorMin = new Vector2(0f, 0.46f);
+        labelRect.anchorMin = new Vector2(0f, 0.48f);
         labelRect.anchorMax = new Vector2(1f, 1f);
         labelRect.offsetMin = labelRect.offsetMax = Vector2.zero;
         resultsText = textObject.GetComponent<TextMeshProUGUI>();
         resultsText.alignment = TextAlignmentOptions.Center;
-        resultsText.fontSize = 48f;
+        resultsText.fontSize = 52f;
         resultsText.color = Color.white;
+        resultsText.raycastTarget = false;
         int elapsed = Mathf.CeilToInt(GameSession.MissionElapsedSeconds);
         int stars = won ? MissionProgress.StarsForTime(GameSession.SelectedMission, GameSession.MissionElapsedSeconds) : 0;
         float best = won ? MissionProgress.BestTime(GameSession.SelectedMission,
             (MissionProgress.Difficulty)GameSession.SelectedDifficulty) : -1f;
-        resultsText.text = (won ? "VICTORY" : "DEFEAT") + "\\n" +
-            string.Format("{0:00}:{1:00}", elapsed / 60, elapsed % 60) + "\\n" +
-            "" +
-            (best >= 0f ? "\\nBest: " + Mathf.CeilToInt(best) + "s" : "");
+        resultsText.text = (won ? "VICTOIRE" : "DÉFAITE") + "\\n" +
+            string.Format("{0:00}:{1:00}", elapsed / 60, elapsed % 60) +
+            (best >= 0f ? "\\nMeilleur temps : " + Mathf.CeilToInt(best) + " s" : "");
         MissionStarsUI.Create(rect, stars, MissionVisualStyle.EarnedStar,
-            MissionVisualStyle.GreyStar, new Vector2(64f, 64f), new Vector2(0f, 165f));
-        CreateResultButton(rect, "Retry", -0.26f, RetryMission);
-        CreateResultButton(rect, "Missions", 0.26f, ReturnToMissions);
+            MissionVisualStyle.GreyStar, new Vector2(90f, 90f), new Vector2(0f, 205f));
+        CreateResultButton(rect, "Réessayer", -0.25f, RetryMission);
+        CreateResultButton(rect, "Quitter", 0.25f, ReturnToMissions);
     }
 
     private void CreateResultButton(RectTransform parent, string label, float x, UnityEngine.Events.UnityAction action)
@@ -96,9 +96,9 @@ public sealed class MissionTimerOverlay : MonoBehaviour
         obj.transform.SetParent(parent, false);
         var rect = obj.GetComponent<RectTransform>();
         rect.anchorMin = rect.anchorMax = new Vector2(0.5f + x, 0.17f);
-        rect.sizeDelta = new Vector2(220f, 80f);
+        rect.sizeDelta = new Vector2(330f, 110f);
         var buttonImage = obj.GetComponent<Image>();
-        buttonImage.sprite = MissionVisualStyle.ButtonBackground;
+        buttonImage.sprite = MissionVisualStyle.ResultButtonBackground;
         buttonImage.preserveAspect = true;
         buttonImage.color = buttonImage.sprite != null ? Color.white : new Color(0.3f, 0.18f, 0.13f, 1f);
         obj.GetComponent<Button>().onClick.AddListener(action);
@@ -110,7 +110,7 @@ public sealed class MissionTimerOverlay : MonoBehaviour
         childRect.offsetMin = childRect.offsetMax = Vector2.zero;
         var text = child.GetComponent<TextMeshProUGUI>();
         text.text = label;
-        text.fontSize = 28f;
+        text.fontSize = 38f;
         text.color = Color.white;
         text.alignment = TextAlignmentOptions.Center;
         text.raycastTarget = false;
@@ -150,6 +150,7 @@ public sealed class MissionTimerOverlay : MonoBehaviour
             (!GameSession.MissionTimerRunning && GameSession.SelectedMission != null)))
             ShowResults();
         int total = Mathf.CeilToInt(GameSession.MissionTimeRemaining);
+        clockText.gameObject.SetActive(!resultsShown);
         clockText.text = GameSession.MissionTimedOut ? "00:00 - Failed" :
             string.Format("{0:00}:{1:00}", total / 60, total % 60);
     }

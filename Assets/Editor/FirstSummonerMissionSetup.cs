@@ -87,6 +87,7 @@ public static class FirstSummonerMissionSetup
         var templateLabel = template.GetComponentInChildren<TMP_Text>(true);
         if (templateLabel != null)
         {
+            templateLabel.color = Color.black;
             templateLabel.fontSize = 28;
             templateLabel.enableAutoSizing = true;
             templateLabel.fontSizeMin = 18;
@@ -175,6 +176,7 @@ public static class FirstSummonerMissionSetup
         var button = Component<Button>(rect.gameObject);
         var text = Text(rect, "Label", label, 22);
         Stretch((RectTransform)text.transform, Vector2.zero, Vector2.one);
+        text.color = Color.black;
         return button;
     }
 

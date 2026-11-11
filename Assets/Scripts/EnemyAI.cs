@@ -27,6 +27,21 @@ public class EnemyAI : MonoBehaviour
     private PlayerHealth player;
     private Transform currentTarget;
     private float nextAttackTime;
+    private EnemyAggroGroup aggroGroup;
+
+    public void AssignAggroGroup(EnemyAggroGroup group)
+    {
+        if (aggroGroup == group) return;
+        if (aggroGroup != null) aggroGroup.Unregister(this);
+        aggroGroup = group;
+        if (aggroGroup != null) aggroGroup.Register(this);
+    }
+
+    private void OnDestroy()
+    {
+        if (aggroGroup != null) aggroGroup.Unregister(this);
+    }
+
     void Start()
     {
         controller = GetComponent<CharacterController>();

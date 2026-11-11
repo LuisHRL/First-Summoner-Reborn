@@ -252,15 +252,29 @@ public class LevelProgressGauge : MonoBehaviour
 
         playerProgressMarker.anchoredPosition = position;
 
-        // Keep the final marker aligned with the last enemy's original position.
+        // Track the enemy's current world position, not its original spawn position.
+        // Use the gauge's own local coordinates to avoid top-anchor offsets.
         if (finalEnemyMarker == null)
             ResolveFinalEnemyMarker();
         if (finalEnemyMarker == null)
             return;
 
-        Vector2 endPosition = finalEnemyMarker.anchoredPosition;
-        endPosition.y = progressGauge.rect.height;
-        finalEnemyMarker.anchoredPosition = endPosition;
+        if (finalEnemyMarker.parent != progressGauge)
+            finalEnemyMarker.SetParent(progressGauge, false);
+
+        finalEnemyMarker.anchorMin = new Vector2(0.5f, 0.5f);
+        finalEnemyMarker.anchorMax = new Vector2(0.5f, 0.5f);
+        finalEnemyMarker.pivot = new Vector2(0.5f, 0.5f);
+
+        float enemyZ = trackedEnemy != null ? trackedEnemy.transform.position.z : endZ;
+        float enemyProgress = Mathf.Clamp01((enemyZ - startZ) / (endZ - startZ));
+        float halfMarkerHeight = finalEnemyMarker.rect.height * 0.5f;
+        float lowerY = progressGauge.rect.yMin + halfMarkerHeight;
+        float upperY = progressGauge.rect.yMax - halfMarkerHeight;
+        float markerY = lowerY <= upperY
+            ? Mathf.Lerp(lowerY, upperY, enemyProgress)
+            : progressGauge.rect.center.y;
+        finalEnemyMarker.anchoredPosition = new Vector2(0f, markerY);
 
         // Default ring before aggro; dedicated red sprite during combat.
         bool engaged = enemyAlive && spawner.FinalEnemyGroup != null &&

@@ -145,6 +145,7 @@ public sealed class MissionMapUI : MonoBehaviour
             GameSession.ClearMissionSelection();
             return;
         }
+        MissionVisualStyle.Set(earnedStarSprite, unearnedStarSprite, enterButtonSprite);
         GameSession.SetMissionReturnScene(SceneManager.GetActiveScene().name);
         SceneManager.LoadScene(gameplaySceneName);
     }

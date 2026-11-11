@@ -11,14 +11,17 @@ public class ZoneManager : MonoBehaviour
 
     void Start()
     {
-        zoneCompleteText.SetActive(false);
-        returnMenuButton.SetActive(false);
+        if (zoneCompleteText != null) zoneCompleteText.SetActive(false);
+        if (returnMenuButton != null) returnMenuButton.SetActive(false);
     }
 
     void Update()
     {
-        if (zoneComplete)
+        if (zoneComplete || (GameSession.SelectedMission != null &&
+            (!GameSession.MissionTimerRunning || GameSession.MissionTimedOut)))
             return;
+
+        if (enemySpawner == null) return;
 
         if (enemySpawner.IsWaveFinished &&
             FindAnyObjectByType<EnemyHealth>() == null)
@@ -29,9 +32,16 @@ public class ZoneManager : MonoBehaviour
 
     void CompleteZone()
     {
+        if (GameSession.SelectedMission != null)
+        {
+            if (!GameSession.CompleteSelectedMission()) return;
+            zoneComplete = true;
+            return; // The mission results overlay handles the victory UI.
+        }
+
         zoneComplete = true;
-        zoneCompleteText.SetActive(true);
-        returnMenuButton.SetActive(true);
+        if (zoneCompleteText != null) zoneCompleteText.SetActive(true);
+        if (returnMenuButton != null) returnMenuButton.SetActive(true);
     }
 
     public void ReturnToMenu()

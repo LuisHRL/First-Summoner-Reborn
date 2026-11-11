@@ -73,24 +73,15 @@ public sealed class MissionMapUI : MonoBehaviour
             case MissionMenuNavigator.Page.Region:
                 var regionSelected = navigator.SelectedRegion;
                 SetHeading(regionSelected != null ? regionSelected.displayName : "");
-                SetImage(regionSelected != null ? regionSelected.mapIllustration : null);
-                if (regionSelected != null && regionSelected.subzones != null)
-                    foreach (var subzone in regionSelected.subzones)
-                        if (subzone != null)
-                            AddEntry(subzone.displayName, () => { navigator.SelectSubzone(subzone); Refresh(); });
-                break;
-
-            case MissionMenuNavigator.Page.Subzone:
-                var subzoneSelected = navigator.SelectedSubzone;
-                SetHeading(subzoneSelected != null ? subzoneSelected.displayName : "");
                 bool unlocked = MissionProgress.IsUnlocked(navigator.World, difficulty);
-                if (!unlocked) SetHeading((subzoneSelected != null ? subzoneSelected.displayName : "") + " - Medium locked - complete all Normal world missions");
-                SetImage(subzoneSelected != null ? subzoneSelected.illustration : null);
-                if (subzoneSelected != null && subzoneSelected.missions != null)
-                    foreach (var mission in subzoneSelected.missions)
+                if (!unlocked) SetHeading((regionSelected != null ? regionSelected.displayName : "") +
+                    " - Medium locked - complete all Normal world missions");
+                SetImage(regionSelected != null ? regionSelected.mapIllustration : null);
+                if (regionSelected != null && regionSelected.missions != null)
+                    foreach (var mission in regionSelected.missions)
                         if (mission != null)
                             AddEntry((MissionProgress.IsCompleted(mission, difficulty) ? "✓ " : "") + mission.displayName,
-                                () => { if (MissionProgress.IsUnlocked(navigator.World, difficulty)) { navigator.SelectMission(mission); Refresh(); } }, unlocked);
+                                () => { if (MissionProgress.IsUnlocked(navigator.World, difficulty)) navigator.SelectMission(mission); }, unlocked);
                 break;
 
             case MissionMenuNavigator.Page.Mission:
@@ -104,7 +95,7 @@ public sealed class MissionMapUI : MonoBehaviour
     public void LaunchSelectedMission()
     {
         if (navigator == null || navigator.CurrentPage != MissionMenuNavigator.Page.Mission ||
-            !GameSession.TrySelectMission(navigator.World, navigator.SelectedSubzone,
+            !GameSession.TrySelectMission(navigator.World, navigator.SelectedRegion,
                 navigator.SelectedMission, difficulty))
         {
             Debug.LogWarning("MissionMapUI: mission unavailable or incomplete selection.");

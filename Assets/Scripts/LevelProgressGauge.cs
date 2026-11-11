@@ -34,11 +34,11 @@ public class LevelProgressGauge : MonoBehaviour
         if (finalEnemyMarker == null)
         {
             // FinalEnemy is often a sibling of ProgressGauge, not its child.
-            Transform searchRoot = transform.root;
-            RectTransform[] markers = searchRoot.GetComponentsInChildren<RectTransform>(true);
+            RectTransform[] markers = Resources.FindObjectsOfTypeAll<RectTransform>();
             foreach (RectTransform marker in markers)
             {
-                if (marker.name == "FinalEnemy")
+                if (marker.name == "FinalEnemy" && marker.gameObject.scene.IsValid() &&
+                    marker.gameObject.scene == gameObject.scene)
                 {
                     finalEnemyMarker = marker;
                     break;
@@ -61,7 +61,12 @@ public class LevelProgressGauge : MonoBehaviour
     {
         // Marker lifetime is independent of gauge movement and player references.
         if (spawner == null)
-            spawner = FindAnyObjectByType<EnemySpawner>();
+        {
+            EnemySpawner[] spawners = FindObjectsByType<EnemySpawner>();
+            foreach (EnemySpawner candidate in spawners)
+                if (spawner == null || candidate.FurthestSpawnZ > spawner.FurthestSpawnZ)
+                    spawner = candidate;
+        }
         if (finalEnemyMarker == null)
             ResolveFinalEnemyMarker();
 

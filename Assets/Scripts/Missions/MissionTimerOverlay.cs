@@ -124,6 +124,7 @@ public sealed class MissionTimerOverlay : MonoBehaviour
             return;
         }
         GameSession.ClearMissionSelection();
+        GameSession.RequestMissionMenuReturn();
         SceneManager.LoadScene(returnScene);
     }
 

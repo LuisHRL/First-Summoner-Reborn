@@ -238,7 +238,7 @@ public sealed class MissionMapUI : MonoBehaviour
         TMP_Text label = launchButton.GetComponentInChildren<TMP_Text>(true);
         if (label != null)
         {
-            label.text = "Entrer";
+            label.text = "Lancer";
             label.alignment = TextAlignmentOptions.Center;
             label.color = Color.white;
         }

@@ -75,10 +75,14 @@ public static class FirstSummonerMissionSetup
         layout.childAlignment = TextAnchor.UpperCenter;
         layout.childControlHeight = true;
         layout.childForceExpandHeight = false;
+        layout.childControlWidth = true;
+        layout.childForceExpandWidth = false;
 
         Button template = Button(root, "EntryTemplate", "Mission");
         template.gameObject.SetActive(false);
-        Component<LayoutElement>(template.gameObject).preferredHeight = 72;
+        var templateLayout = Component<LayoutElement>(template.gameObject);
+        templateLayout.preferredHeight = 72;
+        templateLayout.preferredWidth = 260;
         ((RectTransform)template.transform).sizeDelta = new Vector2(220f, 72f);
         var templateLabel = template.GetComponentInChildren<TMP_Text>(true);
         if (templateLabel != null)
@@ -110,6 +114,8 @@ public static class FirstSummonerMissionSetup
         if (localCanvas == null) localCanvas = Undo.AddComponent<Canvas>(root.gameObject);
         localCanvas.overrideSorting = true;
         localCanvas.sortingOrder = 10;
+        // A nested Canvas needs its own raycaster to receive pointer/touch events.
+        Component<GraphicRaycaster>(root.gameObject);
         var scaler = root.GetComponent<CanvasScaler>();
         if (scaler != null) Object.DestroyImmediate(scaler);
 

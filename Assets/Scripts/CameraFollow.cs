@@ -41,6 +41,12 @@ public class CameraFollow : MonoBehaviour
     public bool keepTerrainEndsInView = true;
     [Min(0f)] public float terrainEdgePadding = 2f;
 
+    [Header("Position initiale du héros")]
+    public bool correctHeroSpawnNearTerrainEdge = true;
+    [Min(0f)] public float heroStartDistanceFromEdge = 8f;
+    [Min(0f)] public float heroSpawnGroundOffset = 0.1f;
+    private bool heroSpawnChecked;
+
     [Header("Introduction de mission")]
     public bool playMissionIntro = true;
     [Min(0f)] public float introHoldSeconds = 0.8f;
@@ -85,6 +91,7 @@ public class CameraFollow : MonoBehaviour
             cameraComponent = GetComponent<Camera>();
 
         ResolveTerrain();
+        CorrectHeroSpawnIfNeeded();
         if (playMissionIntro && !introFinished)
         {
             UpdateMissionIntro();
@@ -173,6 +180,42 @@ public class CameraFollow : MonoBehaviour
 
         transform.position = result;
         UpdateObstructions();
+    }
+
+    private void CorrectHeroSpawnIfNeeded()
+    {
+        if (heroSpawnChecked || terrain == null || terrain.terrainData == null)
+            return;
+
+        heroSpawnChecked = true;
+        if (!correctHeroSpawnNearTerrainEdge)
+            return;
+
+        Vector3 origin = terrain.transform.position;
+        Vector3 size = terrain.terrainData.size;
+        float localZ = target.position.z - origin.z;
+        float desiredZ = Mathf.Clamp(heroStartDistanceFromEdge, 0f, size.z * 0.5f);
+        if (localZ >= desiredZ && localZ <= size.z)
+            return;
+
+        // Only move a hero at the beginning of the terrain; do not teleport
+        // an already progressing player or one near the far end.
+        if (localZ > desiredZ)
+            return;
+
+        Vector3 position = target.position;
+        position.z = origin.z + desiredZ;
+        float pathX = terrainGenerator != null
+            ? terrainGenerator.PathCenter(desiredZ)
+            : size.x * 0.5f;
+        position.x = origin.x + Mathf.Clamp(pathX, 0f, size.x);
+        position.y = terrain.SampleHeight(position) + origin.y + heroSpawnGroundOffset;
+
+        CharacterController characterController = target.GetComponent<CharacterController>();
+        bool wasEnabled = characterController != null && characterController.enabled;
+        if (wasEnabled) characterController.enabled = false;
+        target.position = position;
+        if (wasEnabled) characterController.enabled = true;
     }
 
     private void UpdateMissionIntro()

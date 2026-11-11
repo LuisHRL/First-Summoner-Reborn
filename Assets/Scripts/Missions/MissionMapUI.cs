@@ -27,6 +27,19 @@ public sealed class MissionMapUI : MonoBehaviour
     public void ShowNormal() { difficulty = MissionProgress.Difficulty.Normal; Refresh(); }
     public void ShowMedium() { difficulty = MissionProgress.Difficulty.Medium; Refresh(); }
 
+    private void Awake()
+    {
+        // Repair older scene instances that contain a nested Canvas without a raycaster.
+        var localCanvas = GetComponent<Canvas>();
+        if (localCanvas != null)
+        {
+            if (GetComponent<GraphicRaycaster>() == null)
+                gameObject.AddComponent<GraphicRaycaster>();
+            localCanvas.overrideSorting = true;
+            localCanvas.sortingOrder = 10;
+        }
+    }
+
     private void OnEnable()
     {
         if (navigator != null) navigator.SelectionChanged += Refresh;
@@ -174,7 +187,11 @@ public sealed class MissionMapUI : MonoBehaviour
         button.gameObject.SetActive(true);
         button.interactable = interactable;
         TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
-        if (text != null) text.text = label;
+        if (text != null)
+        {
+            text.text = label;
+            text.raycastTarget = false;
+        }
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(action);
     }

@@ -176,7 +176,7 @@ public sealed class MissionMapUI : MonoBehaviour
         rect.anchoredPosition = Vector2.zero;
         rect.sizeDelta = new Vector2(116f, 78f);
         TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
-        if (text != null) text.text = (index + 1).ToString() + "\n" + label;
+        if (text != null) { text.text = (index + 1).ToString() + "\n" + label; text.color = Color.black; }
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(action);
     }
@@ -190,6 +190,7 @@ public sealed class MissionMapUI : MonoBehaviour
         if (text != null)
         {
             text.text = label;
+            text.color = Color.black;
             text.raycastTarget = false;
         }
         button.onClick.RemoveAllListeners();

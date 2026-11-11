@@ -69,12 +69,12 @@ public sealed class MissionTimerOverlay : MonoBehaviour
         var textObject = new GameObject("ResultText", typeof(RectTransform), typeof(TextMeshProUGUI));
         textObject.transform.SetParent(rect, false);
         var labelRect = textObject.GetComponent<RectTransform>();
-        labelRect.anchorMin = new Vector2(0f, 0.35f);
+        labelRect.anchorMin = new Vector2(0f, 0.46f);
         labelRect.anchorMax = new Vector2(1f, 1f);
         labelRect.offsetMin = labelRect.offsetMax = Vector2.zero;
         resultsText = textObject.GetComponent<TextMeshProUGUI>();
         resultsText.alignment = TextAlignmentOptions.Center;
-        resultsText.fontSize = 38f;
+        resultsText.fontSize = 48f;
         resultsText.color = Color.white;
         int elapsed = Mathf.CeilToInt(GameSession.MissionElapsedSeconds);
         int stars = won ? MissionProgress.StarsForTime(GameSession.SelectedMission, GameSession.MissionElapsedSeconds) : 0;
@@ -82,8 +82,10 @@ public sealed class MissionTimerOverlay : MonoBehaviour
             (MissionProgress.Difficulty)GameSession.SelectedDifficulty) : -1f;
         resultsText.text = (won ? "VICTORY" : "DEFEAT") + "\\n" +
             string.Format("{0:00}:{1:00}", elapsed / 60, elapsed % 60) + "\\n" +
-            (won ? new string('★', stars) + new string('☆', 3 - stars) : "☆☆☆") +
+            "" +
             (best >= 0f ? "\\nBest: " + Mathf.CeilToInt(best) + "s" : "");
+        MissionStarsUI.Create(rect, stars, MissionVisualStyle.EarnedStar,
+            MissionVisualStyle.GreyStar, new Vector2(64f, 64f), new Vector2(0f, 165f));
         CreateResultButton(rect, "Retry", -0.26f, RetryMission);
         CreateResultButton(rect, "Missions", 0.26f, ReturnToMissions);
     }
@@ -95,7 +97,10 @@ public sealed class MissionTimerOverlay : MonoBehaviour
         var rect = obj.GetComponent<RectTransform>();
         rect.anchorMin = rect.anchorMax = new Vector2(0.5f + x, 0.17f);
         rect.sizeDelta = new Vector2(220f, 80f);
-        obj.GetComponent<Image>().color = new Color(0.3f, 0.18f, 0.13f, 1f);
+        var buttonImage = obj.GetComponent<Image>();
+        buttonImage.sprite = MissionVisualStyle.ButtonBackground;
+        buttonImage.preserveAspect = true;
+        buttonImage.color = buttonImage.sprite != null ? Color.white : new Color(0.3f, 0.18f, 0.13f, 1f);
         obj.GetComponent<Button>().onClick.AddListener(action);
         var child = new GameObject("Text", typeof(RectTransform), typeof(TextMeshProUGUI));
         child.transform.SetParent(obj.transform, false);

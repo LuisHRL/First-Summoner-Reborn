@@ -18,7 +18,7 @@ public class LevelProgressGauge : MonoBehaviour
     private EnemySpawner spawner;
     [Header("Marqueur du dernier ennemi")]
     [SerializeField] private RectTransform finalEnemyMarker;
-    [SerializeField] private Color finalEnemyColor = Color.red;
+    [SerializeField] private Sprite finalEnemySprite;
     private Image finalEnemyImage;
 
     private void Awake()
@@ -43,8 +43,11 @@ public class LevelProgressGauge : MonoBehaviour
         if (finalEnemyMarker != null)
         {
             finalEnemyImage = finalEnemyMarker.GetComponent<Image>();
-            if (finalEnemyImage != null)
-                finalEnemyImage.color = finalEnemyColor;
+            if (finalEnemyImage != null && finalEnemySprite != null)
+            {
+                finalEnemyImage.sprite = finalEnemySprite;
+                finalEnemyImage.color = Color.white;
+            }
         }
     }
 
@@ -94,8 +97,11 @@ public class LevelProgressGauge : MonoBehaviour
             Vector2 endPosition = finalEnemyMarker.anchoredPosition;
             endPosition.y = progressGauge.rect.height;
             finalEnemyMarker.anchoredPosition = endPosition;
-            if (finalEnemyImage != null && finalEnemyImage.color != finalEnemyColor)
-                finalEnemyImage.color = finalEnemyColor;
+            if (finalEnemyImage != null && finalEnemySprite != null && finalEnemyImage.sprite != finalEnemySprite)
+            {
+                finalEnemyImage.sprite = finalEnemySprite;
+                finalEnemyImage.color = Color.white;
+            }
         }
     }
 }

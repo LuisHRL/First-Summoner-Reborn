@@ -63,14 +63,14 @@ public sealed class MissionMapUI : MonoBehaviour
             case MissionMenuNavigator.Page.Subzone:
                 var subzoneSelected = navigator.SelectedSubzone;
                 SetHeading(subzoneSelected != null ? subzoneSelected.displayName : "");
-                bool unlocked = MissionProgress.IsUnlocked(subzoneSelected, difficulty);
-                if (!unlocked) SetHeading((subzoneSelected != null ? subzoneSelected.displayName : "") + " - Medium locked");
+                bool unlocked = MissionProgress.IsUnlocked(navigator.World, difficulty);
+                if (!unlocked) SetHeading((subzoneSelected != null ? subzoneSelected.displayName : "") + " - Medium locked - complete all Normal world missions");
                 SetImage(subzoneSelected != null ? subzoneSelected.illustration : null);
                 if (subzoneSelected != null && subzoneSelected.missions != null)
                     foreach (var mission in subzoneSelected.missions)
                         if (mission != null)
                             AddEntry((MissionProgress.IsCompleted(mission, difficulty) ? "✓ " : "") + mission.displayName,
-                                () => { if (MissionProgress.IsUnlocked(navigator.SelectedSubzone, difficulty)) { navigator.SelectMission(mission); Refresh(); } }, unlocked);
+                                () => { if (MissionProgress.IsUnlocked(navigator.World, difficulty)) { navigator.SelectMission(mission); Refresh(); } }, unlocked);
                 break;
 
             case MissionMenuNavigator.Page.Mission:

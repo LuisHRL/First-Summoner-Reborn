@@ -14,7 +14,7 @@ public static class GameSession
         MissionProgress.Difficulty difficulty)
     {
         if (world == null || region == null || mission == null ||
-            !MissionProgress.IsUnlocked(world, difficulty))
+            !MissionProgress.IsMissionUnlocked(world, region, mission, difficulty))
             return false;
 
         if (world.regions == null ||

@@ -6,13 +6,15 @@ public static class MissionVisualStyle
     public static Sprite EarnedStar { get; private set; }
     public static Sprite GreyStar { get; private set; }
     public static Sprite ButtonBackground { get; private set; }
+    public static Sprite ResultButtonBackground { get; private set; }
     public static Sprite LoadingEmblem { get; private set; }
 
-    public static void Set(Sprite earnedStar, Sprite greyStar, Sprite buttonBackground, Sprite loadingEmblem)
+    public static void Set(Sprite earnedStar, Sprite greyStar, Sprite buttonBackground, Sprite loadingEmblem, Sprite resultButtonBackground)
     {
         EarnedStar = earnedStar;
         GreyStar = greyStar;
         ButtonBackground = buttonBackground;
         LoadingEmblem = loadingEmblem;
+        ResultButtonBackground = resultButtonBackground;
     }
 }

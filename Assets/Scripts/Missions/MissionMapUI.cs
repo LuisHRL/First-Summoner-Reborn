@@ -17,6 +17,11 @@ public sealed class MissionMapUI : MonoBehaviour
     [SerializeField] private Image mapIllustration;
     [SerializeField] private Button backButton;
 
+    [SerializeField] private MissionProgress.Difficulty difficulty = MissionProgress.Difficulty.Normal;
+
+    public void ShowNormal() { difficulty = MissionProgress.Difficulty.Normal; Refresh(); }
+    public void ShowMedium() { difficulty = MissionProgress.Difficulty.Medium; Refresh(); }
+
     private void OnEnable() => Refresh();
 
     public void Refresh()
@@ -58,11 +63,14 @@ public sealed class MissionMapUI : MonoBehaviour
             case MissionMenuNavigator.Page.Subzone:
                 var subzoneSelected = navigator.SelectedSubzone;
                 SetHeading(subzoneSelected != null ? subzoneSelected.displayName : "");
+                bool unlocked = MissionProgress.IsUnlocked(subzoneSelected, difficulty);
+                if (!unlocked) SetHeading((subzoneSelected != null ? subzoneSelected.displayName : "") + " - Medium locked");
                 SetImage(subzoneSelected != null ? subzoneSelected.illustration : null);
                 if (subzoneSelected != null && subzoneSelected.missions != null)
                     foreach (var mission in subzoneSelected.missions)
                         if (mission != null)
-                            AddEntry(mission.displayName, () => { navigator.SelectMission(mission); Refresh(); });
+                            AddEntry((MissionProgress.IsCompleted(mission, difficulty) ? "✓ " : "") + mission.displayName,
+                                () => { if (MissionProgress.IsUnlocked(navigator.SelectedSubzone, difficulty)) { navigator.SelectMission(mission); Refresh(); } }, unlocked);
                 break;
 
             case MissionMenuNavigator.Page.Mission:
@@ -79,10 +87,11 @@ public sealed class MissionMapUI : MonoBehaviour
             Refresh();
     }
 
-    private void AddEntry(string label, UnityEngine.Events.UnityAction action)
+    private void AddEntry(string label, UnityEngine.Events.UnityAction action, bool interactable = true)
     {
         Button button = Instantiate(entryButtonPrefab, entriesContainer);
         button.gameObject.SetActive(true);
+        button.interactable = interactable;
         TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
         if (text != null) text.text = label;
         button.onClick.RemoveAllListeners();

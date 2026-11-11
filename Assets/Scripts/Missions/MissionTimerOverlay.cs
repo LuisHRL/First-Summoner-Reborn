@@ -56,6 +56,7 @@ public sealed class MissionTimerOverlay : MonoBehaviour
     private void ShowResults()
     {
         resultsShown = true;
+        Time.timeScale = 0f; // Pause combat and physics while keeping UI buttons responsive.
         bool won = !GameSession.MissionTimedOut;
         var root = GetComponent<Canvas>().transform;
         resultsPanel = new GameObject("MissionResults", typeof(RectTransform), typeof(Image));
@@ -112,6 +113,7 @@ public sealed class MissionTimerOverlay : MonoBehaviour
 
     private void RetryMission()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(gameObject.scene.name);
     }
 
@@ -123,9 +125,15 @@ public sealed class MissionTimerOverlay : MonoBehaviour
             Debug.LogError("Mission return scene is unavailable in Build Settings.");
             return;
         }
+        Time.timeScale = 1f;
         GameSession.ClearMissionSelection();
         GameSession.RequestMissionMenuReturn();
         SceneManager.LoadScene(returnScene);
+    }
+
+    private void OnDestroy()
+    {
+        if (resultsShown) Time.timeScale = 1f;
     }
 
     private void Update()

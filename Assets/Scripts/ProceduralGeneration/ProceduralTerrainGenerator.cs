@@ -27,6 +27,32 @@ public class ProceduralTerrainGenerator : MonoBehaviour
     public float pathFrequency = 1.5f;
 
 
+    [Header("Safe zone du chemin")]
+    [Min(0f)] public float safeZoneLength = 15f;
+    [Min(0f)] public float safeZoneTransitionLength = 12f;
+
+    private float PathCenter(float z)
+    {
+        float start = Mathf.Clamp(safeZoneLength, 0f, terrainLength);
+        float transition = Mathf.Max(0.001f, safeZoneTransitionLength);
+        float t = Mathf.Clamp01((z - start) / transition);
+        float blend = t * t * (3f - 2f * t);
+        // The sine phase starts at zero at the end of the safe zone.
+        float curvedDistance = Mathf.Max(0f, z - start);
+        float phase = curvedDistance / Mathf.Max(1f, terrainLength) *
+            Mathf.PI * 2f * pathFrequency;
+        return terrainWidth * 0.5f + Mathf.Sin(phase) * pathCurvature * blend;
+    }
+
+    private float PathSlope(float z)
+    {
+        float step = Mathf.Max(0.01f, terrainLength / 4096f);
+        return (PathCenter(Mathf.Min(terrainLength, z + step)) -
+            PathCenter(Mathf.Max(0f, z - step))) /
+            Mathf.Max(0.0001f, Mathf.Min(terrainLength, z + step) -
+                Mathf.Max(0f, z - step));
+    }
+
     [Header("Relief")]
     [Min(0f)]
     public float terrainHeight = 10f;
@@ -176,11 +202,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
 
                 // Déplacer progressivement le centre du chemin
                 // pour créer des courbes naturelles
-                float pathCenterX =
-                    terrainWidth * 0.5f
-                    + Mathf.Sin(
-                        normalizedZ * Mathf.PI * 2f * pathFrequency
-                    ) * pathCurvature;
+                float pathCenterX = PathCenter(normalizedZ * terrainLength);
 
                 // Distance par rapport au chemin sinueux
                 float worldX = normalizedX * terrainWidth;
@@ -255,11 +277,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                         (float)z / (alphaResolution - 1);
 
                     // Retrouver le centre du chemin sinueux
-                    float pathCenterX =
-                        terrainWidth * 0.5f
-                        + Mathf.Sin(
-                            normalizedZ * Mathf.PI * 2f * pathFrequency
-                        ) * pathCurvature;
+                    float pathCenterX = PathCenter(normalizedZ * terrainLength);
 
                     float worldX = normalizedX * terrainWidth;
 
@@ -388,13 +406,11 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                 {
                     float pathZ = torchEndMargin + usableLength * (i + 0.5f) / torchCount;
                     float normalizedZ = pathZ / terrainLength;
-                    float phase = normalizedZ * Mathf.PI * 2f * pathFrequency;
-                    float centerX = terrainWidth * 0.5f + Mathf.Sin(phase) * pathCurvature;
+                    float centerX = PathCenter(pathZ);
 
                     // Normal to the curved path, not just a horizontal X offset.
                     // This places the torch at the actual edge on tight bends.
-                    float slope = pathCurvature * Mathf.Cos(phase) *
-                        Mathf.PI * 2f * pathFrequency / terrainLength;
+                    float slope = PathSlope(pathZ);
                     float normalLength = Mathf.Sqrt(1f + slope * slope);
                     int side = alternateTorchSides ? (i % 2 == 0 ? -1 : 1)
                         : (torchRandom.Next(2) == 0 ? -1 : 1);
@@ -448,11 +464,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
                 // Calculer le centre du chemin à cette position
                 float normalizedZ = z / terrainLength;
 
-                float pathCenterX =
-                    terrainWidth * 0.5f
-                    + Mathf.Sin(
-                        normalizedZ * Mathf.PI * 2f * pathFrequency
-                    ) * pathCurvature;
+                float pathCenterX = PathCenter(normalizedZ * terrainLength);
 
                 // Ne pas placer d'arbres sur le chemin
                 float distanceToPath = Mathf.Abs(x - pathCenterX);
@@ -556,11 +568,7 @@ public class ProceduralTerrainGenerator : MonoBehaviour
 
                 float normalizedZ = z / terrainLength;
 
-                float pathCenterX =
-                    terrainWidth * 0.5f +
-                    Mathf.Sin(
-                        normalizedZ * Mathf.PI * 2f * pathFrequency
-                    ) * pathCurvature;
+                float pathCenterX = PathCenter(z);
 
                 float distanceToPath =
                     Mathf.Abs(x - pathCenterX);

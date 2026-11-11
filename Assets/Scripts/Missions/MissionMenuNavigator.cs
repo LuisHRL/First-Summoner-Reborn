@@ -13,6 +13,8 @@ public sealed class MissionMenuNavigator : MonoBehaviour
     [SerializeField] private MissionWorldDefinition world;
     [SerializeField] private UnityEvent onSelectionChanged;
 
+    public event Action SelectionChanged;
+
     public Page CurrentPage { get; private set; } = Page.World;
     public MissionRegionDefinition SelectedRegion { get; private set; }
     public MissionSubzoneDefinition SelectedSubzone { get; private set; }
@@ -89,5 +91,9 @@ public sealed class MissionMenuNavigator : MonoBehaviour
 
     private void OnEnable() => ShowWorld();
 
-    private void NotifyChanged() => onSelectionChanged?.Invoke();
+    private void NotifyChanged()
+    {
+        onSelectionChanged?.Invoke();
+        SelectionChanged?.Invoke();
+    }
 }

@@ -18,6 +18,10 @@ public sealed class MissionMapUI : MonoBehaviour
     [Header("Mission markers")]
     [SerializeField] private Sprite missionMarkerSprite;
     [SerializeField] private Vector2 missionMarkerSize = new Vector2(88f, 100f);
+    [SerializeField] private Sprite earnedStarSprite;
+    [SerializeField] private Sprite unearnedStarSprite;
+    [SerializeField] private Sprite enterButtonSprite;
+    [SerializeField] private Vector2 mapStarSize = new Vector2(24f, 24f);
     [SerializeField] private TMP_Text heading;
     [SerializeField] private Image mapIllustration;
     [SerializeField] private Button backButton;
@@ -75,6 +79,7 @@ public sealed class MissionMapUI : MonoBehaviour
 
         if (launchButton != null)
         {
+            ApplyEnterButtonStyle();
             launchButton.gameObject.SetActive(navigator.CurrentPage == MissionMenuNavigator.Page.Mission);
             launchButton.onClick.RemoveListener(LaunchSelectedMission);
             launchButton.onClick.AddListener(LaunchSelectedMission);
@@ -192,7 +197,6 @@ public sealed class MissionMapUI : MonoBehaviour
         int stars = MissionProgress.BestStars(mission, difficulty);
         if (stars == 0 && MissionProgress.IsCompleted(mission, difficulty)) stars = 1;
         stars = Mathf.Clamp(stars, 0, 3);
-        string rating = stars == 0 ? "☆☆☆" : new string('★', stars) + new string('☆', 3 - stars);
         TMP_Text text = button.GetComponentInChildren<TMP_Text>(true);
         if (text == null)
         {
@@ -200,7 +204,7 @@ public sealed class MissionMapUI : MonoBehaviour
             labelObject.transform.SetParent(button.transform, false);
             text = labelObject.GetComponent<TextMeshProUGUI>();
         }
-        text.text = label + "\n" + rating;
+        text.text = label;
         text.color = Color.white;
         text.alignment = TextAlignmentOptions.Center;
         text.fontSize = 21f;
@@ -210,9 +214,31 @@ public sealed class MissionMapUI : MonoBehaviour
         labelRect.anchorMin = labelRect.anchorMax = new Vector2(0.5f, 0f);
         labelRect.pivot = new Vector2(0.5f, 1f);
         labelRect.anchoredPosition = new Vector2(0f, -3f);
-        labelRect.sizeDelta = new Vector2(130f, 60f);
+        labelRect.sizeDelta = new Vector2(130f, 30f);
+        MissionStarsUI.Create(button.transform, stars, earnedStarSprite,
+            unearnedStarSprite, mapStarSize, new Vector2(0f, -47f));
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(action);
+    }
+
+    private void ApplyEnterButtonStyle()
+    {
+        if (launchButton == null) return;
+        var image = launchButton.GetComponent<Image>();
+        if (image != null && enterButtonSprite != null)
+        {
+            image.sprite = enterButtonSprite;
+            image.type = Image.Type.Simple;
+            image.preserveAspect = true;
+            image.color = Color.white;
+        }
+        TMP_Text label = launchButton.GetComponentInChildren<TMP_Text>(true);
+        if (label != null)
+        {
+            label.text = "Enter";
+            label.alignment = TextAlignmentOptions.Center;
+            label.color = Color.white;
+        }
     }
 
     private void AddEntry(string label, UnityEngine.Events.UnityAction action, bool interactable = true)

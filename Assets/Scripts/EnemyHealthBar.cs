@@ -7,6 +7,7 @@ public class EnemyHealthBar : MonoBehaviour
     [Header("Références")]
     public EnemyHealth enemyHealth;
     public Image healthBarFill;
+    public AnimatedFillEffect healthAnimation;
 
     [Header("Caméra")]
     public Camera mainCamera;
@@ -29,7 +30,8 @@ public class EnemyHealthBar : MonoBehaviour
                 Mathf.Max(1, enemyHealth.maxHealth)
             );
 
-            healthBarFill.fillAmount = healthPercent;
+            if (healthAnimation != null) healthAnimation.SetValue(healthPercent);
+            else healthBarFill.fillAmount = healthPercent;
         }
 
         // Garder la barre face à la caméra.

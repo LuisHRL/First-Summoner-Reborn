@@ -54,6 +54,10 @@ public static class CombatUIInstaller
         // Preserve the original icon orientation; only the transition light rotates.
         iconRect.localRotation = Quaternion.identity;
         manaIcon.gameObject.SetActive(true);
+        // Clip the animated fill and its moving light to the original vial silhouette.
+        var vialMask = manaIcon.GetComponent<Mask>();
+        if (vialMask == null) vialMask = Undo.AddComponent<Mask>(manaIcon.gameObject);
+        vialMask.showMaskGraphic = true;
         if (manaIconSprite == null)
             Debug.LogError("[Combat UI] icon_mana not found in atlas; vial sprite missing.");
         var iconFill = EnsureImage(manaIcon.transform, "ManaIconFill", manaIcon.sprite);
@@ -146,13 +150,13 @@ public static class CombatUIInstaller
         RectTransform fillRect = fill.rectTransform;
         float thickness = Mathf.Max(2f, Mathf.Min(fillRect.rect.width, fillRect.rect.height) * 0.18f);
         light.rectTransform.sizeDelta = vertical
-            ? new Vector2(Mathf.Max(1f, fillRect.rect.width), thickness)
+            ? new Vector2(Mathf.Max(1f, fillRect.rect.width * 0.72f), thickness)
             : new Vector2(thickness, Mathf.Max(1f, fillRect.rect.height));
         light.raycastTarget = false;
         light.gameObject.SetActive(false);
         if (light.sprite == null && fill.sprite != null) light.sprite = fill.sprite;
         light.type = Image.Type.Simple;
-        light.color = vertical ? new Color(0.8f, 0.55f, 1f, 0.75f) : new Color(1f, 0.6f, 0.55f, 0.75f);
+        light.color = vertical ? new Color(1f, 1f, 1f, 0.9f) : new Color(1f, 0.6f, 0.55f, 0.75f);
         animation.transitionLight = light.sprite != null ? light : null;
         EditorUtility.SetDirty(animation);
         return animation;

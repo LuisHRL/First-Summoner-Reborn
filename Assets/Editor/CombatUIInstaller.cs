@@ -121,10 +121,30 @@ public static class CombatUIInstaller
                 var hpSprite = FindSprite("img_bar_hp");
                 if (hpSprite != null) { hpFill.sprite = hpSprite; hpFill.color = Color.white; }
                 ConfigureFill(hpFill, Image.FillMethod.Horizontal);
+                // The original enemy frame is a horizontally sliced sprite. Keep the
+                // prefab dimensions and its inset fill; render the frame above the fill.
+                var background = hpFill.transform.parent.GetComponent<Image>();
+                var frameSprite = FindSprite("img_bar_hp_bg");
+                if (background != null && frameSprite != null)
+                {
+                    background.sprite = frameSprite;
+                    background.type = Image.Type.Sliced;
+                    background.fillCenter = true;
+                    background.color = Color.white;
+                }
                 var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
                 CopyRect(hpFill.rectTransform, hit.rectTransform);
                 hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
                 ConfigureHitVisual(hit, hpFill);
+                if (background != null && frameSprite != null)
+                {
+                    var outline = EnsureImage(background.transform, "EnemyHPFrameOutline", frameSprite);
+                    CopyRect(background.rectTransform, outline.rectTransform);
+                    outline.rectTransform.SetAsLastSibling();
+                    outline.type = Image.Type.Sliced;
+                    outline.fillCenter = false;
+                    outline.color = Color.white;
+                }
                 enemyBar.healthBarFill = hpFill;
                 enemyBar.healthAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedEnemyHP", hpFill, hit, false);
                 enemyBar.healthAnimation.flashRemainingHealthOnDamage = true;

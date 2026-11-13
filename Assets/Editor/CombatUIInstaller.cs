@@ -90,6 +90,8 @@ public static class CombatUIInstaller
             CopyRect(hpFill.rectTransform, hit.rectTransform);
             ConfigureHitVisual(hit, hpFill);
             var hpAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedTargetHP", hpFill, hit, false);
+            hpAnimation.flashRemainingHealthOnDamage = true;
+            EditorUtility.SetDirty(hpAnimation);
             Undo.RecordObject(target, "Wire target HP animation");
             target.healthAnimation = hpAnimation;
             Debug.Log("[Combat UI] Target HP light=" + (hpAnimation.transitionLight != null ? hpAnimation.transitionLight.sprite.name : "MISSING"));
@@ -116,6 +118,7 @@ public static class CombatUIInstaller
                 ConfigureHitVisual(hit, hpFill);
                 enemyBar.healthBarFill = hpFill;
                 enemyBar.healthAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedEnemyHP", hpFill, hit, false);
+                enemyBar.healthAnimation.flashRemainingHealthOnDamage = true;
                 Debug.Log("[Combat UI] Enemy HP light=" + (enemyBar.healthAnimation.transitionLight != null ? enemyBar.healthAnimation.transitionLight.sprite.name : "MISSING"));
                 PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
             }

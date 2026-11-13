@@ -138,6 +138,9 @@ public static class CombatUIInstaller
                 ConfigureHitVisual(hit, hpFill);
                 if (background != null && frameSprite != null)
                 {
+                    // Only remove extra installer-generated outlines. Never touch the
+                    // original background, fill, hit overlay, or gameplay references.
+                    RemoveDuplicateGeneratedChildren(background.transform, "EnemyHPFrameOutline");
                     var outline = EnsureImage(background.transform, "EnemyHPFrameOutline", frameSprite);
                     CopyRect(background.rectTransform, outline.rectTransform);
                     outline.rectTransform.SetAsLastSibling();
@@ -186,6 +189,22 @@ public static class CombatUIInstaller
         animation.transitionLight = light.sprite != null ? light : null;
         EditorUtility.SetDirty(animation);
         return animation;
+    }
+
+    private static void RemoveDuplicateGeneratedChildren(Transform parent, string generatedName)
+    {
+        bool found = false;
+        for (int i = parent.childCount - 1; i >= 0; i--)
+        {
+            var child = parent.GetChild(i);
+            if (child.name != generatedName) continue;
+            if (!found) { found = true; continue; }
+            // A duplicate generated frame has no gameplay component or child objects.
+            if (child.childCount != 0 || child.GetComponents<Component>().Any(c =>
+                c != null && !(c is Transform) && !(c is CanvasRenderer) && !(c is Image)))
+                continue;
+            Undo.DestroyObjectImmediate(child.gameObject);
+        }
     }
 
     private static Image EnsureImage(Transform parent, string name, Sprite sprite)

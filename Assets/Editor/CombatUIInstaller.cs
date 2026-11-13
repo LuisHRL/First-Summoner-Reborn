@@ -148,7 +148,7 @@ public static class CombatUIInstaller
         animation.delayedFill = trail;
         // The atlas light orientation differs from the logical fill axis.
         // Preserve the existing HP light and correct the vial light by 90 degrees.
-        animation.horizontalLight = false;
+        animation.horizontalLight = vertical;
         var light = EnsureImage(fill.transform.parent, name + "Light", FindSprite("fx_light_03"));
         light.rectTransform.SetAsLastSibling();
         RectTransform fillRect = fill.rectTransform;

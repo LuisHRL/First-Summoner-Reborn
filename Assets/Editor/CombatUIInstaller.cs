@@ -47,7 +47,7 @@ public static class CombatUIInstaller
         iconRect.anchorMax = new Vector2(0, 0.5f);
         iconRect.pivot = new Vector2(1, 0.5f);
         iconRect.anchoredPosition = new Vector2(-8, 0);
-        float iconSize = Mathf.Max(1f, ((RectTransform)manaSlider.transform).rect.height);
+        float iconSize = Mathf.Max(32f, ((RectTransform)manaSlider.transform).rect.height * 4f);
         iconRect.sizeDelta = new Vector2(iconSize, iconSize);
         manaIcon.color = new Color(0.25f, 0.18f, 0.35f, 1);
         manaIcon.gameObject.SetActive(manaIconSprite != null);
@@ -155,6 +155,11 @@ public static class CombatUIInstaller
 
     private static Sprite FindSprite(string name)
     {
+        // The original UI sprites are sub-assets of the z_total atlas.
+        const string atlasPath = "Assets/Generated/AssetRipperSprites/Sprite_Atlas_UI_z_total.png";
+        var atlasSprite = AssetDatabase.LoadAllAssetsAtPath(atlasPath)
+            .OfType<Sprite>().FirstOrDefault(sprite => sprite.name == name);
+        if (atlasSprite != null) return atlasSprite;
         foreach (var guid in AssetDatabase.FindAssets(name + " t:Texture2D"))
         {
             string path = AssetDatabase.GUIDToAssetPath(guid);

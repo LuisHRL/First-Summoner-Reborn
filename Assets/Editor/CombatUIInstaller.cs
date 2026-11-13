@@ -47,10 +47,7 @@ public static class CombatUIInstaller
         iconRect.anchorMax = new Vector2(0, 0.5f);
         iconRect.pivot = new Vector2(0, 0.5f);
         iconRect.anchoredPosition = new Vector2(4, 0);
-        float iconHeight = Mathf.Max(24f, ((RectTransform)manaSlider.transform).rect.height * 2.7f);
-        float iconAspect = manaIconSprite != null && manaIconSprite.rect.height > 0f
-            ? manaIconSprite.rect.width / manaIconSprite.rect.height : 1f;
-        iconRect.sizeDelta = new Vector2(iconHeight * iconAspect, iconHeight);
+        if (manaIconSprite != null) iconRect.sizeDelta = manaIconSprite.rect.size;
         // Preserve the original white mana icon without tint or rotation.
         manaIcon.color = new Color(0.30f, 0.12f, 0.42f, 1f);
         // Preserve the original icon orientation; only the transition light rotates.
@@ -70,7 +67,10 @@ public static class CombatUIInstaller
         var iconAnimation = EnsureAnimation(manaIcon.transform, "AnimatedManaIconFill", iconFill, null, true);
         iconFill.fillOrigin = (int)Image.OriginVertical.Bottom;
         var gain = EnsureImage(manaIcon.transform, "ManaGainFx", FindSprite("icon_mana_fx"));
-        Stretch(gain.rectTransform);
+        if (gain.sprite != null) gain.rectTransform.sizeDelta = gain.sprite.rect.size;
+        gain.rectTransform.anchorMin = gain.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
+        gain.rectTransform.pivot = new Vector2(0.5f, 0.5f);
+        gain.rectTransform.anchoredPosition = Vector2.zero;
         gain.raycastTarget = false;
         gain.gameObject.SetActive(false);
         Undo.RecordObject(playerUI, "Wire mana animation");
@@ -153,8 +153,8 @@ public static class CombatUIInstaller
         light.rectTransform.SetAsLastSibling();
         RectTransform fillRect = fill.rectTransform;
         float thickness = Mathf.Max(2f, Mathf.Min(fillRect.rect.width, fillRect.rect.height) * 0.18f);
-        light.rectTransform.sizeDelta = vertical
-            ? new Vector2(Mathf.Max(1f, fillRect.rect.width * 0.48f), Mathf.Max(1f, thickness * 0.65f))
+        light.rectTransform.sizeDelta = vertical && light.sprite != null
+            ? light.sprite.rect.size
             : new Vector2(thickness, Mathf.Max(1f, fillRect.rect.height));
         light.raycastTarget = false;
         light.gameObject.SetActive(false);

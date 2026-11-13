@@ -45,12 +45,14 @@ public static class CombatUIInstaller
         var iconRect = manaIcon.rectTransform;
         iconRect.anchorMin = new Vector2(0, 0.5f);
         iconRect.anchorMax = new Vector2(0, 0.5f);
-        iconRect.pivot = new Vector2(1, 0.5f);
-        iconRect.anchoredPosition = new Vector2(-8, 0);
+        iconRect.pivot = new Vector2(0, 0.5f);
+        iconRect.anchoredPosition = new Vector2(4, 0);
         float iconSize = Mathf.Max(32f, ((RectTransform)manaSlider.transform).rect.height * 4f);
         iconRect.sizeDelta = new Vector2(iconSize, iconSize);
         manaIcon.color = new Color(0.25f, 0.18f, 0.35f, 1);
-        manaIcon.gameObject.SetActive(manaIconSprite != null);
+        manaIcon.gameObject.SetActive(true);
+        if (manaIconSprite == null)
+            Debug.LogError("[Combat UI] icon_mana not found in atlas; vial sprite missing.");
         var iconFill = EnsureImage(manaIcon.transform, "ManaIconFill", manaIcon.sprite);
         Stretch(iconFill.rectTransform);
         iconFill.color = Color.white;
@@ -65,6 +67,10 @@ public static class CombatUIInstaller
         playerUI.manaIconAnimation = iconAnimation;
         playerUI.manaGainFx = gain;
         EditorUtility.SetDirty(playerUI);
+        Debug.Log("[Combat UI] Mana sprites: vial=" + (manaIcon.sprite != null ? manaIcon.sprite.name : "MISSING")
+            + ", gain=" + (gain.sprite != null ? gain.sprite.name : "MISSING")
+            + ", vial light=" + (iconAnimation.transitionLight != null ? iconAnimation.transitionLight.sprite.name : "MISSING")
+            + ", bar light=" + (manaAnimation.transitionLight != null ? manaAnimation.transitionLight.sprite.name : "MISSING"));
 
         // Target UI: retain existing target tracking, replace only fill visuals.
         var target = UnityEngine.Object.FindObjectsByType<TargetHealthBarUI>(FindObjectsInactive.Include).FirstOrDefault();
@@ -81,6 +87,7 @@ public static class CombatUIInstaller
             var hpAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedTargetHP", hpFill, hit, false);
             Undo.RecordObject(target, "Wire target HP animation");
             target.healthAnimation = hpAnimation;
+            Debug.Log("[Combat UI] Target HP light=" + (hpAnimation.transitionLight != null ? hpAnimation.transitionLight.sprite.name : "MISSING"));
             EditorUtility.SetDirty(target);
         }
         EditorSceneManager.MarkSceneDirty(scene);
@@ -104,6 +111,7 @@ public static class CombatUIInstaller
                 ConfigureHitVisual(hit, hpFill);
                 enemyBar.healthBarFill = hpFill;
                 enemyBar.healthAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedEnemyHP", hpFill, hit, false);
+                Debug.Log("[Combat UI] Enemy HP light=" + (enemyBar.healthAnimation.transitionLight != null ? enemyBar.healthAnimation.transitionLight.sprite.name : "MISSING"));
                 PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
             }
         }
@@ -133,6 +141,7 @@ public static class CombatUIInstaller
         light.raycastTarget = false;
         light.gameObject.SetActive(false);
         if (light.sprite == null && fill.sprite != null) light.sprite = fill.sprite;
+        light.type = Image.Type.Simple;
         light.color = vertical ? new Color(0.8f, 0.55f, 1f, 0.75f) : new Color(1f, 0.6f, 0.55f, 0.75f);
         animation.transitionLight = light.sprite != null ? light : null;
         EditorUtility.SetDirty(animation);

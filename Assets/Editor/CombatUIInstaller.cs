@@ -66,6 +66,8 @@ public static class CombatUIInstaller
         ConfigureFill(iconFill, Image.FillMethod.Vertical);
         var iconAnimation = EnsureAnimation(manaIcon.transform, "AnimatedManaIconFill", iconFill, null, true);
         iconFill.fillOrigin = (int)Image.OriginVertical.Bottom;
+        iconAnimation.instantResetFromFullToEmpty = true;
+        EditorUtility.SetDirty(iconAnimation);
         var gain = EnsureImage(manaIcon.transform, "ManaGainFx", FindSprite("icon_mana_fx"));
         if (gain.sprite != null) gain.rectTransform.sizeDelta = gain.sprite.rect.size;
         gain.rectTransform.anchorMin = gain.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);

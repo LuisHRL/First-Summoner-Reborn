@@ -14,6 +14,7 @@ public class AnimatedFillEffect : MonoBehaviour
     public bool horizontalLight;
     public bool animateDecreases = true;
     public bool animateIncreases = true;
+    public bool instantResetFromFullToEmpty;
     [Min(0.01f)] public float hitFlashDuration = 0.24f;
     public bool flashRemainingHealthOnDamage;
     public bool persistentLightBelowFullHealth;
@@ -46,6 +47,11 @@ public class AnimatedFillEffect : MonoBehaviour
             return;
         }
         if (Mathf.Approximately(target, normalized)) return;
+        if (instantResetFromFullToEmpty && target >= 1f - Mathf.Epsilon && normalized <= Mathf.Epsilon)
+        {
+            SetValue(normalized, true);
+            return;
+        }
         if (flashRemainingHealthOnDamage)
         {
             bool damage = normalized < target;

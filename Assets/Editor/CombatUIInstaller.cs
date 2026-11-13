@@ -29,7 +29,8 @@ public static class CombatUIInstaller
             return;
         }
         var manaAnimation = EnsureAnimation(manaSlider.transform, "AnimatedManaBar", barFill, null, false);
-        var manaIcon = EnsureImage(manaSlider.transform.parent, "AnimatedManaIcon", FindSprite("icon_mana"));
+        var manaIconSprite = FindSprite("icon_mana");
+        var manaIcon = EnsureImage(manaSlider.transform.parent, "AnimatedManaIcon", manaIconSprite);
         var iconRect = manaIcon.rectTransform;
         iconRect.anchorMin = new Vector2(0, 0.5f);
         iconRect.anchorMax = new Vector2(0, 0.5f);
@@ -37,6 +38,7 @@ public static class CombatUIInstaller
         iconRect.anchoredPosition = new Vector2(-8, 0);
         iconRect.sizeDelta = new Vector2(44, 44);
         manaIcon.color = new Color(0.25f, 0.18f, 0.35f, 1);
+        manaIcon.gameObject.SetActive(manaIconSprite != null);
         var iconFill = EnsureImage(manaIcon.transform, "ManaIconFill", manaIcon.sprite);
         Stretch(iconFill.rectTransform);
         iconFill.color = Color.white;
@@ -114,7 +116,7 @@ public static class CombatUIInstaller
         light.rectTransform.sizeDelta = vertical ? new Vector2(46, 8) : new Vector2(8, 28);
         light.raycastTarget = false;
         light.gameObject.SetActive(false);
-        animation.transitionLight = light;
+        animation.transitionLight = light.sprite != null ? light : null;
         EditorUtility.SetDirty(animation);
         return animation;
     }

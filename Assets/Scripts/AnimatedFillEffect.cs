@@ -14,6 +14,7 @@ public class AnimatedFillEffect : MonoBehaviour
     public bool horizontalLight;
     public bool animateDecreases = true;
     public bool animateIncreases = true;
+    public bool flashRemainingHealthOnDamage;
 
     private float displayed;
     private float target;
@@ -23,6 +24,9 @@ public class AnimatedFillEffect : MonoBehaviour
     private bool animating;
     private float initialLightAlpha = 1f;
     private bool lightAlphaCaptured;
+    private float hitFlashElapsed;
+    private bool hitFlashActive;
+    private float hitFlashInitialAlpha = 1f;
 
     public void SetValue(float normalized, bool immediate = false)
     {
@@ -34,10 +38,34 @@ public class AnimatedFillEffect : MonoBehaviour
             animating = false;
             if (fill != null) fill.fillAmount = normalized;
             if (delayedFill != null) { delayedFill.fillAmount = normalized; delayedFill.enabled = false; }
+            hitFlashActive = false;
             HideLight();
             return;
         }
         if (Mathf.Approximately(target, normalized)) return;
+        if (flashRemainingHealthOnDamage)
+        {
+            bool damage = normalized < target;
+            target = displayed = from = normalized;
+            animating = false;
+            if (fill != null) fill.fillAmount = normalized;
+            HideLight();
+            if (delayedFill != null)
+            {
+                delayedFill.fillAmount = normalized;
+                delayedFill.enabled = damage;
+                if (damage)
+                {
+                    hitFlashInitialAlpha = 1f;
+                    var c = delayedFill.color;
+                    c.a = hitFlashInitialAlpha;
+                    delayedFill.color = c;
+                }
+            }
+            hitFlashActive = damage && delayedFill != null;
+            hitFlashElapsed = 0f;
+            return;
+        }
         bool animate = normalized > target ? animateIncreases : animateDecreases;
         bool takingDamage = normalized < displayed;
         if (delayedFill != null)
@@ -52,10 +80,21 @@ public class AnimatedFillEffect : MonoBehaviour
         if (!animate) SetValue(normalized, true);
     }
 
-    private void OnDisable() { HideLight(); }
+    private void OnDisable() { HideLight(); hitFlashActive = false; if (delayedFill != null && flashRemainingHealthOnDamage) delayedFill.enabled = false; }
 
     private void Update()
     {
+        if (flashRemainingHealthOnDamage)
+        {
+            if (!hitFlashActive || delayedFill == null) return;
+            hitFlashElapsed += Time.deltaTime;
+            float fade = 1f - Mathf.Clamp01(hitFlashElapsed / Mathf.Max(0.01f, duration));
+            var c = delayedFill.color;
+            c.a = hitFlashInitialAlpha * fade;
+            delayedFill.color = c;
+            if (fade <= 0f) { hitFlashActive = false; delayedFill.enabled = false; }
+            return;
+        }
         if (!animating) return;
         elapsed += Time.deltaTime;
         float t = Mathf.Clamp01(elapsed / duration);

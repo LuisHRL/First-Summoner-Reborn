@@ -94,6 +94,8 @@ public static class CombatUIInstaller
             if (hpSprite != null) { Undo.RecordObject(hpFill, "HP sprite"); hpFill.sprite = hpSprite; hpFill.color = new Color(0.52f, 0.12f, 0.16f, 1f); }
             ConfigureFill(hpFill, Image.FillMethod.Horizontal);
             var targetBackground = hpFill.transform.parent.GetComponent<Image>();
+            if (targetBackground == null)
+                targetBackground = Undo.AddComponent<Image>(hpFill.transform.parent.gameObject);
             var targetFrameSprite = FindSprite("img_bar_hp_bg");
             if (targetBackground != null && targetFrameSprite != null)
             {
@@ -105,13 +107,10 @@ public static class CombatUIInstaller
             hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
             CopyRect(hpFill.rectTransform, hit.rectTransform);
             ConfigureHitVisual(hit, hpFill);
-            if (targetBackground != null && targetFrameSprite != null)
-                EnsureFrameOutline(targetBackground, targetFrameSprite, "TargetHPFrameOutline");
+            RemoveGeneratedFrame(hpFill.transform.parent, "TargetHPFrameOutline");
             var hpAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedTargetHP", hpFill, hit, false);
             hpAnimation.flashRemainingHealthOnDamage = true;
             hpAnimation.persistentLightBelowFullHealth = true;
-            if (targetBackground != null && targetFrameSprite != null)
-                targetBackground.transform.Find("TargetHPFrameOutline")?.SetAsLastSibling();
             EditorUtility.SetDirty(hpAnimation);
             Undo.RecordObject(target, "Wire target HP animation");
             target.healthAnimation = hpAnimation;
@@ -148,14 +147,11 @@ public static class CombatUIInstaller
                 CopyRect(hpFill.rectTransform, hit.rectTransform);
                 hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
                 ConfigureHitVisual(hit, hpFill);
-                if (background != null && frameSprite != null)
-                    EnsureFrameOutline(background, frameSprite, "EnemyHPFrameOutline");
+                RemoveGeneratedFrame(hpFill.transform.parent, "EnemyHPFrameOutline");
                 enemyBar.healthBarFill = hpFill;
                 enemyBar.healthAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedEnemyHP", hpFill, hit, false);
                 enemyBar.healthAnimation.flashRemainingHealthOnDamage = true;
                 enemyBar.healthAnimation.persistentLightBelowFullHealth = true;
-                if (background != null && frameSprite != null)
-                    background.transform.Find("EnemyHPFrameOutline")?.SetAsLastSibling();
                 Debug.Log("[Combat UI] Enemy HP light=" + (enemyBar.healthAnimation.transitionLight != null ? enemyBar.healthAnimation.transitionLight.sprite.name : "MISSING"));
                 PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
             }
@@ -195,18 +191,18 @@ public static class CombatUIInstaller
         return animation;
     }
 
-    private static void EnsureFrameOutline(Image background, Sprite sprite, string name)
+    private static void RemoveGeneratedFrame(Transform parent, string name)
     {
-        RemoveDuplicateGeneratedChildren(background.transform, name);
-        var outline = EnsureImage(background.transform, name, sprite);
-        // Child outline must fill its parent, not copy the parent's offset.
-        Stretch(outline.rectTransform);
-        outline.rectTransform.localRotation = Quaternion.identity;
-        outline.rectTransform.localScale = Vector3.one;
-        outline.rectTransform.SetAsLastSibling();
-        outline.type = Image.Type.Sliced;
-        outline.fillCenter = false;
-        outline.color = Color.white;
+        // Only remove our obsolete generated overlay, never the original HP UI.
+        for (int i = parent.childCount - 1; i >= 0; i--)
+        {
+            var child = parent.GetChild(i);
+            if (child.name != name || child.childCount != 0) continue;
+            if (child.GetComponents<Component>().Any(c =>
+                c != null && !(c is Transform) && !(c is CanvasRenderer) && !(c is Image)))
+                continue;
+            Undo.DestroyObjectImmediate(child.gameObject);
+        }
     }
 
     private static void RemoveDuplicateGeneratedChildren(Transform parent, string generatedName)

@@ -14,7 +14,7 @@ public static class CombatUIInstaller
     {
         const string scenePath = "Assets/Scenes/GameScene.unity";
         var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
-        var playerUI = UnityEngine.Object.FindObjectsByType<PlayerUI>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault();
+        var playerUI = UnityEngine.Object.FindObjectsByType<PlayerUI>(FindObjectsInactive.Include).FirstOrDefault();
         if (playerUI == null || playerUI.manaBar == null)
         {
             Debug.LogError("[Combat UI] PlayerUI or ManaBar missing. No changes made.");
@@ -57,7 +57,7 @@ public static class CombatUIInstaller
         EditorUtility.SetDirty(playerUI);
 
         // Target UI: retain existing target tracking, replace only fill visuals.
-        var target = UnityEngine.Object.FindObjectsByType<TargetHealthBarUI>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault();
+        var target = UnityEngine.Object.FindObjectsByType<TargetHealthBarUI>(FindObjectsInactive.Include).FirstOrDefault();
         if (target != null && target.healthBarFill != null)
         {
             var hpFill = target.healthBarFill;

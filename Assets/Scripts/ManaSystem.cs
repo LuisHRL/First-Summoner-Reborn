@@ -10,6 +10,8 @@ public class ManaSystem : MonoBehaviour
     // Ce "buffer" garde en mémoire les petits bouts de mana
     // (ex: 0.4) en attendant qu'ils s'accumulent jusqu'à 1 mana entier.
     private float manaBuffer;
+    public float FractionalManaProgress => Mathf.Clamp01(manaBuffer);
+    public float TotalMana => currentMana + FractionalManaProgress;
 
     void Start()
     {
@@ -43,7 +45,10 @@ public class ManaSystem : MonoBehaviour
     public void GainMana(float amount)
     {
         if (currentMana >= maxMana)
+        {
+            manaBuffer = 0f;
             return;
+        }
 
         manaBuffer += amount;
 

@@ -29,14 +29,16 @@ public static class CombatUIInstaller
             return;
         }
         var manaAnimation = EnsureAnimation(manaSlider.transform, "AnimatedManaBar", barFill, null, false);
+        // Keep the original Slider and its RectTransform; only its visual fill is animated.
         var manaIconSprite = FindSprite("icon_mana");
-        var manaIcon = EnsureImage(manaSlider.transform.parent, "AnimatedManaIcon", manaIconSprite);
+        var manaIcon = EnsureImage(manaSlider.transform, "AnimatedManaIcon", manaIconSprite);
         var iconRect = manaIcon.rectTransform;
         iconRect.anchorMin = new Vector2(0, 0.5f);
         iconRect.anchorMax = new Vector2(0, 0.5f);
         iconRect.pivot = new Vector2(1, 0.5f);
         iconRect.anchoredPosition = new Vector2(-8, 0);
-        iconRect.sizeDelta = new Vector2(44, 44);
+        float iconSize = Mathf.Max(1f, ((RectTransform)manaSlider.transform).rect.height);
+        iconRect.sizeDelta = new Vector2(iconSize, iconSize);
         manaIcon.color = new Color(0.25f, 0.18f, 0.35f, 1);
         manaIcon.gameObject.SetActive(manaIconSprite != null);
         var iconFill = EnsureImage(manaIcon.transform, "ManaIconFill", manaIcon.sprite);
@@ -113,7 +115,11 @@ public static class CombatUIInstaller
         animation.horizontalLight = vertical;
         var light = EnsureImage(fill.transform.parent, name + "Light", FindSprite("fx_light_03"));
         light.rectTransform.SetAsLastSibling();
-        light.rectTransform.sizeDelta = vertical ? new Vector2(46, 8) : new Vector2(8, 28);
+        RectTransform fillRect = fill.rectTransform;
+        float thickness = Mathf.Max(2f, Mathf.Min(fillRect.rect.width, fillRect.rect.height) * 0.18f);
+        light.rectTransform.sizeDelta = vertical
+            ? new Vector2(Mathf.Max(1f, fillRect.rect.width), thickness)
+            : new Vector2(thickness, Mathf.Max(1f, fillRect.rect.height));
         light.raycastTarget = false;
         light.gameObject.SetActive(false);
         animation.transitionLight = light.sprite != null ? light : null;

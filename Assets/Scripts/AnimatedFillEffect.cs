@@ -22,6 +22,8 @@ public class AnimatedFillEffect : MonoBehaviour
     private float lightElapsed;
     private bool initialized;
     private bool animating;
+    private float initialLightAlpha = 1f;
+    private bool lightAlphaCaptured;
 
     public void SetValue(float normalized, bool immediate = false)
     {
@@ -62,6 +64,11 @@ public class AnimatedFillEffect : MonoBehaviour
         }
         if (transitionLight != null)
         {
+            if (!lightAlphaCaptured)
+            {
+                initialLightAlpha = transitionLight.color.a;
+                lightAlphaCaptured = true;
+            }
             transitionLight.gameObject.SetActive(true);
             RectTransform lightRect = transitionLight.rectTransform;
             if (fill != null)
@@ -76,7 +83,7 @@ public class AnimatedFillEffect : MonoBehaviour
             }
             lightRect.localRotation = Quaternion.Euler(0f, 0f, horizontalLight ? 90f : 0f);
             Color color = transitionLight.color;
-            color.a = Mathf.Clamp01((1f - t) * duration / lightFadeDuration);
+            color.a = initialLightAlpha * Mathf.Clamp01((1f - t) * duration / lightFadeDuration);
             transitionLight.color = color;
         }
         if (t >= 1f)

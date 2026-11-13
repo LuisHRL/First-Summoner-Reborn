@@ -28,8 +28,14 @@ public static class CombatUIInstaller
             Debug.LogError("[Combat UI] ManaBar Slider Fill Image missing. No changes made.");
             return;
         }
-        var manaAnimation = EnsureAnimation(manaSlider.transform, "AnimatedManaBar", barFill, null, false);
-        // Keep the original Slider and its RectTransform; only its visual fill is animated.
+        // The Slider changes its fill RectTransform every frame; animate a separate overlay.
+        var manaVisual = EnsureImage(barFill.transform.parent, "AnimatedManaVisual", barFill.sprite);
+        Stretch(manaVisual.rectTransform);
+        manaVisual.color = barFill.color;
+        ConfigureFill(manaVisual, Image.FillMethod.Horizontal);
+        manaVisual.rectTransform.SetAsLastSibling();
+        if (barFill.enabled) { Undo.RecordObject(barFill, "Hide Slider driven visual"); barFill.enabled = false; }
+        var manaAnimation = EnsureAnimation(manaSlider.transform, "AnimatedManaBar", manaVisual, null, false);
         var manaIconSprite = FindSprite("icon_mana");
         var manaIcon = EnsureImage(manaSlider.transform, "AnimatedManaIcon", manaIconSprite);
         var iconRect = manaIcon.rectTransform;
@@ -67,7 +73,7 @@ public static class CombatUIInstaller
             var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
             hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex());
             CopyRect(hpFill.rectTransform, hit.rectTransform);
-            ConfigureFill(hit, Image.FillMethod.Horizontal);
+            ConfigureHitVisual(hit, hpFill);
             var hpAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedTargetHP", hpFill, hit, false);
             Undo.RecordObject(target, "Wire target HP animation");
             target.healthAnimation = hpAnimation;
@@ -91,7 +97,7 @@ public static class CombatUIInstaller
                 var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
                 CopyRect(hpFill.rectTransform, hit.rectTransform);
                 hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex());
-                ConfigureFill(hit, Image.FillMethod.Horizontal);
+                ConfigureHitVisual(hit, hpFill);
                 enemyBar.healthBarFill = hpFill;
                 enemyBar.healthAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedEnemyHP", hpFill, hit, false);
                 PrefabUtility.SaveAsPrefabAsset(prefab, prefabPath);
@@ -122,6 +128,8 @@ public static class CombatUIInstaller
             : new Vector2(thickness, Mathf.Max(1f, fillRect.rect.height));
         light.raycastTarget = false;
         light.gameObject.SetActive(false);
+        if (light.sprite == null && fill.sprite != null) light.sprite = fill.sprite;
+        light.color = vertical ? new Color(0.8f, 0.55f, 1f, 0.75f) : new Color(1f, 0.6f, 0.55f, 0.75f);
         animation.transitionLight = light.sprite != null ? light : null;
         EditorUtility.SetDirty(animation);
         return animation;
@@ -157,6 +165,13 @@ public static class CombatUIInstaller
         }
         Debug.LogWarning("[Combat UI] Sprite not found: " + name + " (existing graphic retained where possible)");
         return null;
+    }
+
+    private static void ConfigureHitVisual(Image hit, Image original)
+    {
+        if (hit.sprite == null) hit.sprite = original.sprite;
+        hit.color = new Color(1f, 0.12f, 0.18f, 1f);
+        ConfigureFill(hit, Image.FillMethod.Horizontal);
     }
 
     private static void ConfigureFill(Image image, Image.FillMethod method)

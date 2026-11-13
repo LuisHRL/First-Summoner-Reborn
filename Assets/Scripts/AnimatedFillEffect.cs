@@ -49,7 +49,15 @@ public class AnimatedFillEffect : MonoBehaviour
             target = displayed = from = normalized;
             animating = false;
             if (fill != null) fill.fillAmount = normalized;
-            HideLight();
+            if (damage && transitionLight != null)
+            {
+                PositionLight(normalized);
+                var lightColor = transitionLight.color;
+                lightColor.a = 0.9f;
+                transitionLight.color = lightColor;
+                transitionLight.gameObject.SetActive(true);
+            }
+            else HideLight();
             if (delayedFill != null)
             {
                 delayedFill.fillAmount = normalized;
@@ -86,13 +94,22 @@ public class AnimatedFillEffect : MonoBehaviour
     {
         if (flashRemainingHealthOnDamage)
         {
-            if (!hitFlashActive || delayedFill == null) return;
+            if (!hitFlashActive) return;
             hitFlashElapsed += Time.deltaTime;
             float fade = 1f - Mathf.Clamp01(hitFlashElapsed / Mathf.Max(0.01f, duration));
-            var c = delayedFill.color;
-            c.a = hitFlashInitialAlpha * fade;
-            delayedFill.color = c;
-            if (fade <= 0f) { hitFlashActive = false; delayedFill.enabled = false; }
+            if (delayedFill != null)
+            {
+                var c = delayedFill.color;
+                c.a = hitFlashInitialAlpha * fade;
+                delayedFill.color = c;
+            }
+            if (transitionLight != null)
+            {
+                var c = transitionLight.color;
+                c.a = 0.9f * fade;
+                transitionLight.color = c;
+            }
+            if (fade <= 0f) { hitFlashActive = false; if (delayedFill != null) delayedFill.enabled = false; HideLight(); }
             return;
         }
         if (!animating) return;
@@ -113,21 +130,7 @@ public class AnimatedFillEffect : MonoBehaviour
                 lightAlphaCaptured = true;
             }
             transitionLight.gameObject.SetActive(true);
-            RectTransform lightRect = transitionLight.rectTransform;
-            if (fill != null)
-            {
-                RectTransform fillRect = fill.rectTransform;
-                RectTransform container = fillRect.parent as RectTransform;
-                if (container != null && lightRect.parent == container)
-                {
-                    bool vertical = fill.fillMethod == Image.FillMethod.Vertical;
-                    Vector2 min = vertical ? new Vector2(0.5f, displayed) : new Vector2(displayed, 0.5f);
-                    lightRect.anchorMin = min;
-                    lightRect.anchorMax = min;
-                    lightRect.anchoredPosition = Vector2.zero;
-                }
-            }
-            lightRect.localRotation = Quaternion.Euler(0f, 0f, horizontalLight ? 90f : 0f);
+            PositionLight(displayed);
             Color color = transitionLight.color;
             color.a = initialLightAlpha * Mathf.Clamp01((1f - t) * duration / lightFadeDuration);
             transitionLight.color = color;
@@ -139,6 +142,23 @@ public class AnimatedFillEffect : MonoBehaviour
             if (delayedFill != null) { delayedFill.fillAmount = target; delayedFill.enabled = false; }
             HideLight();
         }
+    }
+
+    private void PositionLight(float value)
+    {
+        if (fill == null || transitionLight == null) return;
+        RectTransform fillRect = fill.rectTransform;
+        RectTransform lightRect = transitionLight.rectTransform;
+        RectTransform container = fillRect.parent as RectTransform;
+        if (container != null && lightRect.parent == container)
+        {
+            bool vertical = fill.fillMethod == Image.FillMethod.Vertical;
+            Vector2 anchor = vertical ? new Vector2(0.5f, value) : new Vector2(value, 0.5f);
+            lightRect.anchorMin = anchor;
+            lightRect.anchorMax = anchor;
+            lightRect.anchoredPosition = Vector2.zero;
+        }
+        lightRect.localRotation = Quaternion.Euler(0f, 0f, horizontalLight ? 90f : 0f);
     }
 
     private void HideLight()

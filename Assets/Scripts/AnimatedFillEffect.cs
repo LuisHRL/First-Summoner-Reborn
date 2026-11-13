@@ -33,12 +33,18 @@ public class AnimatedFillEffect : MonoBehaviour
             displayed = target = from = normalized;
             animating = false;
             if (fill != null) fill.fillAmount = normalized;
-            if (delayedFill != null) delayedFill.fillAmount = normalized;
+            if (delayedFill != null) { delayedFill.fillAmount = normalized; delayedFill.enabled = false; }
             HideLight();
             return;
         }
         if (Mathf.Approximately(target, normalized)) return;
         bool animate = normalized > target ? animateIncreases : animateDecreases;
+        bool takingDamage = normalized < displayed;
+        if (delayedFill != null)
+        {
+            delayedFill.enabled = takingDamage && animate;
+            delayedFill.fillAmount = displayed;
+        }
         target = normalized;
         from = displayed;
         elapsed = 0f;
@@ -55,9 +61,9 @@ public class AnimatedFillEffect : MonoBehaviour
         float t = Mathf.Clamp01(elapsed / duration);
         displayed = Mathf.Lerp(from, target, t);
         if (fill != null) fill.fillAmount = displayed;
-        if (delayedFill != null)
+        if (delayedFill != null && delayedFill.enabled)
         {
-            // A delayed hit layer remains behind the main HP bar on damage.
+            // Bright hit overlay stays at the previous HP level, then retracts to the new level.
             delayedFill.fillAmount = Mathf.Lerp(from, target, Mathf.Clamp01((t - 0.2f) / 0.8f));
         }
         if (transitionLight != null)
@@ -91,7 +97,7 @@ public class AnimatedFillEffect : MonoBehaviour
         {
             animating = false;
             if (fill != null) fill.fillAmount = target;
-            if (delayedFill != null) delayedFill.fillAmount = target;
+            if (delayedFill != null) { delayedFill.fillAmount = target; delayedFill.enabled = false; }
             HideLight();
         }
     }

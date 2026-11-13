@@ -100,8 +100,7 @@ public static class CombatUIInstaller
             if (targetBackground != null && targetFrameSprite != null)
             {
                 targetBackground.sprite = targetFrameSprite;
-                targetBackground.type = Image.Type.Sliced;
-                targetBackground.color = Color.white;
+                ConfigureProportionalFrame(targetBackground, targetFrameSprite);
             }
             var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
             hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
@@ -139,9 +138,7 @@ public static class CombatUIInstaller
                 if (background != null && frameSprite != null)
                 {
                     background.sprite = frameSprite;
-                    background.type = Image.Type.Sliced;
-                    background.fillCenter = true;
-                    background.color = Color.white;
+                    ConfigureProportionalFrame(background, frameSprite);
                 }
                 var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
                 CopyRect(hpFill.rectTransform, hit.rectTransform);
@@ -189,6 +186,30 @@ public static class CombatUIInstaller
         animation.transitionLight = light.sprite != null ? light : null;
         EditorUtility.SetDirty(animation);
         return animation;
+    }
+
+    private static void ConfigureProportionalFrame(Image frame, Sprite sprite)
+    {
+        frame.sprite = sprite;
+        frame.type = Image.Type.Sliced;
+        frame.fillCenter = true;
+        frame.color = Color.white;
+        frame.raycastTarget = false;
+
+        // Unity's default sliced-image border uses pixels per unit. At a
+        // different UI height, the end caps can become flattened. Derive the
+        // multiplier from the sprite's own height and the existing frame height
+        // so its corners retain their original aspect ratio; only the middle
+        // section stretches horizontally.
+        var rect = frame.rectTransform;
+        float height = rect.rect.height;
+        if (height <= 0f) height = Mathf.Abs(rect.sizeDelta.y);
+        if (height <= 0f || sprite.pixelsPerUnit <= 0f) return;
+        var canvas = frame.canvas;
+        float referencePPU = canvas != null ? canvas.referencePixelsPerUnit : 100f;
+        frame.pixelsPerUnitMultiplier =
+            sprite.rect.height * referencePPU / (height * sprite.pixelsPerUnit);
+        EditorUtility.SetDirty(frame);
     }
 
     private static void RemoveGeneratedFrame(Transform parent, string name)

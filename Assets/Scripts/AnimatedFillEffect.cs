@@ -15,6 +15,7 @@ public class AnimatedFillEffect : MonoBehaviour
     public bool animateDecreases = true;
     public bool animateIncreases = true;
     public bool flashRemainingHealthOnDamage;
+    public bool persistentLightBelowFullHealth;
 
     private float displayed;
     private float target;
@@ -39,7 +40,8 @@ public class AnimatedFillEffect : MonoBehaviour
             if (fill != null) fill.fillAmount = normalized;
             if (delayedFill != null) { delayedFill.fillAmount = normalized; delayedFill.enabled = false; }
             hitFlashActive = false;
-            HideLight();
+            if (persistentLightBelowFullHealth) UpdatePersistentLight(normalized);
+            else HideLight();
             return;
         }
         if (Mathf.Approximately(target, normalized)) return;
@@ -49,14 +51,7 @@ public class AnimatedFillEffect : MonoBehaviour
             target = displayed = from = normalized;
             animating = false;
             if (fill != null) fill.fillAmount = normalized;
-            if (damage && transitionLight != null)
-            {
-                PositionLight(normalized);
-                var lightColor = transitionLight.color;
-                lightColor.a = 0.9f;
-                transitionLight.color = lightColor;
-                transitionLight.gameObject.SetActive(true);
-            }
+            if (persistentLightBelowFullHealth) UpdatePersistentLight(normalized);
             else HideLight();
             if (delayedFill != null)
             {
@@ -103,13 +98,13 @@ public class AnimatedFillEffect : MonoBehaviour
                 c.a = hitFlashInitialAlpha * fade;
                 delayedFill.color = c;
             }
-            if (transitionLight != null)
+            if (transitionLight != null && !persistentLightBelowFullHealth)
             {
                 var c = transitionLight.color;
                 c.a = 0.9f * fade;
                 transitionLight.color = c;
             }
-            if (fade <= 0f) { hitFlashActive = false; if (delayedFill != null) delayedFill.enabled = false; HideLight(); }
+            if (fade <= 0f) { hitFlashActive = false; if (delayedFill != null) delayedFill.enabled = false; if (!persistentLightBelowFullHealth) HideLight(); }
             return;
         }
         if (!animating) return;
@@ -142,6 +137,18 @@ public class AnimatedFillEffect : MonoBehaviour
             if (delayedFill != null) { delayedFill.fillAmount = target; delayedFill.enabled = false; }
             HideLight();
         }
+    }
+
+    private void UpdatePersistentLight(float value)
+    {
+        if (transitionLight == null) return;
+        bool visible = value > 0f && value < 1f;
+        if (!visible) { HideLight(); return; }
+        PositionLight(value);
+        var color = transitionLight.color;
+        color.a = 0.9f;
+        transitionLight.color = color;
+        transitionLight.gameObject.SetActive(true);
     }
 
     private void PositionLight(float value)

@@ -83,10 +83,10 @@ public static class CombatUIInstaller
         {
             var hpFill = target.healthBarFill;
             var hpSprite = FindSprite("img_bar_hp");
-            if (hpSprite != null) { Undo.RecordObject(hpFill, "HP sprite"); hpFill.sprite = hpSprite; hpFill.color = Color.white; }
+            if (hpSprite != null) { Undo.RecordObject(hpFill, "HP sprite"); hpFill.sprite = hpSprite; hpFill.color = new Color(0.52f, 0.12f, 0.16f, 1f); }
             ConfigureFill(hpFill, Image.FillMethod.Horizontal);
             var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
-            hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex());
+            hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
             CopyRect(hpFill.rectTransform, hit.rectTransform);
             ConfigureHitVisual(hit, hpFill);
             var hpAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedTargetHP", hpFill, hit, false);
@@ -112,7 +112,7 @@ public static class CombatUIInstaller
                 ConfigureFill(hpFill, Image.FillMethod.Horizontal);
                 var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
                 CopyRect(hpFill.rectTransform, hit.rectTransform);
-                hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex());
+                hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
                 ConfigureHitVisual(hit, hpFill);
                 enemyBar.healthBarFill = hpFill;
                 enemyBar.healthAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedEnemyHP", hpFill, hit, false);
@@ -135,7 +135,9 @@ public static class CombatUIInstaller
         if (animation == null) animation = Undo.AddComponent<AnimatedFillEffect>(go);
         animation.fill = fill;
         animation.delayedFill = trail;
-        animation.horizontalLight = vertical;
+        // The atlas light orientation differs from the logical fill axis.
+        // Preserve the existing HP light and correct the vial light by 90 degrees.
+        animation.horizontalLight = false;
         var light = EnsureImage(fill.transform.parent, name + "Light", FindSprite("fx_light_03"));
         light.rectTransform.SetAsLastSibling();
         RectTransform fillRect = fill.rectTransform;
@@ -193,8 +195,9 @@ public static class CombatUIInstaller
     private static void ConfigureHitVisual(Image hit, Image original)
     {
         if (hit.sprite == null) hit.sprite = original.sprite;
-        hit.color = new Color(1f, 0.12f, 0.18f, 1f);
+        hit.color = new Color(1f, 0.34f, 0.38f, 1f);
         ConfigureFill(hit, Image.FillMethod.Horizontal);
+        hit.raycastTarget = false;
     }
 
     private static void ConfigureFill(Image image, Image.FillMethod method)

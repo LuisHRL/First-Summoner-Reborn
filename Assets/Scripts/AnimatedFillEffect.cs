@@ -19,7 +19,6 @@ public class AnimatedFillEffect : MonoBehaviour
     private float target;
     private float from;
     private float elapsed;
-    private float lightElapsed;
     private bool initialized;
     private bool animating;
     private float initialLightAlpha = 1f;
@@ -43,7 +42,6 @@ public class AnimatedFillEffect : MonoBehaviour
         target = normalized;
         from = displayed;
         elapsed = 0f;
-        lightElapsed = 0f;
         animating = animate;
         if (!animate) SetValue(normalized, true);
     }
@@ -74,10 +72,13 @@ public class AnimatedFillEffect : MonoBehaviour
             if (fill != null)
             {
                 RectTransform fillRect = fill.rectTransform;
-                if (lightRect.parent == fillRect)
+                RectTransform container = fillRect.parent as RectTransform;
+                if (container != null && lightRect.parent == container)
                 {
-                    lightRect.anchorMin = new Vector2(displayed, 0.5f);
-                    lightRect.anchorMax = new Vector2(displayed, 0.5f);
+                    bool vertical = fill.fillMethod == Image.FillMethod.Vertical;
+                    Vector2 min = vertical ? new Vector2(0.5f, displayed) : new Vector2(displayed, 0.5f);
+                    lightRect.anchorMin = min;
+                    lightRect.anchorMax = min;
                     lightRect.anchoredPosition = Vector2.zero;
                 }
             }

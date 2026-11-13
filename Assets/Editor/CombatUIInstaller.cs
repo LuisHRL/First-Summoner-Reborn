@@ -49,13 +49,15 @@ public static class CombatUIInstaller
         iconRect.anchoredPosition = new Vector2(4, 0);
         float iconSize = Mathf.Max(32f, ((RectTransform)manaSlider.transform).rect.height * 4f);
         iconRect.sizeDelta = new Vector2(iconSize, iconSize);
-        manaIcon.color = new Color(0.25f, 0.18f, 0.35f, 1);
+        // Preserve the original white mana icon without tint or rotation.
+        manaIcon.color = Color.white;
+        iconRect.localRotation = Quaternion.identity;
         manaIcon.gameObject.SetActive(true);
         if (manaIconSprite == null)
             Debug.LogError("[Combat UI] icon_mana not found in atlas; vial sprite missing.");
         var iconFill = EnsureImage(manaIcon.transform, "ManaIconFill", manaIcon.sprite);
         Stretch(iconFill.rectTransform);
-        iconFill.color = Color.white;
+        iconFill.color = new Color(0.65f, 0.3f, 1f, 1f);
         ConfigureFill(iconFill, Image.FillMethod.Vertical);
         var iconAnimation = EnsureAnimation(manaIcon.transform, "AnimatedManaIconFill", iconFill, null, true);
         var gain = EnsureImage(manaIcon.transform, "ManaGainFx", FindSprite("icon_mana_fx"));

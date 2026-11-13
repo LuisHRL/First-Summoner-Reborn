@@ -5,6 +5,7 @@ public class TargetHealthBarUI : MonoBehaviour
 {
     public PlayerTargeting playerTargeting;
     public Image healthBarFill;
+    public AnimatedFillEffect healthAnimation;
 
     void Update()
     {
@@ -21,9 +22,8 @@ public class TargetHealthBarUI : MonoBehaviour
         if (!hasTarget)
             return;
 
-        healthBarFill.fillAmount = Mathf.Clamp01(
-            (float)target.CurrentHealth /
-            Mathf.Max(1, target.maxHealth)
-        );
+        float value = Mathf.Clamp01((float)target.CurrentHealth / Mathf.Max(1, target.maxHealth));
+        if (healthAnimation != null) healthAnimation.SetValue(value);
+        else healthBarFill.fillAmount = value;
     }
 }

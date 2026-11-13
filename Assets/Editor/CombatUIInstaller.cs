@@ -93,10 +93,20 @@ public static class CombatUIInstaller
             var hpSprite = FindSprite("img_bar_hp");
             if (hpSprite != null) { Undo.RecordObject(hpFill, "HP sprite"); hpFill.sprite = hpSprite; hpFill.color = new Color(0.52f, 0.12f, 0.16f, 1f); }
             ConfigureFill(hpFill, Image.FillMethod.Horizontal);
+            var targetBackground = hpFill.transform.parent.GetComponent<Image>();
+            var targetFrameSprite = FindSprite("img_bar_hp_bg");
+            if (targetBackground != null && targetFrameSprite != null)
+            {
+                targetBackground.sprite = targetFrameSprite;
+                targetBackground.type = Image.Type.Sliced;
+                targetBackground.color = Color.white;
+            }
             var hit = EnsureImage(hpFill.transform.parent, "HPDamageTrail", FindSprite("img_bar_hp_hit"));
             hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
             CopyRect(hpFill.rectTransform, hit.rectTransform);
             ConfigureHitVisual(hit, hpFill);
+            if (targetBackground != null && targetFrameSprite != null)
+                EnsureFrameOutline(targetBackground, targetFrameSprite, "TargetHPFrameOutline");
             var hpAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedTargetHP", hpFill, hit, false);
             hpAnimation.flashRemainingHealthOnDamage = true;
             hpAnimation.persistentLightBelowFullHealth = true;
@@ -137,17 +147,7 @@ public static class CombatUIInstaller
                 hit.rectTransform.SetSiblingIndex(hpFill.transform.GetSiblingIndex() + 1);
                 ConfigureHitVisual(hit, hpFill);
                 if (background != null && frameSprite != null)
-                {
-                    // Only remove extra installer-generated outlines. Never touch the
-                    // original background, fill, hit overlay, or gameplay references.
-                    RemoveDuplicateGeneratedChildren(background.transform, "EnemyHPFrameOutline");
-                    var outline = EnsureImage(background.transform, "EnemyHPFrameOutline", frameSprite);
-                    CopyRect(background.rectTransform, outline.rectTransform);
-                    outline.rectTransform.SetAsLastSibling();
-                    outline.type = Image.Type.Sliced;
-                    outline.fillCenter = false;
-                    outline.color = Color.white;
-                }
+                    EnsureFrameOutline(background, frameSprite, "EnemyHPFrameOutline");
                 enemyBar.healthBarFill = hpFill;
                 enemyBar.healthAnimation = EnsureAnimation(hpFill.transform.parent, "AnimatedEnemyHP", hpFill, hit, false);
                 enemyBar.healthAnimation.flashRemainingHealthOnDamage = true;
@@ -189,6 +189,20 @@ public static class CombatUIInstaller
         animation.transitionLight = light.sprite != null ? light : null;
         EditorUtility.SetDirty(animation);
         return animation;
+    }
+
+    private static void EnsureFrameOutline(Image background, Sprite sprite, string name)
+    {
+        RemoveDuplicateGeneratedChildren(background.transform, name);
+        var outline = EnsureImage(background.transform, name, sprite);
+        // Child outline must fill its parent, not copy the parent's offset.
+        Stretch(outline.rectTransform);
+        outline.rectTransform.localRotation = Quaternion.identity;
+        outline.rectTransform.localScale = Vector3.one;
+        outline.rectTransform.SetAsLastSibling();
+        outline.type = Image.Type.Sliced;
+        outline.fillCenter = false;
+        outline.color = Color.white;
     }
 
     private static void RemoveDuplicateGeneratedChildren(Transform parent, string generatedName)

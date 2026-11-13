@@ -14,6 +14,7 @@ public class AnimatedFillEffect : MonoBehaviour
     public bool horizontalLight;
     public bool animateDecreases = true;
     public bool animateIncreases = true;
+    [Min(0.01f)] public float hitFlashDuration = 0.24f;
     public bool flashRemainingHealthOnDamage;
     public bool persistentLightBelowFullHealth;
 
@@ -91,7 +92,7 @@ public class AnimatedFillEffect : MonoBehaviour
         {
             if (!hitFlashActive) return;
             hitFlashElapsed += Time.deltaTime;
-            float fade = 1f - Mathf.Clamp01(hitFlashElapsed / Mathf.Max(0.01f, duration));
+            float fade = 1f - Mathf.Clamp01(hitFlashElapsed / Mathf.Max(0.01f, hitFlashDuration));
             if (delayedFill != null)
             {
                 var c = delayedFill.color;

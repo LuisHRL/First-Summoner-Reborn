@@ -47,8 +47,10 @@ public static class CombatUIInstaller
         iconRect.anchorMax = new Vector2(0, 0.5f);
         iconRect.pivot = new Vector2(0, 0.5f);
         iconRect.anchoredPosition = new Vector2(4, 0);
-        float iconSize = Mathf.Max(32f, ((RectTransform)manaSlider.transform).rect.height * 4f);
-        iconRect.sizeDelta = new Vector2(iconSize, iconSize);
+        float iconHeight = Mathf.Max(24f, ((RectTransform)manaSlider.transform).rect.height * 2.7f);
+        float iconAspect = manaIconSprite != null && manaIconSprite.rect.height > 0f
+            ? manaIconSprite.rect.width / manaIconSprite.rect.height : 1f;
+        iconRect.sizeDelta = new Vector2(iconHeight * iconAspect, iconHeight);
         // Preserve the original white mana icon without tint or rotation.
         manaIcon.color = new Color(0.30f, 0.12f, 0.42f, 1f);
         // Preserve the original icon orientation; only the transition light rotates.
@@ -152,7 +154,7 @@ public static class CombatUIInstaller
         RectTransform fillRect = fill.rectTransform;
         float thickness = Mathf.Max(2f, Mathf.Min(fillRect.rect.width, fillRect.rect.height) * 0.18f);
         light.rectTransform.sizeDelta = vertical
-            ? new Vector2(Mathf.Max(1f, fillRect.rect.width * 0.72f), thickness)
+            ? new Vector2(Mathf.Max(1f, fillRect.rect.width * 0.48f), Mathf.Max(1f, thickness * 0.65f))
             : new Vector2(thickness, Mathf.Max(1f, fillRect.rect.height));
         light.raycastTarget = false;
         light.gameObject.SetActive(false);

@@ -24,7 +24,11 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
     [Min(0)] public float displayedLeftWidth = 12f;
     [Min(0)] public float displayedRightWidth = 12f;
 
-    private void OnValidate() { Apply(); }
+    private void OnValidate()
+    {
+        // Never mutate another RectTransform during Unity's validation pass.
+        // The Inspector can apply changes explicitly via the context menu.
+    }
 
     [ContextMenu("Apply Mana Visual Layout")]
     public void Apply()

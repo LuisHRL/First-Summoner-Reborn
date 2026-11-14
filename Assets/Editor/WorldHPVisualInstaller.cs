@@ -13,12 +13,27 @@ public static class WorldHPVisualInstaller
         const string scenePath = "Assets/Scenes/GameScene.unity";
         if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
         var scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
-        var hero = Object.FindObjectsByType<PlayerHealth>(FindObjectsInactive.Include).FirstOrDefault();
-        var bar = hero != null ? hero.GetComponentInChildren<WorldHealthBar>(true) : null;
-        if (bar == null || bar.healthBarFill == null)
+        // Resolve by the actual scene hierarchy, not by PlayerHealth's location.
+        // Some player prefabs keep the health component on another child.
+        var roots = scene.GetRootGameObjects();
+        var playerRoot = roots.SelectMany(root => root.GetComponentsInChildren<Transform>(true))
+            .FirstOrDefault(t => t.name == "Player" && t.parent != null && t.parent.gameObject.scene == scene);
+        if (playerRoot == null)
+            playerRoot = roots.Select(root => root.transform).FirstOrDefault(t => t.name == "Player");
+        var barTransform = playerRoot != null ? playerRoot.Find("WorldHealthBar") : null;
+        var bar = barTransform != null ? barTransform.GetComponent<WorldHealthBar>() : null;
+        var fillTransform = barTransform != null ? barTransform.Find("HealthBarBackground/HealthBarFill") : null;
+        var fill = fillTransform != null ? fillTransform.GetComponent<Image>() : null;
+        if (barTransform == null || bar == null || fill == null)
         {
-            Debug.LogError("[Hero HP] WorldHealthBar / HealthBarFill not found; no changes.");
+            Debug.LogError("[Hero HP] Missing Player/WorldHealthBar/HealthBarBackground/HealthBarFill or Image component in GameScene. No changes.");
             return;
+        }
+        if (bar.healthBarFill != fill)
+        {
+            Undo.RecordObject(bar, "Repair hero HP fill reference");
+            bar.healthBarFill = fill;
+            EditorUtility.SetDirty(bar);
         }
         var parent = bar.healthBarFill.transform.parent;
         var existing = parent.Find("AdjustableHPFrame");

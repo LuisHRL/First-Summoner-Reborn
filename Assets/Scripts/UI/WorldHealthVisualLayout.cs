@@ -24,6 +24,30 @@ public sealed class WorldHealthVisualLayout : MonoBehaviour
     [Min(0)] public float displayedRightWidth = 12f;
     public bool hideOldBackground = true;
 
+    private void Awake()
+    {
+        // Apply only persisted appearance settings at runtime.
+        // Never re-layout RectTransforms here: their Inspector-tuned geometry
+        // and world-space Canvas positions must remain untouched.
+        ApplyAppearance();
+    }
+
+    private void ApplyAppearance()
+    {
+        if (healthFill != null)
+        {
+            if (originalFillSprite != null) healthFill.sprite = originalFillSprite;
+            if (applyFillTint) healthFill.color = normalFillTint;
+        }
+        if (hitOverlay != null)
+        {
+            // Keep the configured RGB while the animation owns flash alpha.
+            Color c = hitOverlayTint;
+            c.a = hitOverlay.color.a;
+            hitOverlay.color = c;
+        }
+    }
+
     [ContextMenu("Apply World HP Visual Layout")]
     public void Apply()
     {

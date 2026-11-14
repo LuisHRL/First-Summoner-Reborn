@@ -15,6 +15,11 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
     public bool useOriginalManaSprite = true;
     public bool applyFrameLayout;
     public bool useSlicedFrame;
+    [Header("Original mana alignment")]
+    public RectTransform manaIcon;
+    public bool startAtIconCenter = true;
+    public bool hideLegacyBackground = true;
+    public Image legacyBackground;
     [Header("Optional original frame with adjustable left / center / right")]
     public AdjustableThreeSlice threePartFrame;
     public bool applyThreePartFrame;
@@ -33,11 +38,15 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
     [ContextMenu("Apply Mana Visual Layout")]
     public void Apply()
     {
+        if (hideLegacyBackground && legacyBackground != null && legacyBackground != fill && legacyBackground != frame)
+            legacyBackground.enabled = false;
         if (fill != null)
         {
             if (useOriginalManaSprite && originalManaSprite != null)
                 fill.sprite = originalManaSprite;
             SetRect(fill.rectTransform, fillSize, fillOffset);
+            if (startAtIconCenter && manaIcon != null)
+                AlignLeftEdge(fill.rectTransform, manaIcon);
         }
         if (applyThreePartFrame && threePartFrame != null)
         {
@@ -47,15 +56,31 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
             threePartFrame.displayedLeftWidth = displayedLeftWidth;
             threePartFrame.displayedRightWidth = displayedRightWidth;
             SetRect(threePartFrame.rectTransform, frameSize, frameOffset);
+            if (startAtIconCenter && manaIcon != null)
+                AlignLeftEdge(threePartFrame.rectTransform, manaIcon);
             threePartFrame.SetAllDirty();
         }
         if (applyFrameLayout && frame != null)
         {
             SetRect(frame.rectTransform, frameSize, frameOffset);
+            if (startAtIconCenter && manaIcon != null)
+                AlignLeftEdge(frame.rectTransform, manaIcon);
             // Slicing is valid only for sprites with configured borders.
             bool hasBorders = frame.sprite != null && frame.sprite.border.sqrMagnitude > 0f;
             frame.type = useSlicedFrame && hasBorders ? Image.Type.Sliced : Image.Type.Simple;
         }
+    }
+
+    private static void AlignLeftEdge(RectTransform target, RectTransform icon)
+    {
+        // Transform the icon center into the target's parent space, so this
+        // works even when the animated fill is nested under a Slider Fill Area.
+        var parent = target.parent as RectTransform;
+        if (parent == null) return;
+        Vector3 local = parent.InverseTransformPoint(icon.TransformPoint(icon.rect.center));
+        Vector3 targetCenter = parent.InverseTransformPoint(target.position);
+        Vector3 desired = targetCenter + new Vector3(local.x - (targetCenter.x - target.rect.width * 0.5f), local.y - targetCenter.y, 0f);
+        target.position = parent.TransformPoint(desired);
     }
 
     private static void SetRect(RectTransform rect, Vector2 size, Vector2 offset)

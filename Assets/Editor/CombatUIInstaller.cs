@@ -191,7 +191,8 @@ public static class CombatUIInstaller
     private static void ConfigureProportionalFrame(Image frame, Sprite sprite)
     {
         frame.sprite = sprite;
-        frame.type = Image.Type.Sliced;
+        // Tile the middle instead of stretching it; preserve native end caps.
+        frame.type = Image.Type.Tiled;
         frame.fillCenter = true;
         frame.color = Color.white;
         frame.raycastTarget = false;

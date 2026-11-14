@@ -69,6 +69,46 @@ public static class WorldHPVisualInstaller
             layout.hideOldBackground = true;
             layout.Apply();
         }
+        // Reuse the existing visual layout and never reset manually tuned sizes.
+        // Overlay must be above the fill, but below no independent gameplay UI.
+        var overlayTransform = parent.Find("HeroHPHitOverlay");
+        GameObject overlayObject;
+        if (overlayTransform == null)
+        {
+            overlayObject = new GameObject("HeroHPHitOverlay", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            Undo.RegisterCreatedObjectUndo(overlayObject, "Create hero HP hit overlay");
+            overlayObject.transform.SetParent(parent, false);
+        }
+        else overlayObject = overlayTransform.gameObject;
+        var overlay = overlayObject.GetComponent<Image>();
+        if (overlay == null) overlay = Undo.AddComponent<Image>(overlayObject);
+        var hitSprite = FindSprite("img_bar_hp_hit_green");
+        if (hitSprite != null) overlay.sprite = hitSprite;
+        else if (overlay.sprite == null) overlay.sprite = bar.healthBarFill.sprite;
+        overlay.type = Image.Type.Filled;
+        overlay.fillMethod = bar.healthBarFill.fillMethod;
+        overlay.fillOrigin = bar.healthBarFill.fillOrigin;
+        overlay.fillClockwise = bar.healthBarFill.fillClockwise;
+        overlay.raycastTarget = false;
+        overlay.transform.SetAsLastSibling();
+
+        var animation = bar.GetComponent<AnimatedFillEffect>();
+        if (animation == null) animation = Undo.AddComponent<AnimatedFillEffect>(bar.gameObject);
+        animation.fill = bar.healthBarFill;
+        animation.delayedFill = overlay;
+        animation.flashRemainingHealthOnDamage = true;
+        animation.hitFlashDuration = 0.24f;
+        animation.persistentLightBelowFullHealth = false;
+        animation.transitionLight = null;
+        bar.healthAnimation = animation;
+        layout.hitOverlay = overlay;
+        // On first setup, tint the existing green sprite to a softer shade.
+        // Keep user-adjusted tint on subsequent installations.
+        if (overlayTransform == null) layout.normalFillTint = new Color(0.48f, 0.72f, 0.48f, 1f);
+        layout.Apply();
+        overlay.enabled = false;
+        EditorUtility.SetDirty(animation);
+        EditorUtility.SetDirty(bar);
         EditorUtility.SetDirty(layout);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene);

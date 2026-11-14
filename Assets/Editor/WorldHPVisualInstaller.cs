@@ -63,7 +63,9 @@ public static class WorldHPVisualInstaller
             layout.frameSize = backgroundRect.rect.size;
             layout.frameOffset = Vector2.zero;
             layout.originalFrameSprite = FindSprite("img_bar_hp_bg_01");
-            layout.originalFillSprite = FindSprite("img_bar_hp");
+            // Preserve the hero's existing green HP sprite and tint.
+            // img_bar_hp is red (enemy HP), and img_bar_hp_hit_green may be a hit overlay.
+            layout.originalFillSprite = bar.healthBarFill.sprite;
             layout.hideOldBackground = true;
             layout.Apply();
         }

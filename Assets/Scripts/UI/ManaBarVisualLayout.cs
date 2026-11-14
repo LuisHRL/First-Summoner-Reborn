@@ -15,6 +15,14 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
     public bool useOriginalManaSprite = true;
     public bool applyFrameLayout;
     public bool useSlicedFrame;
+    [Header("Optional original frame with adjustable left / center / right")]
+    public AdjustableThreeSlice threePartFrame;
+    public bool applyThreePartFrame;
+    public Sprite originalFrameSprite;
+    [Min(0)] public float sourceLeftPixels = 12f;
+    [Min(0)] public float sourceRightPixels = 12f;
+    [Min(0)] public float displayedLeftWidth = 12f;
+    [Min(0)] public float displayedRightWidth = 12f;
 
     private void OnValidate() { Apply(); }
 
@@ -26,6 +34,16 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
             if (useOriginalManaSprite && originalManaSprite != null)
                 fill.sprite = originalManaSprite;
             SetRect(fill.rectTransform, fillSize, fillOffset);
+        }
+        if (applyThreePartFrame && threePartFrame != null)
+        {
+            if (originalFrameSprite != null) threePartFrame.SourceSprite = originalFrameSprite;
+            threePartFrame.sourceLeftPixels = sourceLeftPixels;
+            threePartFrame.sourceRightPixels = sourceRightPixels;
+            threePartFrame.displayedLeftWidth = displayedLeftWidth;
+            threePartFrame.displayedRightWidth = displayedRightWidth;
+            SetRect(threePartFrame.rectTransform, frameSize, frameOffset);
+            threePartFrame.SetAllDirty();
         }
         if (applyFrameLayout && frame != null)
         {

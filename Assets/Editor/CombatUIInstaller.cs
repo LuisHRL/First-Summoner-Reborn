@@ -74,6 +74,19 @@ public static class CombatUIInstaller
         // Preserve the original icon orientation; only the transition light rotates.
         iconRect.localRotation = Quaternion.identity;
         manaIcon.gameObject.SetActive(true);
+        // Align the visual bar's left edge with the vial center, even if the
+        // animated fill lives under a nested Slider Fill Area.
+        manaLayout.manaIcon = iconRect;
+        manaLayout.startAtIconCenter = true;
+        // Hide only the Slider's old named Background image, not unrelated UI.
+        var legacyBackgroundTransform = manaSlider.transform.Find("Background");
+        if (legacyBackgroundTransform != null)
+            manaLayout.legacyBackground = legacyBackgroundTransform.GetComponent<Image>();
+        manaLayout.hideLegacyBackground = true;
+        manaLayout.Apply();
+        EditorUtility.SetDirty(manaLayout);
+        // Keep the vial above the frame in UI draw order.
+        iconRect.SetAsLastSibling();
         // Clip the animated fill and its moving light to the original vial silhouette.
         var vialMask = manaIcon.GetComponent<Mask>();
         if (vialMask == null) vialMask = Undo.AddComponent<Mask>(manaIcon.gameObject);

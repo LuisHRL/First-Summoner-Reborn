@@ -30,7 +30,7 @@ public class PlayerUI : MonoBehaviour
     {
         healthBar.value = playerHealth.CurrentHealth;
         manaBar.value = manaSystem.currentMana;
-        if (manaBarAnimation != null) manaBarAnimation.SetValue(manaSystem.TotalMana / Mathf.Max(1, manaSystem.maxMana));
+        if (manaBarAnimation != null) manaBarAnimation.SetValue((float)manaSystem.currentMana / Mathf.Max(1, manaSystem.maxMana), true);
         if (manaIconAnimation != null) manaIconAnimation.SetValue(manaSystem.FractionalManaProgress);
         if (manaSystem.currentMana > previousMana && manaGainFx != null)
         {

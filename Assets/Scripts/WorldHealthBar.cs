@@ -5,6 +5,7 @@ public class WorldHealthBar : MonoBehaviour
 {
     [Header("Barre de vie")]
     public Image healthBarFill;
+    public AnimatedFillEffect healthAnimation;
 
     private PlayerHealth playerHealth;
     private MinionHealth minionHealth;
@@ -22,8 +23,8 @@ public class WorldHealthBar : MonoBehaviour
         previousHealth = GetCurrentHealth();
         isVisible = false;
 
-        if (healthBarFill != null)
-            healthBarFill.fillAmount = 1f;
+        if (healthAnimation != null) healthAnimation.SetValue((float)previousHealth / Mathf.Max(1, GetMaxHealth()), true);
+        else if (healthBarFill != null) healthBarFill.fillAmount = 1f;
 
         SetBarVisible(false);
     }
@@ -39,12 +40,14 @@ public class WorldHealthBar : MonoBehaviour
             SetBarVisible(true);
         }
 
-        if (healthBarFill != null)
+        float fraction = Mathf.Clamp01((float)currentHealth / Mathf.Max(1, GetMaxHealth()));
+        if (healthAnimation != null)
         {
-            healthBarFill.fillAmount = Mathf.Clamp01(
-                (float)currentHealth / Mathf.Max(1, GetMaxHealth())
-            );
+            // Send updates only on actual health changes; the effect itself
+            // flashes only for decreases, and only over the remaining HP.
+            if (currentHealth != previousHealth) healthAnimation.SetValue(fraction);
         }
+        else if (healthBarFill != null) healthBarFill.fillAmount = fraction;
 
         previousHealth = currentHealth;
 

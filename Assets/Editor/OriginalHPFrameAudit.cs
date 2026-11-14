@@ -64,25 +64,27 @@ public static class OriginalHPFrameAudit
     {
         var report = new StringBuilder();
         report.AppendLine("assetPath\tsprite\twidth\theight\tborderLeft\tborderBottom\tborderRight\tborderTop\tpivot\tppu\ttexture\ttextureSize");
-        foreach (string guid in AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets" }))
+        // Only inspect the known UI atlas. Never scan/load every texture in Assets.
+        const string atlasPath = "Assets/Generated/AssetRipperSprites/Sprite_Atlas_UI_z_total.png";
+        if (AssetDatabase.LoadAssetAtPath<Texture2D>(atlasPath) == null)
         {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            foreach (var sprite in AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>())
-            {
-                string name = sprite.name.ToLowerInvariant();
-                if (!name.Contains("hp") && !name.Contains("health") && !name.Contains("bar")) continue;
-                var b = sprite.border;
-                var rect = sprite.rect;
-                var texture = sprite.texture;
-                string[] values = {
-                    path, sprite.name, rect.width.ToString("R"), rect.height.ToString("R"),
-                    b.x.ToString("R"), b.y.ToString("R"), b.z.ToString("R"), b.w.ToString("R"),
-                    sprite.pivot.ToString("F3"), sprite.pixelsPerUnit.ToString("R"),
-                    texture != null ? texture.name : "",
-                    texture != null ? texture.width + "x" + texture.height : ""
-                };
-                report.AppendLine(string.Join("\t", values));
-            }
+            Debug.LogError("[HP Audit] UI atlas not found: " + atlasPath);
+            return;
+        }
+        foreach (var sprite in AssetDatabase.LoadAllAssetsAtPath(atlasPath).OfType<Sprite>())
+        {
+            string name = sprite.name.ToLowerInvariant();
+            if (!name.Contains("hp") && !name.Contains("health") && !name.Contains("bar")) continue;
+            var b = sprite.border;
+            var rect = sprite.rect;
+            string[] values = {
+                atlasPath, sprite.name, rect.width.ToString("R"), rect.height.ToString("R"),
+                b.x.ToString("R"), b.y.ToString("R"), b.z.ToString("R"), b.w.ToString("R"),
+                sprite.pivot.ToString("F3"), sprite.pixelsPerUnit.ToString("R"),
+                sprite.texture != null ? sprite.texture.name : "",
+                sprite.texture != null ? sprite.texture.width + "x" + sprite.texture.height : ""
+            };
+            report.AppendLine(string.Join("\t", values));
         }
         string folder = Path.Combine(Application.dataPath, "../HPFrameAudits");
         Directory.CreateDirectory(folder);

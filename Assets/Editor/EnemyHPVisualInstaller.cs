@@ -125,15 +125,22 @@ public static class EnemyHPVisualInstaller
             layout.fillSize = new Vector2(fillWidth, fillHeight);
             layout.frameOffset = Vector2.zero;
             layout.fillOffset = Vector2.zero;
-            // Preserve the actual source cut points, but scale the visible
-            // caps with the new frame height rather than the native width.
-            float frameScale = frameHeight / Mathf.Max(1f, frameSprite.rect.height);
-            layout.displayedLeftWidth = Mathf.Min(width * 0.25f, layout.sourceLeftPixels * frameScale);
-            layout.displayedRightWidth = Mathf.Min(width * 0.25f, layout.sourceRightPixels * frameScale);
+            // Recover end caps from the original sprite instead of preserving
+            // the erroneous 0.5px values left by the earlier reset.
+            // Prefer authored sprite borders; for borderless atlas sprites,
+            // use the original sprite height to estimate symmetrical end caps.
+            float sourceCap = Mathf.Min(frameSprite.rect.width * 0.25f, frameSprite.rect.height * 0.5f);
+            float left = frameSprite.border.x > 0f ? frameSprite.border.x : sourceCap;
+            float right = frameSprite.border.z > 0f ? frameSprite.border.z : sourceCap;
+            layout.sourceLeftPixels = left;
+            layout.sourceRightPixels = right;
+            float capScale = frameHeight / Mathf.Max(1f, frameSprite.rect.height);
+            layout.displayedLeftWidth = left * capScale;
+            layout.displayedRightWidth = right * capScale;
             layout.Apply();
             EditorUtility.SetDirty(layout);
             PrefabUtility.SaveAsPrefabAsset(prefab, path);
-            Debug.Log("[Enemy HP] Enemy HP sprites fitted to one shared bar footprint (original sprite aspect ratios retained for fill).");
+            Debug.Log("[Enemy HP] Enemy HP frame caps restored from sprite borders or proportional fallback; check sprite alpha separately.");
         }
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }

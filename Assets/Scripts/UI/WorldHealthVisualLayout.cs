@@ -7,6 +7,11 @@ public sealed class WorldHealthVisualLayout : MonoBehaviour
     public Image healthFill;
     public AdjustableThreeSlice frame;
     public Image oldBackground;
+    [Header("Normal green and damage flash")]
+    public Image hitOverlay;
+    public Color normalFillTint = new Color(0.48f, 0.72f, 0.48f, 1f);
+    public Color hitOverlayTint = Color.white;
+    public bool applyFillTint = true;
     public Sprite originalFrameSprite;
     public Sprite originalFillSprite;
     public Vector2 frameSize = new Vector2(100f, 24f);
@@ -36,6 +41,13 @@ public sealed class WorldHealthVisualLayout : MonoBehaviour
         {
             if (originalFillSprite != null) healthFill.sprite = originalFillSprite;
             SetRect(healthFill.rectTransform, fillSize, fillOffset);
+            if (applyFillTint) healthFill.color = normalFillTint;
+        }
+        if (hitOverlay != null)
+        {
+            SetRect(hitOverlay.rectTransform, fillSize, fillOffset);
+            hitOverlay.color = hitOverlayTint;
+            hitOverlay.raycastTarget = false;
         }
         if (oldBackground != null && oldBackground != healthFill)
             oldBackground.enabled = !hideOldBackground;

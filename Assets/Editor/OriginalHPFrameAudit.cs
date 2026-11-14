@@ -18,7 +18,7 @@ public static class OriginalHPFrameAudit
         var originalScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path;
         try
         {
-            foreach (string path in AssetDatabase.FindAssets("t:Scene").Select(AssetDatabase.GUIDToAssetPath))
+            foreach (string path in AssetDatabase.FindAssets("t:Scene", new[] { "Assets" }).Select(AssetDatabase.GUIDToAssetPath).Where(p => p.StartsWith("Assets/", StringComparison.Ordinal)))
             {
                 try
                 {
@@ -33,7 +33,7 @@ public static class OriginalHPFrameAudit
                 }
                 catch (Exception e) { Debug.LogWarning("[HP Audit] Scene skipped: " + path + " " + e.Message); }
             }
-            foreach (string path in AssetDatabase.FindAssets("t:Prefab").Select(AssetDatabase.GUIDToAssetPath))
+            foreach (string path in AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" }).Select(AssetDatabase.GUIDToAssetPath).Where(p => p.StartsWith("Assets/", StringComparison.Ordinal)))
             {
                 GameObject prefab = null;
                 try

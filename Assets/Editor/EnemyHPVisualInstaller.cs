@@ -110,19 +110,30 @@ public static class EnemyHPVisualInstaller
                 Debug.LogError("[Enemy HP] Original frame/fill sprites are missing. Nothing changed.");
                 return;
             }
-            layout.frameSize = NativeSize(frameSprite, layout.frame.canvas);
-            layout.fillSize = NativeSize(fillSprite, layout.healthFill.canvas);
+            // The two atlas sprites have unrelated native dimensions (e.g. 90x59
+            // versus 329x29). Reset them to a shared bar footprint instead of
+            // assigning both native sizes independently.
+            Vector2 nativeFrame = NativeSize(frameSprite, layout.frame.canvas);
+            Vector2 nativeFill = NativeSize(fillSprite, layout.healthFill.canvas);
+            float width = Mathf.Max(1f, nativeFrame.x);
+            float fillWidth = width * 0.88f;
+            float fillHeight = fillWidth * nativeFill.y / Mathf.Max(1f, nativeFill.x);
+            // Give the frame a little breathing room vertically, rather than
+            // inheriting a 59px-high background for a ~7px-high red fill.
+            float frameHeight = fillHeight * 1.65f;
+            layout.frameSize = new Vector2(width, frameHeight);
+            layout.fillSize = new Vector2(fillWidth, fillHeight);
             layout.frameOffset = Vector2.zero;
             layout.fillOffset = Vector2.zero;
-            // Preserve the existing source cap boundaries when known; reset
-            // their display widths to native sprite units.
-            float frameFactor = layout.frameSize.x / frameSprite.rect.width;
-            layout.displayedLeftWidth = layout.sourceLeftPixels * frameFactor;
-            layout.displayedRightWidth = layout.sourceRightPixels * frameFactor;
+            // Preserve the actual source cut points, but scale the visible
+            // caps with the new frame height rather than the native width.
+            float frameScale = frameHeight / Mathf.Max(1f, frameSprite.rect.height);
+            layout.displayedLeftWidth = Mathf.Min(width * 0.25f, layout.sourceLeftPixels * frameScale);
+            layout.displayedRightWidth = Mathf.Min(width * 0.25f, layout.sourceRightPixels * frameScale);
             layout.Apply();
             EditorUtility.SetDirty(layout);
             PrefabUtility.SaveAsPrefabAsset(prefab, path);
-            Debug.Log("[Enemy HP] Native sprite sizes restored for the enemy world-space bar only.");
+            Debug.Log("[Enemy HP] Enemy HP sprites fitted to one shared bar footprint (original sprite aspect ratios retained for fill).");
         }
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }

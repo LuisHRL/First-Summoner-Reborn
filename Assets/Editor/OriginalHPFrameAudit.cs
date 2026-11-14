@@ -59,6 +59,39 @@ public static class OriginalHPFrameAudit
         EditorUtility.RevealInFinder(output);
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Audit Original HP Sprites (Read Only)")]
+    public static void AuditOriginalSprites()
+    {
+        var report = new StringBuilder();
+        report.AppendLine("assetPath\tsprite\twidth\theight\tborderLeft\tborderBottom\tborderRight\tborderTop\tpivot\tppu\ttexture\ttextureSize");
+        foreach (string guid in AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets" }))
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            foreach (var sprite in AssetDatabase.LoadAllAssetsAtPath(path).OfType<Sprite>())
+            {
+                string name = sprite.name.ToLowerInvariant();
+                if (!name.Contains("hp") && !name.Contains("health") && !name.Contains("bar")) continue;
+                var b = sprite.border;
+                var rect = sprite.rect;
+                var texture = sprite.texture;
+                string[] values = {
+                    path, sprite.name, rect.width.ToString("R"), rect.height.ToString("R"),
+                    b.x.ToString("R"), b.y.ToString("R"), b.z.ToString("R"), b.w.ToString("R"),
+                    sprite.pivot.ToString("F3"), sprite.pixelsPerUnit.ToString("R"),
+                    texture != null ? texture.name : "",
+                    texture != null ? texture.width + "x" + texture.height : ""
+                };
+                report.AppendLine(string.Join("\t", values));
+            }
+        }
+        string folder = Path.Combine(Application.dataPath, "../HPFrameAudits");
+        Directory.CreateDirectory(folder);
+        string output = Path.Combine(folder, "hp_original_sprites_" + DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".tsv");
+        File.WriteAllText(output, report.ToString(), Encoding.UTF8);
+        Debug.Log("[HP Audit] Sprite inventory (read-only): " + Path.GetFullPath(output));
+        EditorUtility.RevealInFinder(output);
+    }
+
     private static void Record(StringBuilder report, string source, string assetPath, Image image)
     {
         string name = image.sprite != null ? image.sprite.name : "";

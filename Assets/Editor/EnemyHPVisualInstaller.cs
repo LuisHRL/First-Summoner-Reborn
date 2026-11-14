@@ -87,6 +87,53 @@ public static class EnemyHPVisualInstaller
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Reset Enemy HP Native Sizes")]
+    public static void ResetNativeSizes()
+    {
+        const string path = "Assets/Prefabs/UI/EnemyHealthBar.prefab";
+        var prefab = PrefabUtility.LoadPrefabContents(path);
+        try
+        {
+            var parent = prefab.transform.Find("HealthBarBackground");
+            var layout = parent != null ? parent.GetComponent<WorldHealthVisualLayout>() : null;
+            if (layout == null || layout.frame == null || layout.healthFill == null)
+            {
+                Debug.LogError("[Enemy HP] Install the adjustable enemy frame first. Nothing changed.");
+                return;
+            }
+            // Sprite.rect is expressed in pixels. Convert through PPU to the
+            // RectTransform's native UI units, without touching the prefab scale.
+            var frameSprite = layout.originalFrameSprite ?? layout.frame.SourceSprite;
+            var fillSprite = layout.originalFillSprite ?? layout.healthFill.sprite;
+            if (frameSprite == null || fillSprite == null)
+            {
+                Debug.LogError("[Enemy HP] Original frame/fill sprites are missing. Nothing changed.");
+                return;
+            }
+            layout.frameSize = NativeSize(frameSprite, layout.frame.canvas);
+            layout.fillSize = NativeSize(fillSprite, layout.healthFill.canvas);
+            layout.frameOffset = Vector2.zero;
+            layout.fillOffset = Vector2.zero;
+            // Preserve the existing source cap boundaries when known; reset
+            // their display widths to native sprite units.
+            float frameFactor = layout.frameSize.x / frameSprite.rect.width;
+            layout.displayedLeftWidth = layout.sourceLeftPixels * frameFactor;
+            layout.displayedRightWidth = layout.sourceRightPixels * frameFactor;
+            layout.Apply();
+            EditorUtility.SetDirty(layout);
+            PrefabUtility.SaveAsPrefabAsset(prefab, path);
+            Debug.Log("[Enemy HP] Native sprite sizes restored for the enemy world-space bar only.");
+        }
+        finally { PrefabUtility.UnloadPrefabContents(prefab); }
+    }
+
+    private static Vector2 NativeSize(Sprite sprite, Canvas canvas)
+    {
+        float referencePPU = canvas != null ? canvas.referencePixelsPerUnit : 100f;
+        float scale = referencePPU / Mathf.Max(0.001f, sprite.pixelsPerUnit);
+        return sprite.rect.size * scale;
+    }
+
     private static Sprite FindSprite(string name)
     {
         foreach (var atlasPath in new[] {

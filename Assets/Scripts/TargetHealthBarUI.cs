@@ -6,6 +6,7 @@ public class TargetHealthBarUI : MonoBehaviour
     public PlayerTargeting playerTargeting;
     public Image healthBarFill;
     public AnimatedFillEffect healthAnimation;
+    public TargetHPDamageParticles damageParticles;
 
     [Header("Target HUD light (independent of enemy bars)")]
     public Color targetLightColor = Color.white;
@@ -63,6 +64,7 @@ public class TargetHealthBarUI : MonoBehaviour
             return;
 
         float value = Mathf.Clamp01((float)target.CurrentHealth / Mathf.Max(1, target.maxHealth));
+        if (damageParticles != null) damageParticles.SetHealth(value);
         if (healthAnimation != null) healthAnimation.SetValue(value);
         else healthBarFill.fillAmount = value;
     }

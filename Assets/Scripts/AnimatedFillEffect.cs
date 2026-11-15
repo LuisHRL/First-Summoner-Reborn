@@ -163,14 +163,26 @@ public class AnimatedFillEffect : MonoBehaviour
         if (fill == null || transitionLight == null) return;
         RectTransform fillRect = fill.rectTransform;
         RectTransform lightRect = transitionLight.rectTransform;
-        RectTransform container = fillRect.parent as RectTransform;
-        if (container != null && lightRect.parent == container)
+        // The fill is usually much narrower than its parent HUD slot.
+        // Anchor against the fill's actual rectangle, then convert to the
+        // light parent's local coordinates. This works with independent HUD
+        // scaling, different parents, and world-space enemy bars.
+        bool vertical = fill.fillMethod == Image.FillMethod.Vertical;
+        float progress = Mathf.Clamp01(value);
+        Rect r = fillRect.rect;
+        Vector3 localPoint = vertical
+            ? new Vector3(r.center.x, Mathf.Lerp(r.yMin, r.yMax, progress), 0f)
+            : new Vector3(Mathf.Lerp(r.xMin, r.xMax, progress), r.center.y, 0f);
+        var parent = lightRect.parent as RectTransform;
+        if (parent != null)
         {
-            bool vertical = fill.fillMethod == Image.FillMethod.Vertical;
-            Vector2 anchor = vertical ? new Vector2(0.5f, value) : new Vector2(value, 0.5f);
-            lightRect.anchorMin = anchor;
-            lightRect.anchorMax = anchor;
-            lightRect.anchoredPosition = Vector2.zero;
+            Vector3 worldPoint = fillRect.TransformPoint(localPoint);
+            Vector3 parentPoint = parent.InverseTransformPoint(worldPoint);
+            lightRect.anchorMin = lightRect.anchorMax = new Vector2(0.5f, 0.5f);
+            Vector2 anchorCenter = new Vector2(
+                (0.5f - parent.pivot.x) * parent.rect.width,
+                (0.5f - parent.pivot.y) * parent.rect.height);
+            lightRect.anchoredPosition = (Vector2)parentPoint - anchorCenter;
         }
         lightRect.localRotation = Quaternion.Euler(0f, 0f, horizontalLight ? 90f : 0f);
     }

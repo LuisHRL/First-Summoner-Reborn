@@ -29,6 +29,25 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
     [Min(0)] public float displayedLeftWidth = 12f;
     [Min(0)] public float displayedRightWidth = 12f;
 
+    [Header("Responsive screen alignment")]
+    [Tooltip("Keep the mana fill and frame aligned to the mana icon when screen size or Canvas layout changes.")]
+    public bool keepAlignedAtRuntime = true;
+
+    private void LateUpdate()
+    {
+        if (!Application.isPlaying || !keepAlignedAtRuntime ||
+            !startAtIconCenter || manaIcon == null) return;
+
+        // Layout groups, Canvas scaling and device aspect ratios can move the
+        // icon after Apply() has run. Correct position only; never reset sizes,
+        // colors, sprites, mana values or animation state.
+        if (fill != null) AlignLeftEdge(fill.rectTransform, manaIcon);
+        if (applyThreePartFrame && threePartFrame != null)
+            AlignLeftEdge(threePartFrame.rectTransform, manaIcon);
+        if (applyFrameLayout && frame != null)
+            AlignLeftEdge(frame.rectTransform, manaIcon);
+    }
+
     private void OnValidate()
     {
         // Never mutate another RectTransform during Unity's validation pass.
@@ -73,14 +92,22 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
 
     private static void AlignLeftEdge(RectTransform target, RectTransform icon)
     {
-        // Transform the icon center into the target's parent space, so this
-        // works even when the animated fill is nested under a Slider Fill Area.
         var parent = target.parent as RectTransform;
         if (parent == null) return;
-        Vector3 local = parent.InverseTransformPoint(icon.TransformPoint(icon.rect.center));
-        Vector3 targetCenter = parent.InverseTransformPoint(target.position);
-        Vector3 desired = targetCenter + new Vector3(local.x - (targetCenter.x - target.rect.width * 0.5f), local.y - targetCenter.y, 0f);
-        target.position = parent.TransformPoint(desired);
+
+        // Compare real world-space positions, including parent scales and
+        // pivots. The icon center must meet the left edge of the mana bar.
+        Vector3 iconCenterWorld = icon.TransformPoint(icon.rect.center);
+        Vector3 barLeftWorld = target.TransformPoint(
+            new Vector3(target.rect.xMin, target.rect.center.y, 0f));
+        Vector3 desiredLocal = parent.InverseTransformPoint(iconCenterWorld);
+        Vector3 currentLocal = parent.InverseTransformPoint(barLeftWorld);
+        Vector3 correction = desiredLocal - currentLocal;
+        if (correction.sqrMagnitude < 0.000001f) return;
+
+        // Change only the anchored position; avoid modifying stretch,
+        // frame width, fill amount, or any animation components.
+        target.anchoredPosition += new Vector2(correction.x, correction.y);
     }
 
     private static void SetRect(RectTransform rect, Vector2 size, Vector2 offset)

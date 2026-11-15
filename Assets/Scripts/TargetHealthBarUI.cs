@@ -7,6 +7,14 @@ public class TargetHealthBarUI : MonoBehaviour
     public Image healthBarFill;
     public AnimatedFillEffect healthAnimation;
 
+    void Awake()
+    {
+        // Prefab assets cannot serialize references to scene objects. Preserve
+        // a scene-assigned reference, and resolve it only when missing.
+        if (playerTargeting == null)
+            playerTargeting = FindFirstObjectByType<PlayerTargeting>();
+    }
+
     void Update()
     {
         if (playerTargeting == null || healthBarFill == null)

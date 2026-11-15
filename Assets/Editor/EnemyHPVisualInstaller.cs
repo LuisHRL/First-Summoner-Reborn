@@ -145,6 +145,41 @@ public static class EnemyHPVisualInstaller
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Fit Enemy HP Fill Inside Frame")]
+    public static void FitFillInsideFrame()
+    {
+        const string path = "Assets/Prefabs/UI/EnemyHealthBar.prefab";
+        var prefab = PrefabUtility.LoadPrefabContents(path);
+        try
+        {
+            var background = prefab.transform.Find("HealthBarBackground");
+            var layout = background != null ? background.GetComponent<WorldHealthVisualLayout>() : null;
+            if (layout == null || layout.frame == null || layout.healthFill == null)
+            {
+                Debug.LogError("[Enemy HP] Missing adjustable frame or fill. No changes made.");
+                return;
+            }
+            // Only fit the red fill; preserve the manually validated frame,
+            // source caps, positions and tint. The frame's opaque center must
+            // stay behind the fill, not be moved in front of it.
+            float width = Mathf.Max(1f, layout.frameSize.x);
+            float height = Mathf.Max(1f, layout.frameSize.y);
+            layout.fillSize = new Vector2(width * 0.82f, height * 0.43f);
+            layout.fillOffset = Vector2.zero;
+            layout.Apply();
+            layout.frame.transform.SetAsFirstSibling();
+            if (layout.hitOverlay != null)
+            {
+                layout.hitOverlay.transform.SetSiblingIndex(layout.healthFill.transform.GetSiblingIndex() + 1);
+                layout.hitOverlay.enabled = false;
+            }
+            EditorUtility.SetDirty(layout);
+            PrefabUtility.SaveAsPrefabAsset(prefab, path);
+            Debug.Log("[Enemy HP] Fill fitted inside frame; frame geometry and cap settings preserved.");
+        }
+        finally { PrefabUtility.UnloadPrefabContents(prefab); }
+    }
+
     private static Vector2 NativeSize(Sprite sprite, Canvas canvas)
     {
         float referencePPU = canvas != null ? canvas.referencePixelsPerUnit : 100f;

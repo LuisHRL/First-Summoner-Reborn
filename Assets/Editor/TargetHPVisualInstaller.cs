@@ -95,6 +95,73 @@ public static class TargetHPVisualInstaller
         Debug.Log("[Target HP] Screen-top target frame installed. Edit World Health Visual Layout in the Inspector; enemy world bars unchanged.");
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Separate Target HP Visual References")]
+    public static void SeparateTargetVisualReferences()
+    {
+        const string scenePath = "Assets/Scenes/GameScene.unity";
+        if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        Scene scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+        var targets = scene.GetRootGameObjects()
+            .SelectMany(go => go.GetComponentsInChildren<TargetHealthBarUI>(true)).ToArray();
+        if (targets.Length != 1)
+        {
+            Debug.LogError("[Target HP] Expected one TargetHealthBarUI, found " + targets.Length + ". No changes.");
+            return;
+        }
+        var target = targets[0];
+        // Use the screen HUD's own fill, not a similarly named fill in a world prefab.
+        var localFill = target.GetComponentsInChildren<Image>(true)
+            .FirstOrDefault(image => image.name == "TargetHealthFill");
+        if (localFill == null)
+        {
+            Debug.LogError("[Target HP] No local TargetHealthFill under TargetHealthBarUI. Nothing changed.");
+            return;
+        }
+        var background = localFill.transform.parent;
+        var layout = background.GetComponent<WorldHealthVisualLayout>();
+        var frame = background.Find("AdjustableHPFrame")?.GetComponent<AdjustableThreeSlice>();
+        if (layout == null || frame == null)
+        {
+            Debug.LogError("[Target HP] TargetHealthBackground lacks local layout/frame. Run initial installer first.");
+            return;
+        }
+        // Verify every reference belongs to the same HUD subtree before repair.
+        var trail = background.Find("HPDamageTrail")?.GetComponent<Image>();
+        Undo.RecordObject(target, "Isolate target HP references");
+        Undo.RecordObject(layout, "Isolate target HP visual references");
+        target.healthBarFill = localFill;
+        layout.healthFill = localFill;
+        layout.frame = frame;
+        layout.oldBackground = background.GetComponent<Image>();
+        layout.hitOverlay = trail;
+        if (target.healthAnimation != null)
+        {
+            var animation = target.healthAnimation;
+            if (!animation.transform.IsChildOf(target.transform))
+            {
+                Debug.LogError("[Target HP] Animation component is outside target HUD. Refusing to modify cross-hierarchy animation.");
+                return;
+            }
+            Undo.RecordObject(animation, "Isolate target HP animation");
+            animation.fill = localFill;
+            if (trail != null) animation.delayedFill = trail;
+            if (animation.transitionLight != null &&
+                !animation.transitionLight.transform.IsChildOf(target.transform))
+            {
+                animation.transitionLight = null;
+                Debug.LogWarning("[Target HP] Removed cross-hierarchy light reference; assign a local HUD light.");
+            }
+            EditorUtility.SetDirty(animation);
+        }
+        // Do not call Apply: existing dimensions, colors, UV cuts and light FX
+        // remain exactly as the user tuned them.
+        EditorUtility.SetDirty(target);
+        EditorUtility.SetDirty(layout);
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        Debug.Log("[Target HP] References isolated to target HUD. No visual sizes or colors changed.");
+    }
+
     private static Sprite FindSprite(string name)
     {
         foreach (string path in new[] {

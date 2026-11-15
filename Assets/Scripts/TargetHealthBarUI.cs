@@ -9,6 +9,8 @@ public class TargetHealthBarUI : MonoBehaviour
 
     [Header("Target HUD light (independent of enemy bars)")]
     public Color targetLightColor = Color.white;
+    [Tooltip("Keep the HUD transition light at its original visual size when the health bar is enlarged.")]
+    public bool compensateHudLightScale = true;
 
     void Awake()
     {
@@ -24,6 +26,24 @@ public class TargetHealthBarUI : MonoBehaviour
             var tint = targetLightColor;
             tint.a = light.color.a;
             light.color = tint;
+            if (compensateHudLightScale && healthBarFill != null)
+            {
+                // The HUD visual parent is scaled to fit its 600x50 slot.
+                // Its light should follow that scaled position, but not inherit
+                // the same enlargement of its glow sprite.
+                var visualRoot = healthBarFill.transform.parent;
+                if (visualRoot != null && light.transform.IsChildOf(visualRoot))
+                {
+                    Vector3 visualScale = visualRoot.localScale;
+                    if (Mathf.Abs(visualScale.x) > 0.0001f && Mathf.Abs(visualScale.y) > 0.0001f)
+                    {
+                        Vector3 original = light.rectTransform.localScale;
+                        light.rectTransform.localScale = new Vector3(
+                            original.x / Mathf.Abs(visualScale.x),
+                            original.y / Mathf.Abs(visualScale.y), original.z);
+                    }
+                }
+            }
         }
     }
 

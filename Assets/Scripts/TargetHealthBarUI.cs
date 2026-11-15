@@ -18,7 +18,7 @@ public class TargetHealthBarUI : MonoBehaviour
         // Prefab assets cannot serialize references to scene objects. Preserve
         // a scene-assigned reference, and resolve it only when missing.
         if (playerTargeting == null)
-            playerTargeting = FindFirstObjectByType<PlayerTargeting>();
+            playerTargeting = FindAnyObjectByType<PlayerTargeting>();
 
         // Preserve animation-owned alpha; only neutralize the HUD light tint.
         if (healthAnimation != null && healthAnimation.transitionLight != null)

@@ -212,6 +212,33 @@ public static class EnemyHPVisualInstaller
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Extend Enemy HP Frame Center")]
+    public static void ExtendFrameCenter()
+    {
+        const string path = "Assets/Prefabs/UI/EnemyHealthBar.prefab";
+        var prefab = PrefabUtility.LoadPrefabContents(path);
+        try
+        {
+            var parent = prefab.transform.Find("HealthBarBackground");
+            var layout = parent != null ? parent.GetComponent<WorldHealthVisualLayout>() : null;
+            if (layout == null || layout.frame == null || layout.healthFill == null)
+            {
+                Debug.LogError("[Enemy HP] Missing adjustable frame or fill. Nothing changed.");
+                return;
+            }
+            // Stretch only the middle of the three-slice mesh. The source
+            // cuts, displayed caps, height, tint and fill stay unchanged.
+            float endPadding = Mathf.Max(layout.displayedLeftWidth, layout.displayedRightWidth);
+            float desiredWidth = layout.fillSize.x + 2f * (endPadding + layout.frameSize.y * 0.20f);
+            layout.frameSize = new Vector2(Mathf.Max(layout.frameSize.x, desiredWidth), layout.frameSize.y);
+            layout.Apply();
+            EditorUtility.SetDirty(layout);
+            PrefabUtility.SaveAsPrefabAsset(prefab, path);
+            Debug.Log("[Enemy HP] Frame center extended around existing fill without changing end caps.");
+        }
+        finally { PrefabUtility.UnloadPrefabContents(prefab); }
+    }
+
     private static Vector2 NativeSize(Sprite sprite, Canvas canvas)
     {
         float referencePPU = canvas != null ? canvas.referencePixelsPerUnit : 100f;

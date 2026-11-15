@@ -180,6 +180,38 @@ public static class EnemyHPVisualInstaller
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Trim Enemy HP Corner Transitions")]
+    public static void TrimCornerTransitions()
+    {
+        const string path = "Assets/Prefabs/UI/EnemyHealthBar.prefab";
+        var prefab = PrefabUtility.LoadPrefabContents(path);
+        try
+        {
+            var parent = prefab.transform.Find("HealthBarBackground");
+            var layout = parent != null ? parent.GetComponent<WorldHealthVisualLayout>() : null;
+            var sprite = layout != null ? layout.originalFrameSprite : null;
+            if (layout == null || layout.frame == null || sprite == null)
+            {
+                Debug.LogError("[Enemy HP] Missing frame or source sprite. Nothing changed.");
+                return;
+            }
+            // Trim the diagonal transition by sampling a narrower end section.
+            // Preserve the frame's current size, fill geometry, tint and sprites.
+            float cap = Mathf.Min(sprite.rect.width * 0.12f, sprite.rect.height * 0.18f);
+            cap = Mathf.Max(1f, cap);
+            layout.sourceLeftPixels = cap;
+            layout.sourceRightPixels = cap;
+            float scale = layout.frameSize.y / Mathf.Max(1f, sprite.rect.height);
+            layout.displayedLeftWidth = cap * scale;
+            layout.displayedRightWidth = cap * scale;
+            layout.Apply();
+            EditorUtility.SetDirty(layout);
+            PrefabUtility.SaveAsPrefabAsset(prefab, path);
+            Debug.Log("[Enemy HP] Corner transitions trimmed; existing frame and fill sizes preserved.");
+        }
+        finally { PrefabUtility.UnloadPrefabContents(prefab); }
+    }
+
     private static Vector2 NativeSize(Sprite sprite, Canvas canvas)
     {
         float referencePPU = canvas != null ? canvas.referencePixelsPerUnit : 100f;

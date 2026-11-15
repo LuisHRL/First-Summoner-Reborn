@@ -30,7 +30,7 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
     [Min(0)] public float displayedRightWidth = 12f;
 
     [Header("Responsive screen alignment")]
-    [Tooltip("Keep the mana fill and frame aligned to the mana icon when screen size or Canvas layout changes.")]
+    [Tooltip("Keep the mana icon group centered on the existing fill left edge without moving the mana bar or frame.")]
     public bool keepAlignedAtRuntime = true;
 
     private void LateUpdate()
@@ -38,15 +38,7 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
         if (!Application.isPlaying || !keepAlignedAtRuntime ||
             !startAtIconCenter || manaIcon == null) return;
 
-        // Layout groups, Canvas scaling and device aspect ratios can move the
-        // icon after Apply() has run. Correct position only; never reset sizes,
-        // colors, sprites, mana values or animation state.
-        if (fill != null) AlignLeftEdge(fill.rectTransform, manaIcon);
-        if (applyThreePartFrame && threePartFrame != null)
-            AlignLeftEdge(threePartFrame.rectTransform, manaIcon);
-        if (applyFrameLayout && frame != null)
-            AlignLeftEdge(frame.rectTransform, manaIcon);
-    }
+        // Follow the already-laid-out mana fill. Only the icon parent moves;\n        // its light, fill and folded visuals keep their existing local offsets.\n        if (fill != null) AlignIconToFill(manaIcon, fill.rectTransform);\n    }
 
     private void OnValidate()
     {
@@ -65,7 +57,7 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
                 fill.sprite = originalManaSprite;
             SetRect(fill.rectTransform, fillSize, fillOffset);
             if (startAtIconCenter && manaIcon != null)
-                AlignLeftEdge(fill.rectTransform, manaIcon);
+                AlignIconToFill(manaIcon, fill.rectTransform);
         }
         if (applyThreePartFrame && threePartFrame != null)
         {
@@ -75,42 +67,18 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
             threePartFrame.displayedLeftWidth = displayedLeftWidth;
             threePartFrame.displayedRightWidth = displayedRightWidth;
             SetRect(threePartFrame.rectTransform, frameSize, frameOffset);
-            if (startAtIconCenter && manaIcon != null)
-                AlignLeftEdge(threePartFrame.rectTransform, manaIcon);
             threePartFrame.SetAllDirty();
         }
         if (applyFrameLayout && frame != null)
         {
             SetRect(frame.rectTransform, frameSize, frameOffset);
-            if (startAtIconCenter && manaIcon != null)
-                AlignLeftEdge(frame.rectTransform, manaIcon);
             // Slicing is valid only for sprites with configured borders.
             bool hasBorders = frame.sprite != null && frame.sprite.border.sqrMagnitude > 0f;
             frame.type = useSlicedFrame && hasBorders ? Image.Type.Sliced : Image.Type.Simple;
         }
     }
 
-    private static void AlignLeftEdge(RectTransform target, RectTransform icon)
-    {
-        var parent = target.parent as RectTransform;
-        if (parent == null) return;
-
-        // Compare real world-space positions, including parent scales and
-        // pivots. The icon center must meet the left edge of the mana bar.
-        Vector3 iconCenterWorld = icon.TransformPoint(icon.rect.center);
-        Vector3 barLeftWorld = target.TransformPoint(
-            new Vector3(target.rect.xMin, target.rect.center.y, 0f));
-        Vector3 desiredLocal = parent.InverseTransformPoint(iconCenterWorld);
-        Vector3 currentLocal = parent.InverseTransformPoint(barLeftWorld);
-        Vector3 correction = desiredLocal - currentLocal;
-        if (correction.sqrMagnitude < 0.000001f) return;
-
-        // Change only the anchored position; avoid modifying stretch,
-        // frame width, fill amount, or any animation components.
-        target.anchoredPosition += new Vector2(correction.x, correction.y);
-    }
-
-    private static void SetRect(RectTransform rect, Vector2 size, Vector2 offset)
+    private static void AlignIconToFill(RectTransform icon, RectTransform manaFill)\n    {\n        var parent = icon.parent as RectTransform;\n        if (parent == null) return;\n\n        // Compare actual world positions, even with different UI parents,\n        // Canvas scaling, anchors and screen aspect ratios.\n        Vector3 iconCenterWorld = icon.TransformPoint(icon.rect.center);\n        Vector3 fillLeftWorld = manaFill.TransformPoint(\n            new Vector3(manaFill.rect.xMin, manaFill.rect.center.y, 0f));\n        Vector3 desired = parent.InverseTransformPoint(fillLeftWorld);\n        Vector3 current = parent.InverseTransformPoint(iconCenterWorld);\n        float deltaX = desired.x - current.x;\n        if (Mathf.Abs(deltaX) < 0.001f) return;\n\n        // Horizontal alignment only: preserve height, size, rotation, FX and animation.\n        icon.anchoredPosition += new Vector2(deltaX, 0f);\n    }\n\n    private static void SetRect(RectTransform rect, Vector2 size, Vector2 offset)
     {
         rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
         rect.pivot = new Vector2(0.5f, 0.5f);

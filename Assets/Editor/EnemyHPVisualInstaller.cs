@@ -241,6 +241,39 @@ public static class EnemyHPVisualInstaller
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Keep Enemy HP Tips Fixed")]
+    public static void KeepTipsFixed()
+    {
+        const string path = "Assets/Prefabs/UI/EnemyHealthBar.prefab";
+        var prefab = PrefabUtility.LoadPrefabContents(path);
+        try
+        {
+            var parent = prefab.transform.Find("HealthBarBackground");
+            var layout = parent != null ? parent.GetComponent<WorldHealthVisualLayout>() : null;
+            var sprite = layout != null ? layout.originalFrameSprite : null;
+            if (layout == null || layout.frame == null || sprite == null)
+            {
+                Debug.LogError("[Enemy HP] Missing frame or sprite; nothing changed.");
+                return;
+            }
+            // The previous 10.62px source caps left most of the tapered
+            // ends inside the stretched middle strip. Keep almost the whole
+            // two halves fixed, stretching only the central 10% of the source.
+            float sourceCap = sprite.rect.width * 0.45f;
+            float scale = layout.frameSize.y / Mathf.Max(1f, sprite.rect.height);
+            layout.sourceLeftPixels = sourceCap;
+            layout.sourceRightPixels = sourceCap;
+            layout.displayedLeftWidth = sourceCap * scale;
+            layout.displayedRightWidth = sourceCap * scale;
+            // Do not change frame size, fill, offsets, tint or overlay.
+            layout.Apply();
+            EditorUtility.SetDirty(layout);
+            PrefabUtility.SaveAsPrefabAsset(prefab, path);
+            Debug.Log("[Enemy HP] Fixed end regions; only central 10% of source stretches. Adjust source cap if needed.");
+        }
+        finally { PrefabUtility.UnloadPrefabContents(prefab); }
+    }
+
     private static Vector2 NativeSize(Sprite sprite, Canvas canvas)
     {
         float referencePPU = canvas != null ? canvas.referencePixelsPerUnit : 100f;

@@ -38,7 +38,10 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
         if (!Application.isPlaying || !keepAlignedAtRuntime ||
             !startAtIconCenter || manaIcon == null) return;
 
-        // Follow the already-laid-out mana fill. Only the icon parent moves;\n        // its light, fill and folded visuals keep their existing local offsets.\n        if (fill != null) AlignIconToFill(manaIcon, fill.rectTransform);\n    }
+        // Follow the already-laid-out mana fill. Only the icon parent moves;
+        // its light, fill and folded visuals keep their existing local offsets.
+        if (fill != null) AlignIconToFill(manaIcon, fill.rectTransform);
+    }
 
     private void OnValidate()
     {
@@ -78,7 +81,26 @@ public sealed class ManaBarVisualLayout : MonoBehaviour
         }
     }
 
-    private static void AlignIconToFill(RectTransform icon, RectTransform manaFill)\n    {\n        var parent = icon.parent as RectTransform;\n        if (parent == null) return;\n\n        // Compare actual world positions, even with different UI parents,\n        // Canvas scaling, anchors and screen aspect ratios.\n        Vector3 iconCenterWorld = icon.TransformPoint(icon.rect.center);\n        Vector3 fillLeftWorld = manaFill.TransformPoint(\n            new Vector3(manaFill.rect.xMin, manaFill.rect.center.y, 0f));\n        Vector3 desired = parent.InverseTransformPoint(fillLeftWorld);\n        Vector3 current = parent.InverseTransformPoint(iconCenterWorld);\n        float deltaX = desired.x - current.x;\n        if (Mathf.Abs(deltaX) < 0.001f) return;\n\n        // Horizontal alignment only: preserve height, size, rotation, FX and animation.\n        icon.anchoredPosition += new Vector2(deltaX, 0f);\n    }\n\n    private static void SetRect(RectTransform rect, Vector2 size, Vector2 offset)
+    private static void AlignIconToFill(RectTransform icon, RectTransform manaFill)
+    {
+        var parent = icon.parent as RectTransform;
+        if (parent == null) return;
+
+        // Compare actual world positions, even with different UI parents,
+        // Canvas scaling, anchors and screen aspect ratios.
+        Vector3 iconCenterWorld = icon.TransformPoint(icon.rect.center);
+        Vector3 fillLeftWorld = manaFill.TransformPoint(
+            new Vector3(manaFill.rect.xMin, manaFill.rect.center.y, 0f));
+        Vector3 desired = parent.InverseTransformPoint(fillLeftWorld);
+        Vector3 current = parent.InverseTransformPoint(iconCenterWorld);
+        float deltaX = desired.x - current.x;
+        if (Mathf.Abs(deltaX) < 0.001f) return;
+
+        // Horizontal alignment only: preserve height, size, rotation, FX and animation.
+        icon.anchoredPosition += new Vector2(deltaX, 0f);
+    }
+
+    private static void SetRect(RectTransform rect, Vector2 size, Vector2 offset)
     {
         rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
         rect.pivot = new Vector2(0.5f, 0.5f);

@@ -95,6 +95,89 @@ public static class TargetHPVisualInstaller
         Debug.Log("[Target HP] Screen-top target frame installed. Edit World Health Visual Layout in the Inspector; enemy world bars unchanged.");
     }
 
+    [MenuItem("Tools/First Summoner/Combat UI/Apply Validated Enemy HP Look To Target")]
+    public static void ApplyValidatedEnemyLookToTarget()
+    {
+        const string scenePath = "Assets/Scenes/GameScene.unity";
+        if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+        Scene scene = EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+        var targets = scene.GetRootGameObjects()
+            .SelectMany(go => go.GetComponentsInChildren<TargetHealthBarUI>(true)).ToArray();
+        if (targets.Length != 1)
+        {
+            Debug.LogError("[Target HP] Expected exactly one target HUD. Nothing changed.");
+            return;
+        }
+        var target = targets[0];
+        var fill = target.GetComponentsInChildren<Image>(true)
+            .FirstOrDefault(image => image.name == "TargetHealthFill");
+        if (fill == null || fill.transform.parent == null)
+        {
+            Debug.LogError("[Target HP] TargetHealthFill not found in HUD. Nothing changed.");
+            return;
+        }
+        var parent = fill.transform.parent;
+        var layout = parent.GetComponent<WorldHealthVisualLayout>();
+        var frame = parent.Find("AdjustableHPFrame")?.GetComponent<AdjustableThreeSlice>();
+        if (layout == null || frame == null)
+        {
+            Debug.LogError("[Target HP] Missing target layout/frame; install target adjustable frame first.");
+            return;
+        }
+        var trail = parent.Find("HPDamageTrail")?.GetComponent<Image>();
+        Undo.RecordObject(target, "Apply validated target HP look");
+        Undo.RecordObject(layout, "Apply validated target HP look");
+        Undo.RecordObject(fill, "Apply validated target HP look");
+        target.healthBarFill = fill;
+        layout.healthFill = fill;
+        layout.frame = frame;
+        layout.oldBackground = parent.GetComponent<Image>();
+        layout.hitOverlay = trail;
+        layout.originalFrameSprite = FindSprite("img_bar_hp_bg_01") ?? layout.originalFrameSprite;
+        layout.originalFillSprite = FindSprite("img_bar_hp") ?? layout.originalFillSprite;
+        layout.frameSize = new Vector2(85.5f, 9.5f);
+        layout.frameOffset = Vector2.zero;
+        layout.fillSize = new Vector2(73.8f, 4.953129f);
+        layout.fillOffset = new Vector2(0f, 0.3f);
+        layout.sourceLeftPixels = 40f;
+        layout.sourceRightPixels = 40f;
+        layout.displayedLeftWidth = 12f;
+        layout.displayedRightWidth = 12f;
+        layout.applyFillTint = false;
+        layout.hideOldBackground = true;
+        fill.color = Color.white;
+        if (target.healthAnimation != null)
+        {
+            var animation = target.healthAnimation;
+            if (!animation.transform.IsChildOf(target.transform))
+            {
+                Debug.LogError("[Target HP] Animation is outside target HUD. Nothing applied.");
+                return;
+            }
+            Undo.RecordObject(animation, "Apply validated target HP look");
+            animation.fill = fill;
+            if (trail != null) animation.delayedFill = trail;
+            if (animation.transitionLight != null &&
+                !animation.transitionLight.transform.IsChildOf(target.transform))
+                animation.transitionLight = null;
+            EditorUtility.SetDirty(animation);
+        }
+        // Geometry only on HUD children. Enemy prefab and enemy instances are never touched.
+        foreach (var rect in new[] { frame.rectTransform, fill.rectTransform, trail != null ? trail.rectTransform : null })
+            if (rect != null) Undo.RecordObject(rect, "Apply validated target HP geometry");
+        Undo.RecordObject(frame, "Apply validated target HP frame");
+        if (trail != null) Undo.RecordObject(trail, "Apply validated target HP overlay");
+        layout.Apply();
+        EditorUtility.SetDirty(target);
+        EditorUtility.SetDirty(layout);
+        EditorUtility.SetDirty(fill);
+        EditorUtility.SetDirty(frame);
+        if (trail != null) EditorUtility.SetDirty(trail);
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene);
+        Debug.Log("[Target HP] Validated look applied to target HUD only; independent dimensions and FX retained.");
+    }
+
     [MenuItem("Tools/First Summoner/Combat UI/Separate Target HP Visual References")]
     public static void SeparateTargetVisualReferences()
     {

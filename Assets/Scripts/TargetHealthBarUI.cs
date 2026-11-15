@@ -7,12 +7,24 @@ public class TargetHealthBarUI : MonoBehaviour
     public Image healthBarFill;
     public AnimatedFillEffect healthAnimation;
 
+    [Header("Target HUD light (independent of enemy bars)")]
+    public Color targetLightColor = Color.white;
+
     void Awake()
     {
         // Prefab assets cannot serialize references to scene objects. Preserve
         // a scene-assigned reference, and resolve it only when missing.
         if (playerTargeting == null)
             playerTargeting = FindFirstObjectByType<PlayerTargeting>();
+
+        // Preserve animation-owned alpha; only neutralize the HUD light tint.
+        if (healthAnimation != null && healthAnimation.transitionLight != null)
+        {
+            var light = healthAnimation.transitionLight;
+            var tint = targetLightColor;
+            tint.a = light.color.a;
+            light.color = tint;
+        }
     }
 
     void Update()

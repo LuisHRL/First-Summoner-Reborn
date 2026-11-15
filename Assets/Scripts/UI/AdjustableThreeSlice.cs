@@ -21,9 +21,10 @@ public sealed class AdjustableThreeSlice : MaskableGraphic
     public override Texture mainTexture => sourceSprite != null && sourceSprite.texture != null
         ? sourceSprite.texture : s_WhiteTexture;
 
-    private void OnValidate()
+    protected override void OnValidate()
     {
-        // Unity UI Graphic does not expose a virtual OnValidate in player compilation.
+        base.OnValidate();
+        // Preserve Unity UI validation and refresh the mesh.
         // Only mark the mesh dirty; do not modify RectTransforms during validation.
         SetAllDirty();
     }

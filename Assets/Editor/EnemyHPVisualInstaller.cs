@@ -228,13 +228,15 @@ public static class EnemyHPVisualInstaller
             }
             // Stretch only the middle of the three-slice mesh. The source
             // cuts, displayed caps, height, tint and fill stay unchanged.
-            float endPadding = Mathf.Max(layout.displayedLeftWidth, layout.displayedRightWidth);
-            float desiredWidth = layout.fillSize.x + 2f * (endPadding + layout.frameSize.y * 0.20f);
-            layout.frameSize = new Vector2(Mathf.Max(layout.frameSize.x, desiredWidth), layout.frameSize.y);
+            // Increase the middle section by a visible step every invocation,
+            // even when the existing frame is already wider than the fill.
+            // End cap widths and their source UV cuts remain unchanged.
+            float step = Mathf.Max(2f, layout.fillSize.x * 0.12f);
+            layout.frameSize = new Vector2(layout.frameSize.x + step, layout.frameSize.y);
             layout.Apply();
             EditorUtility.SetDirty(layout);
             PrefabUtility.SaveAsPrefabAsset(prefab, path);
-            Debug.Log("[Enemy HP] Frame center extended around existing fill without changing end caps.");
+            Debug.Log("[Enemy HP] Frame center widened by one step without changing end caps.");
         }
         finally { PrefabUtility.UnloadPrefabContents(prefab); }
     }
